@@ -37,7 +37,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       'title': 'Pro Mass & Chest Blueprint',
       'subtitle': 'Heavy barbell & dumbbell volume for extreme upper-body mass & chest density',
       'gender': 'men',
-      'genderLabel': 'Men Focus 👨',
+      'genderLabel': 'Men Focus',
       'goal': 'mass',
       'goalLabel': 'Hypertrophy',
       'coach': 'Coach Bilal',
@@ -109,7 +109,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       'title': 'Hourglass, Glutes & Waist Sculpt',
       'subtitle': 'Targeted glute growth, slim waist cinching & aesthetic posture alignment',
       'gender': 'women',
-      'genderLabel': 'Women Focus 👩',
+      'genderLabel': 'Women Focus',
       'goal': 'sculpt',
       'goalLabel': 'Glutes & Waist',
       'coach': 'Sarah Jenkins',
@@ -171,7 +171,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       'title': 'V-Taper Shred & Capped Arms',
       'subtitle': 'High-density supersets to carve broad shoulders, sharp lats & striated arms',
       'gender': 'men',
-      'genderLabel': 'Men Focus 👨',
+      'genderLabel': 'Men Focus',
       'goal': 'shred',
       'goalLabel': 'Shred & Cut',
       'coach': 'Marcus Cole',
@@ -218,7 +218,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       'title': 'High-Intensity Calorie Blitz',
       'subtitle': 'Full body metabolic supersets to incinerate fat while preserving lean muscle',
       'gender': 'all',
-      'genderLabel': 'All Athletes ⚡',
+      'genderLabel': 'All Athletes',
       'goal': 'shred',
       'goalLabel': 'Fat Loss',
       'coach': 'Coach Bilal',
@@ -255,7 +255,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       'title': 'Toned Legs, Abs & Posture Flow',
       'subtitle': 'Sculpt long, lean muscle lines in legs with deep abdominal transverse bracing',
       'gender': 'women',
-      'genderLabel': 'Women Focus 👩',
+      'genderLabel': 'Women Focus',
       'goal': 'sculpt',
       'goalLabel': 'Tone & Shape',
       'coach': 'Elena Rostova',
@@ -291,7 +291,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       'title': 'Powerlifting & Heavy Compound Strength',
       'subtitle': 'Develop massive compound numbers in squat, bench press & deadlift',
       'gender': 'all',
-      'genderLabel': 'All Athletes ⚡',
+      'genderLabel': 'All Athletes',
       'goal': 'strength',
       'goalLabel': 'Max Strength',
       'coach': 'Coach Bilal',
@@ -567,9 +567,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
   // --- 3. Gender Segmented Switcher ---
   Widget _buildGenderSegmentedBar() {
     final items = [
-      {'title': 'All Athletes ⚡', 'idx': 0},
-      {'title': 'Men Focus 👨', 'idx': 1},
-      {'title': 'Women Focus 👩', 'idx': 2},
+      {'title': 'All Athletes', 'idx': 0},
+      {'title': 'Men Focus', 'idx': 1},
+      {'title': 'Women Focus', 'idx': 2},
     ];
 
     return Container(
@@ -768,19 +768,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
                           ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.star_rounded, color: AppColors.accentGold, size: 13),
-                              const SizedBox(width: 3),
-                              Text(
-                                '${prog['rating']} (${prog['reviews']})',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            '${prog['rating']} (${prog['reviews']})',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -846,16 +840,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     // Stats & Action Button Row
                     Row(
                       children: [
-                        _buildGlassPill(Icons.date_range_rounded, prog['duration']),
+                        _buildGlassPill(prog['duration']),
                         const SizedBox(width: 6),
-                        _buildGlassPill(Icons.repeat_rounded, prog['frequency']),
+                        _buildGlassPill(prog['frequency']),
                         const SizedBox(width: 6),
-                        _buildGlassPill(Icons.local_fire_department_rounded, prog['calories']),
+                        _buildGlassPill(prog['calories']),
                         const Spacer(),
 
                         // High-End Start Action Button
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                           decoration: BoxDecoration(
                             gradient: AppColors.buttonGradient,
                             borderRadius: BorderRadius.circular(16),
@@ -867,20 +861,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               ),
                             ],
                           ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'View Split',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(width: 3),
-                              Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 10),
-                            ],
+                          child: const Text(
+                            'View Split',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -895,28 +882,21 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  Widget _buildGlassPill(IconData icon, String text) {
+  Widget _buildGlassPill(String text) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.16),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: Colors.white, size: 11),
-          const SizedBox(width: 4),
-          Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 10.5,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -1066,11 +1046,11 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                 // Specs Grid Row
                 Row(
                   children: [
-                    _buildSpecTile(Icons.timer_outlined, 'Duration', widget.program['duration']),
+                    _buildSpecTile('Duration', widget.program['duration']),
                     const SizedBox(width: 8),
-                    _buildSpecTile(Icons.calendar_today_rounded, 'Split', widget.program['frequency']),
+                    _buildSpecTile('Split', widget.program['frequency']),
                     const SizedBox(width: 8),
-                    _buildSpecTile(Icons.local_fire_department_rounded, 'Burn', widget.program['calories']),
+                    _buildSpecTile('Burn', widget.program['calories']),
                   ],
                 ),
 
@@ -1279,7 +1259,7 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
     );
   }
 
-  Widget _buildSpecTile(IconData icon, String label, String value) {
+  Widget _buildSpecTile(String label, String value) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -1290,17 +1270,15 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
         ),
         child: Column(
           children: [
-            Icon(icon, size: 16, color: AppColors.primary),
-            const SizedBox(height: 6),
             Text(
               label,
-              style: const TextStyle(fontSize: 10, color: Color(0xFF757A86), fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 10.5, color: Color(0xFF757A86), fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 3),
             Text(
               value,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF131519)),
+              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF131519)),
             ),
           ],
         ),
