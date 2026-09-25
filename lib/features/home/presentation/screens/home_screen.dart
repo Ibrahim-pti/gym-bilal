@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
+import 'package:gym_base/features/profile/presentation/screens/body_transformation_screen.dart';
+import 'package:gym_base/features/calorie/presentation/screens/supplement_tracker_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(int)? onNavigateTab;
@@ -511,10 +513,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(width: 10),
 
-                    // Card 3: Progress & Analytics
+                    // Card 3: Progress & Analytics (Opens Body Transformation & Slider)
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => widget.onNavigateTab?.call(5),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const BodyTransformationScreen(),
+                            ),
+                          );
+                        },
                         child: Image.asset(
                           'assets/images/card_progress_full.png',
                           fit: BoxFit.contain,
@@ -1548,36 +1556,78 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text('🥗', style: TextStyle(fontSize: 16)),
                 ],
               ),
-              GestureDetector(
-                onTap: () => widget.onNavigateTab?.call(4),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 9,
-                    vertical: 3.5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF10B981).withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Row(
-                    children: [
-                      Icon(
-                        Icons.add_rounded,
-                        size: 13,
-                        color: Color(0xFF059669),
-                      ),
-                      SizedBox(width: 3),
-                      Text(
-                        'Log Food',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF059669),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const SupplementTrackerScreen(),
                         ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 9,
+                        vertical: 3.5,
                       ),
-                    ],
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF3B82F6).withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.medication_rounded,
+                            size: 13,
+                            color: Color(0xFF2563EB),
+                          ),
+                          SizedBox(width: 3),
+                          Text(
+                            'Supplements',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF2563EB),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 6),
+                  GestureDetector(
+                    onTap: () => widget.onNavigateTab?.call(4),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 9,
+                        vertical: 3.5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.add_rounded,
+                            size: 13,
+                            color: Color(0xFF059669),
+                          ),
+                          SizedBox(width: 3),
+                          Text(
+                            'Log Food',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF059669),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

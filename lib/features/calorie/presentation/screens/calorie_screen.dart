@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 import 'package:gym_base/features/calorie/presentation/screens/camera_food_scanner_screen.dart';
+import 'package:gym_base/features/calorie/presentation/screens/supplement_tracker_screen.dart';
 
 class CalorieScreen extends StatefulWidget {
   const CalorieScreen({super.key});
@@ -174,6 +175,11 @@ class _CalorieScreenState extends State<CalorieScreen> {
 
           // 3. SMART HYDRATION WATER TRACKER
           _buildHydrationTrackerCard(),
+
+          const SizedBox(height: 12),
+
+          // 3.5. DAILY SUPPLEMENT STACK TRACKER
+          _buildSupplementsTrackerCard(),
 
           const SizedBox(height: 20),
 
@@ -576,6 +582,63 @@ class _CalorieScreenState extends State<CalorieScreen> {
                 onPressed: _waterGlasses < _targetGlasses + 5 ? () => setState(() => _waterGlasses++) : null,
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- 3.5. DAILY SUPPLEMENT STACK CARD ---
+  Widget _buildSupplementsTrackerCard() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFAF5FF),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFE9D5FF)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF9333EA).withValues(alpha: 0.15),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.medication_rounded, color: Color(0xFF9333EA), size: 20),
+          ),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Daily Supplement Stack',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF581C87)),
+                ),
+                SizedBox(height: 2),
+                Text(
+                  'Creatine, Whey Isolate, Omega-3 • 4/6 Taken',
+                  style: TextStyle(fontSize: 11.5, color: Color(0xFF7E22CE), fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const SupplementTrackerScreen()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF9333EA),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            child: const Text('Stack 💊', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800)),
           ),
         ],
       ),
