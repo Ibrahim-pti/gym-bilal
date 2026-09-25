@@ -84,6 +84,7 @@ class NotificationService {
     String? payload,
   }) async {
     await init();
+    await requestPermissions();
 
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
@@ -100,6 +101,8 @@ class NotificationService {
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
+      presentBanner: true,
+      presentList: true,
     );
 
     const NotificationDetails platformDetails = NotificationDetails(
@@ -145,6 +148,8 @@ class NotificationService {
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
+      presentBanner: true,
+      presentList: true,
     );
 
     const NotificationDetails platformDetails = NotificationDetails(

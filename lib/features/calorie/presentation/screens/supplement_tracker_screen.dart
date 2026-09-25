@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 import 'package:gym_base/core/services/notification_service.dart';
@@ -200,31 +201,60 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
     }
   }
 
+  OverlayEntry? _bannerOverlay;
+
+  @override
+  void dispose() {
+    _bannerOverlay?.remove();
+    _bannerOverlay = null;
+    super.dispose();
+  }
+
+  void _showTopNotificationBanner({
+    required String title,
+    required String subtitle,
+    required String body,
+    IconData icon = Icons.notifications_active_rounded,
+  }) {
+    _bannerOverlay?.remove();
+    _bannerOverlay = null;
+
+    final overlay = Overlay.of(context);
+    late OverlayEntry entry;
+
+    entry = OverlayEntry(
+      builder: (context) => _TopBannerOverlayWidget(
+        title: title,
+        subtitle: subtitle,
+        body: body,
+        icon: icon,
+        onDismiss: () {
+          entry.remove();
+          if (_bannerOverlay == entry) _bannerOverlay = null;
+        },
+      ),
+    );
+
+    _bannerOverlay = entry;
+    overlay.insert(entry);
+  }
+
   // --- Trigger Instant Test Notification ---
   Future<void> _triggerTestNotification() async {
+    // 1. Send native OS system notification
     await NotificationService().showInstantNotification(
       id: 999,
       title: 'Gym Base • Supplement Reminder 💊',
       body: 'Time to take your 5g Creatine Monohydrate with 300ml water! Stay consistent! 🔥',
     );
 
+    // 2. Also pop interactive iOS-style top banner in-app
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Row(
-            children: [
-              Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
-              SizedBox(width: 10),
-              Text(
-                '🔔 Local notification triggered! Check your notification bar.',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-            ],
-          ),
-          backgroundColor: const Color(0xFF10B981),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        ),
+      _showTopNotificationBanner(
+        title: 'Gym Base • Supplement Reminder',
+        subtitle: 'Creatine Monohydrate (5g)',
+        body: 'Time to take your 5g Creatine Monohydrate with 300ml water! Stay consistent! 🔥',
+        icon: Icons.bolt_rounded,
       );
     }
   }
@@ -773,6 +803,225 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Interactive In-App Notification Banner (iOS Dynamic Island / Push Banner Style)
+// -----------------------------------------------------------------------------
+class _TopBannerOverlayWidget extends StatefulWidget {
+  final String title;
+  final String subtitle;
+  final String body;
+  final IconData icon;
+  final VoidCallback onDismiss;
+
+  const _TopBannerOverlayWidget({
+    required this.title,
+    required this.subtitle,
+    required this.body,
+    required this.icon,
+    required this.onDismiss,
+  });
+
+  @override
+  State<_TopBannerOverlayWidget> createState() => _TopBannerOverlayWidgetState();
+}
+
+class _TopBannerOverlayWidgetState extends State<_TopBannerOverlayWidget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<Offset> _slideAnimation;
+  late final Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 450),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, -1.2),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutBack,
+    ));
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    );
+
+    _controller.forward();
+
+    // Auto dismiss after 4.5 seconds
+    Future.delayed(const Duration(milliseconds: 4500), () {
+      if (mounted) {
+        _dismiss();
+      }
+    });
+  }
+
+  void _dismiss() {
+    if (!mounted) return;
+    _controller.reverse().then((_) {
+      if (mounted) {
+        widget.onDismiss();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          child: SlideTransition(
+            position: _slideAnimation,
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: GestureDetector(
+                onVerticalDragUpdate: (details) {
+                  if (details.primaryDelta != null && details.primaryDelta! < -4) {
+                    _dismiss();
+                  }
+                },
+                onTap: _dismiss,
+                child: Material(
+                  color: Colors.transparent,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(22),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF14161A).withValues(alpha: 0.94),
+                          borderRadius: BorderRadius.circular(22),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.16),
+                            width: 1.2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.45),
+                              blurRadius: 28,
+                              offset: const Offset(0, 10),
+                            ),
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.2),
+                              blurRadius: 16,
+                              spreadRadius: -2,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Header Row
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(
+                                    widget.icon,
+                                    color: Colors.white,
+                                    size: 14,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'GYM BASE',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 0.6,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Container(
+                                  width: 3,
+                                  height: 3,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white38,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                const Text(
+                                  'now',
+                                  style: TextStyle(
+                                    color: Colors.white38,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: _dismiss,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.08),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.close_rounded,
+                                      size: 14,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+
+                            // Title & Body
+                            Text(
+                              widget.title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              widget.body,
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.8),
+                                fontSize: 12,
+                                height: 1.3,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
