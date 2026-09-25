@@ -10,66 +10,66 @@ class WorkoutScreen extends StatefulWidget {
 }
 
 class _WorkoutScreenState extends State<WorkoutScreen> {
-  // Active selected muscle category filter: null = Grid View of all categories!
+  // Active selected muscle category filter: null = Grid View of all categories
   String? _selectedCategory;
 
-  // Categories definitions with images
+  // Categories definitions in 100% English with high-impact assets
   final List<Map<String, dynamic>> _muscleCategories = [
     {
       'id': 'chest',
-      'title': 'سنگ',
-      'subtitle': 'Chest Focus',
+      'title': 'Chest',
+      'subtitle': 'Pectorals & Push',
       'image': 'assets/images/workout_back.jpg',
-      'count': '4 یاری',
+      'count': '4 Exercises',
       'tag': 'Pectorals',
     },
     {
       'id': 'back',
-      'title': 'پشت و باڵ',
-      'subtitle': 'Back & Lats',
+      'title': 'Back & Lats',
+      'subtitle': 'V-Taper & Pull',
       'image': 'assets/images/pullup_figure.jpg',
-      'count': '4 یاری',
+      'count': '4 Exercises',
       'tag': 'V-Taper',
     },
     {
       'id': 'shoulders',
-      'title': 'شانەکان',
-      'subtitle': 'Shoulders & Delts',
+      'title': 'Shoulders',
+      'subtitle': 'Deltoids & Traps',
       'image': 'assets/images/male_fitness_banner.jpg',
-      'count': '3 یاری',
-      'tag': '3D Deltoids',
+      'count': '3 Exercises',
+      'tag': 'Deltoids',
     },
     {
       'id': 'arms',
-      'title': 'باڵ و بازوو',
+      'title': 'Arms & Biceps',
       'subtitle': 'Biceps & Triceps',
       'image': 'assets/images/splash_athlete.jpg',
-      'count': '3 یاری',
-      'tag': 'Arms Peak',
+      'count': '3 Exercises',
+      'tag': 'Arm Definition',
     },
     {
       'id': 'legs',
-      'title': 'قاچ و سمت',
-      'subtitle': 'Legs & Quads',
+      'title': 'Legs & Glutes',
+      'subtitle': 'Quads & Hamstrings',
       'image': 'assets/images/female_fitness_banner.jpg',
-      'count': '3 یاری',
-      'tag': 'Squats & Glutes',
+      'count': '3 Exercises',
+      'tag': 'Lower Body',
     },
     {
       'id': 'core',
-      'title': 'سک و ناوەند',
-      'subtitle': 'Abs & Core',
+      'title': 'Core & Abs',
+      'subtitle': 'Transverse & Six-Pack',
       'image': 'assets/images/posture_dark_3d.jpg',
-      'count': '2 یاری',
-      'tag': 'Six Pack',
+      'count': '2 Exercises',
+      'tag': 'Core Stability',
     },
     {
       'id': 'all',
-      'title': 'هەموو یارییەکان',
-      'subtitle': 'All Exercises',
-      'image': 'assets/images/card_gym_full.png',
-      'count': '19 یاری',
-      'tag': 'Full Library',
+      'title': 'All Exercises',
+      'subtitle': 'Full Library',
+      'image': 'assets/images/onboarding_athlete.jpg',
+      'count': '19 Exercises',
+      'tag': 'Complete Suite',
     },
   ];
 
@@ -86,398 +86,379 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   bool _isTimerActive = false;
   Timer? _activeTimer;
 
-  // Master Exercises Database with rich video and technique data
+  // Master Exercises Database (100% English)
   final List<Map<String, dynamic>> _allExercises = [
-    // --- 1. CHEST (سنگ) ---
+    // --- 1. CHEST ---
     {
       'id': 'bench_press',
       'title': 'Barbell Bench Press',
-      'kurdish': 'بێنچ پرێس بە باربێڵ',
       'muscleCategory': 'chest',
-      'muscle': 'سنگ (Chest)',
-      'target': 'ماسولکەی گەورەی سنگ',
+      'muscle': 'Chest Focus',
+      'target': 'Pectoralis Major & Triceps',
       'sets': '4 Sets × 10-12 Reps',
-      'level': 'مامناوەند',
+      'level': 'Intermediate',
       'burn': '140 kcal',
       'equipment': 'Barbell & Flat Bench',
       'videoDuration': '0:45',
       'videoQuality': '1080p HD',
       'image': 'assets/images/workout_back.jpg',
       'instructions':
-          'لەسەر بێنچەکە پاڵبکەوە و پێیەکانت لەسەر زەوی بچەسپێنە. بارەکە بە فراوانی زیاتر لە شانت بگرە، بە کۆنترۆڵ بیهێنە خوارەوە تا بەشی خوارەوەی سنگ، پاشان بە هێزەوە پاڵی پێوە بنێ بۆ سەرەوە بەبێ قفڵکردنی ئەنیشک.',
-      'mistake': 'بەرزکردنەوەی سمت لەسەر بێنچەکە یان کێشانی بار لە سنگ بە خێرایی.',
-      'breathing': 'لەکاتی هێنانە خوارەوە هەناسە هەڵمژە، لەکاتی بردنە سەرەوە بەهێز بیدەرەوە.',
-      'keywords': ['bench', 'press', 'بێنچ', 'پرێس', 'سنگ', 'باربێڵ', 'chest'],
+          'Lie flat on the bench with your feet firmly planted on the floor. Grip the barbell slightly wider than shoulder-width. Lower the bar smoothly to mid-chest with control, then drive it powerfully upward without locking your elbows.',
+      'mistake': 'Bouncing the barbell off your ribcage or lifting your hips off the bench during the press.',
+      'breathing': 'Inhale deeply as you lower the barbell; exhale forcefully as you drive the weight upward.',
+      'keywords': ['bench', 'press', 'chest', 'barbell', 'pecs'],
     },
     {
       'id': 'incline_dumbbell_press',
       'title': 'Incline Dumbbell Press',
-      'kurdish': 'پرێسی سنگ بە دەمبڵی لار',
       'muscleCategory': 'chest',
-      'muscle': 'سەرەوەی سنگ',
-      'target': 'بەشی سەرەوەی سنگ و شانی پێشەوە',
+      'muscle': 'Upper Chest',
+      'target': 'Clavicular Head & Front Deltoids',
       'sets': '4 Sets × 12 Reps',
-      'level': 'پێشکەوتوو',
+      'level': 'Advanced',
       'burn': '125 kcal',
       'equipment': 'Incline Bench & Dumbbells',
       'videoDuration': '0:40',
       'videoQuality': '1080p HD',
       'image': 'assets/images/onboarding_athlete.jpg',
       'instructions':
-          'بێنچەکە لەسەر گۆشەی ٣٠ بۆ ٤٥ پلە ڕێکبخە. دەمبڵەکان بەرەو سەرەوە بەرز بکەرەوە و لە بەرزترین خاڵدا کەمێک فشار بخەرە سەر بەشی سەرەوەی سنگت.',
-      'mistake': 'دانانی گۆشەی کورسی زۆر بەرز کە وا دەکات فشارەکە بچێتە سەر شان.',
-      'breathing': 'هێنانە خوارەوە: هەڵمژین، سەرکەوتن: دانەوە.',
-      'keywords': ['incline', 'dumbbell', 'دەمبڵ', 'لار', 'سنگ', 'سەرەوە'],
+          'Position the bench at a 30 to 45-degree angle. Press the dumbbells upward in a converging arc toward the ceiling, pausing briefly at the peak to squeeze your upper chest fibers.',
+      'mistake': 'Setting the bench angle too steep (over 45 degrees), which transfers tension to the anterior deltoids.',
+      'breathing': 'Inhale on the controlled negative descent; exhale as you press upward to full contraction.',
+      'keywords': ['incline', 'dumbbell', 'chest', 'upper'],
     },
     {
       'id': 'cable_fly',
       'title': 'Cable Chest Fly',
-      'kurdish': 'کەیبڵ فلای بۆ سنگ',
       'muscleCategory': 'chest',
-      'muscle': 'ناوەڕاستی سنگ',
-      'target': 'جیاکردنەوە و هێڵی ناوەڕاستی سنگ',
+      'muscle': 'Mid & Inner Chest',
+      'target': 'Sternal Pec Isolation & Squeeze',
       'sets': '3 Sets × 15 Reps',
-      'level': 'سەرەتایی',
+      'level': 'Beginner',
       'burn': '95 kcal',
       'equipment': 'Cable Crossover Machine',
       'videoDuration': '0:35',
       'videoQuality': '1080p HD',
       'image': 'assets/images/card_gym_full.png',
       'instructions':
-          'دەستەکان بە کەوانەیی بەرەو پێشەوە بهێنە. لە خاڵی کۆتاییدا بۆ ماوەی ١ چرکە سنگت توند بگرە و ئەنیشکت کەمێک چەماوە ڕابگرە.',
-      'mistake': 'ڕاستکردنەوەی تەواوی دەست کە فشاری مەترسیدار دەخاتە سەر ئەنیشک.',
-      'breathing': 'پێشەوە بردن: هەناسەدانەوە، گەڕانەوە: هەناسە هەڵمژین.',
-      'keywords': ['cable', 'fly', 'کەیبڵ', 'فلای', 'تەلبەند', 'سنگ'],
+          'Bring handles forward in a wide hugging motion with a slight bend in your elbows. Squeeze your pecs hard for one full second at the centerline before returning with control.',
+      'mistake': 'Locking your arms completely straight or allowing the weights to overstretch your shoulders behind your torso.',
+      'breathing': 'Inhale as your arms open wide; exhale as you bring hands together at the center.',
+      'keywords': ['cable', 'fly', 'chest', 'crossover'],
     },
     {
       'id': 'chest_dips',
-      'title': 'Chest Parallel Dips',
-      'kurdish': 'دیپس بۆ خوارەوەی سنگ',
+      'title': 'Parallel Bar Chest Dips',
       'muscleCategory': 'chest',
-      'muscle': 'خوارەوەی سنگ',
-      'target': 'هێڵی ژێر سنگ و تڕایسێپس',
+      'muscle': 'Lower Chest',
+      'target': 'Lower Pectorals & Triceps',
       'sets': '3 Sets × 12 Reps',
-      'level': 'مامناوەند',
+      'level': 'Intermediate',
       'burn': '115 kcal',
       'equipment': 'Dip Station / Parallel Bars',
       'videoDuration': '0:38',
       'videoQuality': '1080p HD',
       'image': 'assets/images/male_fitness_banner.jpg',
       'instructions':
-          'لەش کەمێک بەرەو پێشەوە لار بکەرەوە بۆ ئەوەی فشارەکە بکەوێتە سەر سنگت، بە هێواشی دابەزە تا ئەنیشکت گۆشەی ٩٠ پلە دروست دەکات، پاشان سەرکەوە.',
-      'mistake': 'مانەوە بە ڕێکی کە دەبێتە هۆی خستنی فشار لەسەر تڕایسێپس نەک سنگ.',
-      'breathing': 'دابەزین: هەڵمژین، سەرکەوتن: دانەوە.',
-      'keywords': ['dips', 'دیپس', 'سنگ', 'تڕایسێپس'],
+          'Lean your torso forward at roughly a 30-degree angle to emphasize chest engagement. Lower your body until your elbows reach a 90-degree angle, then press up firmly.',
+      'mistake': 'Staying completely upright, which shifts the majority of tension onto the triceps instead of chest.',
+      'breathing': 'Inhale on the descent; exhale as you press back to starting lockout.',
+      'keywords': ['dips', 'chest', 'lower', 'parallel'],
     },
 
-    // --- 2. BACK (پشت) ---
+    // --- 2. BACK ---
     {
       'id': 'pull_ups',
       'title': 'Wide-Grip Pull Ups',
-      'kurdish': 'پول ئەپس بە گرتنی پان',
       'muscleCategory': 'back',
-      'muscle': 'پشت و باڵەکان',
-      'target': 'فراوانکردنی پانی پشت (V-Taper)',
+      'muscle': 'Back & Lats',
+      'target': 'Latissimus Dorsi & Teres Major',
       'sets': '4 Sets × To Failure',
-      'level': 'مامناوەند',
+      'level': 'Intermediate',
       'burn': '160 kcal',
       'equipment': 'Pull-Up Bar',
       'videoDuration': '0:50',
       'videoQuality': '4K Ultra',
       'image': 'assets/images/pullup_figure.jpg',
       'instructions':
-          'بارەکە پانتر لە شانت بگرە. سنگت بەرز بکەرەوە بەرەو بارەکە تا چەناگەت دەگاتە سەرووی بار، پاشان بە هێواشی و بە کۆنترۆڵ بگەڕێوە خوارەوە.',
-      'mistake': 'شەپۆلدان و جوڵاندنی قاچەکان بۆ دروستکردنی زەبر.',
-      'breathing': 'سەرکەوتن: دانەوە، دابەزین: هەڵمژین.',
-      'keywords': ['pull', 'up', 'پول', 'ئەپ', 'پشت', 'باڵ', 'back'],
+          'Grip the bar slightly wider than shoulder-width with an overhand grip. Pull your chest toward the bar by driving your elbows down and back until your chin clears the bar.',
+      'mistake': 'Kicking your legs or using momentum to swing your body over the bar.',
+      'breathing': 'Exhale as you pull your chest to the bar; inhale as you lower down under strict control.',
+      'keywords': ['pull', 'up', 'back', 'lats', 'v-taper'],
     },
     {
       'id': 'lat_pulldown',
-      'title': 'Lat Pulldown',
-      'kurdish': 'لات پولداون بە دانیشتن',
+      'title': 'Wide-Grip Lat Pulldown',
       'muscleCategory': 'back',
-      'muscle': 'پشت و لاتس',
-      'target': 'پانی پشت و باڵەکان',
+      'muscle': 'Upper Lats',
+      'target': 'Lat Width & Back Thickness',
       'sets': '4 Sets × 12 Reps',
-      'level': 'سەرەتایی',
+      'level': 'Beginner',
       'burn': '110 kcal',
       'equipment': 'Cable Pulldown Machine',
       'videoDuration': '0:42',
       'videoQuality': '1080p HD',
       'image': 'assets/images/pullup_figure.jpg',
       'instructions':
-          'بارەکە بە فراوانی بگرە و کەمێک پشتت بەرەو دواوە لار بکەرەوە. بارەکە بهێنە خوارەوە بۆ سەرووی سنگت و ماسولکەکانی پشتت تەواو توند بکە.',
-      'mistake': 'ڕاکێشانی بار بۆ پشتی مل کە زۆر مەترسیدارە بۆ بڕبڕەی مل.',
-      'breathing': 'ڕاکێشان: هەناسەدانەوە، سەرکەوتن: هەناسە هەڵمژین.',
-      'keywords': ['lat', 'pulldown', 'پولداون', 'لات', 'پشت', 'کێشان'],
+          'Sit securely with your thighs locked under the pads. Lean back slightly and pull the wide bar down to your upper clavicle while squeezing your shoulder blades together.',
+      'mistake': 'Pulling the bar behind your neck, which puts hazardous rotational stress on the cervical spine.',
+      'breathing': 'Exhale as you pull the bar downward; inhale as the bar returns smoothly to the top.',
+      'keywords': ['lat', 'pulldown', 'back', 'cable'],
     },
     {
       'id': 'barbell_row',
       'title': 'Bent-Over Barbell Row',
-      'kurdish': 'ڕاکێشانی باربێڵ بە چەمانەوە',
       'muscleCategory': 'back',
-      'muscle': 'ناوەڕاستی پشت',
-      'target': 'ئەستوورکردنی ماسولکەکانی پشت',
+      'muscle': 'Mid Back',
+      'target': 'Rhomboids, Trapezius & Lats',
       'sets': '4 Sets × 10 Reps',
-      'level': 'پێشکەوتوو',
+      'level': 'Advanced',
       'burn': '150 kcal',
-      'equipment': 'Barbell & Plates',
+      'equipment': 'Barbell & Olympic Plates',
       'videoDuration': '0:45',
       'videoQuality': '1080p HD',
       'image': 'assets/images/male_fitness_banner.jpg',
       'instructions':
-          'ئەژنۆت کەمێک بچەمێنەرەوە و پشتت لەسەر گۆشەی ٤٥ پلە ڕێک ڕابگرە. بارەکە ڕابکێشە بۆ ناوک بە ڕاکێشانی ئەنیشکەکانت بەرەو دواوە.',
-      'mistake': 'خوارکردنی بڕبڕەی پشت و دروستکردنی پەستان لەسەر کەمەر.',
-      'breathing': 'ڕاکێشان: هەناسەدانەوە، بەرەو خوار: هەڵمژین.',
-      'keywords': ['row', 'ڕاو', 'باربێڵ', 'پشت'],
+          'Hinge at your hips with a flat back and a 45-degree torso angle. Pull the barbell straight up into your lower ribcage by leading with your elbows.',
+      'mistake': 'Rounding your lumbar spine or using jerking leg momentum to lift the barbell.',
+      'breathing': 'Exhale as you row the bar to your abdomen; inhale as you lower the weight.',
+      'keywords': ['row', 'barbell', 'back', 'bent-over'],
     },
     {
       'id': 'deadlift',
       'title': 'Conventional Barbell Deadlift',
-      'kurdish': 'دیدلیفت بە باربێڵ',
       'muscleCategory': 'back',
-      'muscle': 'تەواوی پشت و قاچ',
-      'target': 'هێزی گشتی پشت و بەستەرەکان',
+      'muscle': 'Full Posterior Chain',
+      'target': 'Erector Spinae, Glutes & Hamstrings',
       'sets': '4 Sets × 6-8 Reps',
-      'level': 'پێشکەوتوو',
+      'level': 'Advanced',
       'burn': '210 kcal',
       'equipment': 'Barbell & Olympic Plates',
       'videoDuration': '0:55',
       'videoQuality': '4K Ultra',
       'image': 'assets/images/workout_back.jpg',
       'instructions':
-          'پێیەکانت بە پانی شانت دابنێ. بارەکە بە هەردوو دەست بگرە، پشتت بە تەواوی ڕێک و سنگی بەرز ڕابگرە، بە هێزی پاڵنانی پێیەکان کێشەکە بەرز بکەرەوە.',
-      'mistake': 'قۆپکردنی پشت لەکاتی بەرزکردنەوە کە مەترسی دیسکی هەیە.',
-      'breathing': 'لەسەر زەوی هەڵمژینی قووڵ، لە بەرزترین خاڵ دانەوە.',
-      'keywords': ['deadlift', 'دیدلیفت', 'پشت', 'قاچ'],
+          'Stand with feet hip-width apart, bar over mid-foot. Hinge down, grip the bar, brace your core, keep your spine neutral, and drive the floor away with your legs to stand upright.',
+      'mistake': 'Hyperextending your lower back at lockout or letting the bar drift far in front of your shins.',
+      'breathing': 'Take a deep breath and brace your core at the bottom; exhale at the top lockout.',
+      'keywords': ['deadlift', 'back', 'powerlifting', 'strength'],
     },
 
-    // --- 3. SHOULDERS (شان) ---
+    // --- 3. SHOULDERS ---
     {
       'id': 'overhead_press',
       'title': 'Overhead Military Press',
-      'kurdish': 'پرێسی شانی سەربازی بە باربێڵ',
       'muscleCategory': 'shoulders',
-      'muscle': 'شانی پێشەوە و ناوەڕاست',
-      'target': 'گەورەکردنی قەبارەی گشتی شان',
+      'muscle': 'Anterior & Lateral Delts',
+      'target': 'Deltoid Complex & Triceps',
       'sets': '4 Sets × 10 Reps',
-      'level': 'پێشکەوتوو',
+      'level': 'Advanced',
       'burn': '135 kcal',
       'equipment': 'Barbell & Squat Rack',
       'videoDuration': '0:45',
       'videoQuality': '1080p HD',
       'image': 'assets/images/male_fitness_banner.jpg',
       'instructions':
-          'بە پێوە بوەستە، سک و کەمەرت توند بکە. بارەکە لەسەر ئاستی سەرەوەی سنگتەوە بەرەو سەرووی سەر بەرز بکەرەوە تا دەستەکانت ڕاست دەبنەوە.',
-      'mistake': 'بردنە دواوەی زۆری کەمەر و بەکارهێنانی قاچ بۆ هاوێشتن.',
-      'breathing': 'سەرکەوتن: هەناسەدانەوە، دابەزین: هەڵمژین.',
-      'keywords': ['overhead', 'press', 'شان', 'سەربازی', 'باربێڵ'],
+          'Stand tall with feet shoulder-width apart and core braced. Press the barbell vertically overhead from collarbone level until your arms are fully extended overhead.',
+      'mistake': 'Arching your lower back excessively or bending your knees to turn the lift into a push-press.',
+      'breathing': 'Exhale as you press the bar overhead; inhale as you lower it with control to collarbone.',
+      'keywords': ['overhead', 'press', 'military', 'shoulders'],
     },
     {
       'id': 'lateral_raise',
       'title': 'Dumbbell Lateral Raise',
-      'kurdish': 'کردنەوەی دەمبڵ بۆ لاکان',
       'muscleCategory': 'shoulders',
-      'muscle': 'شانی ناوەڕاست',
-      'target': 'تۆپکردن و فراوانکردنی شان',
+      'muscle': 'Lateral Deltoids',
+      'target': 'Shoulder Capping & Width',
       'sets': '4 Sets × 15 Reps',
-      'level': 'مامناوەند',
+      'level': 'Intermediate',
       'burn': '90 kcal',
       'equipment': 'Dumbbells',
       'videoDuration': '0:30',
       'videoQuality': '1080p HD',
       'image': 'assets/images/splash_athlete.jpg',
       'instructions':
-          'دەمبڵەکان لە تەنیشت ڕانتەوە بەرز بکەرەوە تا ئاستی شانت بە شێوەیەکی کەمێک کەوانەیی، ئەنیشکت کەمێک چەماوە بێت.',
-      'mistake': 'بەرزکردنەوەی دەمبڵەکان بە زەبری لەش و لاربوونەوە.',
-      'breathing': 'بەرزکردنەوە: هەناسەدانەوە، هێنانە خوارەوە: هەڵمژین.',
-      'keywords': ['lateral', 'raise', 'شان', 'لاکان', 'دەمبڵ'],
+          'Raise the dumbbells out to the sides in a slight forward angle with soft elbows until your arms are parallel to the floor. Pause momentarily at shoulder height.',
+      'mistake': 'Swinging your torso back and forth or shrugging your traps to raise the dumbbells.',
+      'breathing': 'Exhale as you raise dumbbells laterally; inhale on the controlled descent.',
+      'keywords': ['lateral', 'raise', 'shoulders', 'delts'],
     },
     {
       'id': 'face_pulls',
-      'title': 'Cable Face Pulls',
-      'kurdish': 'فەیس پول بە کەیبڵ و پەت',
+      'title': 'Cable Rope Face Pulls',
       'muscleCategory': 'shoulders',
-      'muscle': 'شانی دواوە و ستوون',
-      'target': 'ڕێککردنەوەی قەمبووری و شانی دواوە',
+      'muscle': 'Rear Deltoids',
+      'target': 'Posterior Delts & Rotator Cuff',
       'sets': '4 Sets × 15 Reps',
-      'level': 'سەرەتایی',
+      'level': 'Beginner',
       'burn': '85 kcal',
-      'equipment': 'Cable & Rope',
+      'equipment': 'Cable & Rope Attachment',
       'videoDuration': '0:35',
       'videoQuality': '1080p HD',
       'image': 'assets/images/female_fitness_banner.jpg',
       'instructions':
-          'پەتەکە ڕابکێشە بەرەو ڕووی دەموچاوت لە ئاستی چاودا، لە کاتی ڕاکێشاندا ئەنیشکەکانت بە بەرزی و بۆ دەرەوە ڕابگرە.',
-      'mistake': 'ڕاکێشان بۆ خوارەوەی گەردن بەبێ بەرزکردنەوەی ئەنیشک.',
-      'breathing': 'ڕاکێشان: دانەوە، گەڕانەوە: هەڵمژین.',
-      'keywords': ['face', 'pull', 'شان', 'دواوە', 'پەت'],
+          'Set cable at eye height. Pull rope attachment toward your face while flaring elbows high and externally rotating wrists back.',
+      'mistake': 'Pulling down toward your chest instead of keeping elbows high at eye level.',
+      'breathing': 'Exhale on the pull and contraction; inhale as arms extend forward.',
+      'keywords': ['face', 'pull', 'rear', 'delts'],
     },
 
-    // --- 4. ARMS (باڵ و بازوو) ---
+    // --- 4. ARMS ---
     {
       'id': 'bicep_curl',
       'title': 'Standing Barbell Bicep Curl',
-      'kurdish': 'بایسێپس بە باربێڵ بە پێوە',
       'muscleCategory': 'arms',
-      'muscle': 'بازوو (Biceps)',
-      'target': 'لووتکەی ماسولکەی بازوو',
+      'muscle': 'Biceps Brachii',
+      'target': 'Bicep Peak & Forearms',
       'sets': '4 Sets × 12 Reps',
-      'level': 'سەرەتایی',
+      'level': 'Beginner',
       'burn': '100 kcal',
       'equipment': 'EZ Bar or Straight Bar',
       'videoDuration': '0:35',
       'videoQuality': '1080p HD',
       'image': 'assets/images/splash_athlete.jpg',
       'instructions':
-          'بە پێوە بوەستە و ئەنیشکەکانت لە تەنیشت کەمەرت بچەسپێنە. بارەکە بەرەو سەرەوە بەرز بکەرەوە تەنها بە جوڵاندنی پێشەدەست.',
-      'mistake': 'جوڵاندنی ئەنیشک بەرەو پێشەوە یان بەکارهێنانی کەمەر.',
-      'breathing': 'سەرکەوتن: هەناسەدانەوە، دابەزین: هەڵمژین.',
-      'keywords': ['bicep', 'curl', 'بایسێپس', 'بازوو', 'باربێڵ'],
+          'Stand upright with elbows pinned tightly against your sides. Curl the barbell upward by contracting your biceps while keeping your upper arms stationary.',
+      'mistake': 'Swinging elbows forward or hyperextending your spine to cheat the weight up.',
+      'breathing': 'Exhale as you curl the weight upward; inhale as you lower the barbell.',
+      'keywords': ['bicep', 'curl', 'arms', 'barbell'],
     },
     {
       'id': 'hammer_curl',
       'title': 'Dumbbell Hammer Curl',
-      'kurdish': 'هەمەر کێرڵ بە دەمبڵ',
       'muscleCategory': 'arms',
-      'muscle': 'بازوو و مەچەک',
-      'target': 'ئەستوورکردنی بازوو و ساعد',
+      'muscle': 'Brachialis & Forearms',
+      'target': 'Arm Thickness & Forearm Strength',
       'sets': '3 Sets × 12 Reps',
-      'level': 'مامناوەند',
+      'level': 'Intermediate',
       'burn': '90 kcal',
       'equipment': 'Dumbbells',
       'videoDuration': '0:32',
       'videoQuality': '1080p HD',
       'image': 'assets/images/onboarding_athlete.jpg',
       'instructions':
-          'دەمبڵەکان بگرە بە شێوەی چەکوش کە کەمەرەی دەمبڵەکە بەرەو سەرەوە بێت، بە هێواشی کێرڵی بکە بەبێ جوڵاندنی شانت.',
-      'mistake': 'لەقاندنی قۆڵ و پشت بۆ کێشانی دەمبڵ.',
-      'breathing': 'بەرزکردنەوە: دانەوە، دابەزین: هەڵمژین.',
-      'keywords': ['hammer', 'curl', 'هەمەر', 'چەکوش', 'بازوو'],
+          'Hold dumbbells with palms facing each other (neutral grip). Curl weights toward shoulders while maintaining the neutral hand alignment throughout.',
+      'mistake': 'Flaring elbows outward or twisting wrists at the top of the curl.',
+      'breathing': 'Exhale as you curl dumbbells; inhale on the downward return.',
+      'keywords': ['hammer', 'curl', 'biceps', 'brachialis'],
     },
     {
       'id': 'tricep_rope',
       'title': 'Tricep Rope Pushdown',
-      'kurdish': 'تڕایسێپس بە کێبڵ و پەت',
       'muscleCategory': 'arms',
-      'muscle': 'پشتی باڵ (Triceps)',
-      'target': 'سەری دەرەوەی تڕایسێپس',
+      'muscle': 'Lateral & Medial Triceps',
+      'target': 'Tricep Horseshoe Definition',
       'sets': '4 Sets × 15 Reps',
-      'level': 'سەرەتایی',
+      'level': 'Beginner',
       'burn': '95 kcal',
       'equipment': 'Cable & Rope Attachment',
       'videoDuration': '0:32',
       'videoQuality': '1080p HD',
       'image': 'assets/images/male_fitness_banner.jpg',
       'instructions':
-          'پەتەکە ڕابکێشە بەرەو خوارەوە، لە کۆتایی جوڵەکەدا سەرەکانی پەتەکە لە یەکتر جیا بکەرەوە بۆ تەواو توندکردنی تڕایسێپس.',
-      'mistake': 'جوڵاندنی ئەنیشکەکان لە کاتی کێشان.',
-      'breathing': 'خوارەوە: هەناسەدانەوە، سەرەوە: هەڵمژین.',
-      'keywords': ['tricep', 'rope', 'تڕایسێپس', 'پەت', 'کەیبڵ'],
+          'Pin your elbows against your ribs. Push the rope attachment downward toward your thighs, spreading the ends apart at the bottom for peak tricep contraction.',
+      'mistake': 'Allowing elbows to drift forward and up, turning the exercise into a shoulder press.',
+      'breathing': 'Exhale as you press the rope down; inhale as hands return to 90-degree flexion.',
+      'keywords': ['tricep', 'rope', 'pushdown', 'arms'],
     },
 
-    // --- 5. LEGS (قاچ و سمت) ---
+    // --- 5. LEGS ---
     {
       'id': 'barbell_squat',
       'title': 'Barbell Back Squat',
-      'kurdish': 'سکوات بە باربێڵ لەسەر پشت',
       'muscleCategory': 'legs',
-      'muscle': 'ڕان و سمت (Quads & Glutes)',
-      'target': 'گەورەکردنی قەبارەی ڕان و سمت',
+      'muscle': 'Quads & Glutes',
+      'target': 'Quadriceps, Gluteus Maximus & Core',
       'sets': '4 Sets × 8-10 Reps',
-      'level': 'پێشکەوتوو',
+      'level': 'Advanced',
       'burn': '190 kcal',
       'equipment': 'Squat Rack & Barbell',
       'videoDuration': '0:55',
       'videoQuality': '4K Ultra',
       'image': 'assets/images/female_fitness_banner.jpg',
       'instructions':
-          'پێیەکانت بە پانی شانت بکەرەوە. دابەزە وەک ئەوەی لەسەر کورسی دابنیشیت، تا ئەژنۆت دەگاتە گۆشەی ٩٠ پلە یان کەمتر، پاشان پاڵ بنێ.',
-      'mistake': 'هاتنە پێشەوەی زۆری ئەژنۆکان یان چەمانەوەی بڕبڕەی پشت.',
-      'breathing': 'دابەزین: هەڵمژینی قووڵ، سەرکەوتن: بەهێز دانەوە.',
-      'keywords': ['squat', 'سکوات', 'قاچ', 'ڕان', 'سمت'],
+          'Rest barbell securely across upper traps. Descend by breaking at hips and knees simultaneously until thighs are parallel to the floor, then drive through heels to stand.',
+      'mistake': 'Knees caving inward or chest collapsing forward during the ascent.',
+      'breathing': 'Inhale deeply and brace core before descending; exhale as you drive out of the hole.',
+      'keywords': ['squat', 'legs', 'quads', 'glutes'],
     },
     {
       'id': 'leg_press',
       'title': '45-Degree Leg Press',
-      'kurdish': 'لێگ پرێس لەسەر ئامێری ٤٥ پلە',
       'muscleCategory': 'legs',
-      'muscle': 'چوارسەری ڕان',
-      'target': 'ئەستووری پێشەوەی ڕان',
+      'muscle': 'Quadriceps & Hips',
+      'target': 'Quad Thickness & Leg Drive',
       'sets': '4 Sets × 12 Reps',
-      'level': 'مامناوەند',
+      'level': 'Intermediate',
       'burn': '145 kcal',
       'equipment': 'Leg Press Machine',
       'videoDuration': '0:40',
       'videoQuality': '1080p HD',
       'image': 'assets/images/female_fitness_banner.jpg',
       'instructions':
-          'پێیەکانت لە ناوەڕاستی سەکۆکە دابنێ. کێشەکە بهێنە خوارەوە بە کۆنترۆڵ، بەبێ ئەوەی ئەنیشکی ئەژنۆ لە کاتی بەرزکردنەوەدا قفڵ بکەیت.',
-      'mistake': 'قفڵکردنی تەواوی ئەژنۆ کە فشارێکی زۆر دەخاتە سەر بەستەرەکان.',
-      'breathing': 'خوارەوە: هەڵمژین، بردنە سەرەوە: دانەوە.',
-      'keywords': ['leg', 'press', 'لێگ', 'پرێس', 'قاچ'],
+          'Place feet shoulder-width apart on the sled. Lower the platform smoothly until knees are at 90 degrees, then press back up without hyper-locking knees.',
+      'mistake': 'Locking your knees violently at the top or lifting your pelvis off the backrest.',
+      'breathing': 'Inhale on the negative descent; exhale as you drive the sled upward.',
+      'keywords': ['leg', 'press', 'quads', 'machine'],
     },
     {
       'id': 'romanian_deadlift',
       'title': 'Romanian Deadlift (RDL)',
-      'kurdish': 'دیدلیفتی ڕۆمانی بۆ پشتەڕان',
       'muscleCategory': 'legs',
-      'muscle': 'پشتەڕان و سمت',
-      'target': 'درێژکردنەوە و توندکردنی پشتەڕان',
+      'muscle': 'Hamstrings & Glutes',
+      'target': 'Hamstring Elongation & Glute Tie-in',
       'sets': '4 Sets × 10 Reps',
-      'level': 'مامناوەند',
+      'level': 'Intermediate',
       'burn': '130 kcal',
       'equipment': 'Barbell or Dumbbells',
       'videoDuration': '0:42',
       'videoQuality': '1080p HD',
       'image': 'assets/images/workout_back.jpg',
       'instructions':
-          'بە پێوە بوەستە، ئەژنۆ کەمێک چەماوە بێت. سمتت بەرەو دواوە بدە کاتێک بارەکە بە نزیک قاچتدا دەهێنیتە خوارەوە تا پشتەڕانت ڕادەکێشرێت.',
-      'mistake': 'چەمانەوەی ئەژنۆ وەک سکوات یان خوارکردنی کەمەر.',
-      'breathing': 'دابەزین: هەڵمژین، سەرکەوتن: دانەوە.',
-      'keywords': ['rdl', 'romanian', 'deadlift', 'پشتەڕان', 'سمت'],
+          'Maintain a soft bend in knees and a rigid neutral spine. Push hips back as far as possible while sliding the weight down close to shins until deep hamstring stretch.',
+      'mistake': 'Bending knees excessively into a squat or rounding the lower spine.',
+      'breathing': 'Inhale on the hip hinge descent; exhale as you thrust hips forward to full upright.',
+      'keywords': ['rdl', 'romanian', 'deadlift', 'hamstrings'],
     },
 
-    // --- 6. CORE (سک و ناوەند) ---
+    // --- 6. CORE ---
     {
       'id': 'plank_core',
       'title': 'Core Plank to Pike',
-      'kurdish': 'پلانک و توندکردنی ناوەند',
       'muscleCategory': 'core',
-      'muscle': 'ماسولکە قووڵەکانی سک',
-      'target': 'تەختی سک و ڕێکی باڵا',
+      'muscle': 'Transverse Abdominis',
+      'target': 'Deep Core Stability & Flat Waist',
       'sets': '3 Sets × 45 Sec',
-      'level': 'سەرەتایی',
+      'level': 'Beginner',
       'burn': '80 kcal',
       'equipment': 'Yoga Mat',
       'videoDuration': '0:35',
       'videoQuality': '1080p HD',
       'image': 'assets/images/posture_dark_3d.jpg',
       'instructions':
-          'لەسەر پێشەدەستەکانت ڕابوەستە و تەواوی لەشت وەک تەختە لە یەک هێڵدا ڕابگرە. کەمەرت توند بکە و لەشت شۆڕ مەکەرەوە.',
-      'mistake': 'بەرزکردنەوەی زۆری سمت یان شۆڕکردنەوەی کەمەر بەرەو زەوی.',
-      'breathing': 'هەناسەدانی هێواش و بەردەوام بەبێ ڕاگرتنی هەناسە.',
-      'keywords': ['plank', 'core', 'پلانک', 'سک', 'ناوەند'],
+          'Hold a rigid forearm plank with your body in a straight line from heels to head. Engage your transverse abdominis by drawing your belly button inward.',
+      'mistake': 'Sagging your lower back or piking your hips high into the air.',
+      'breathing': 'Breathe steadily and rhythmically without holding your breath.',
+      'keywords': ['plank', 'core', 'abs', 'stability'],
     },
     {
       'id': 'hanging_leg_raise',
-      'title': 'Hanging Knee/Leg Raise',
-      'kurdish': 'هەڵواسینی قاچ بۆ خوارەوەی سک',
+      'title': 'Hanging Knee / Leg Raise',
       'muscleCategory': 'core',
-      'muscle': 'خوارەوەی سک (V-Line)',
-      'target': 'دروستکردنی هێڵی خوارەوەی سک',
+      'muscle': 'Lower Abdominals',
+      'target': 'V-Line Definition & Hip Flexors',
       'sets': '4 Sets × 15 Reps',
-      'level': 'مامناوەند',
+      'level': 'Intermediate',
       'burn': '95 kcal',
       'equipment': 'Pull-Up Bar',
       'videoDuration': '0:36',
       'videoQuality': '1080p HD',
       'image': 'assets/images/posture_dark_3d.jpg',
       'instructions':
-          'لە بارەکە هەڵبواسە. ئەژنۆ یان قاچت ڕاست بەرەو سەرووی کەمەرت بەرز بکەرەوە بە هێزی ماسولکەکانی سک بەبێ لەقاندنی لەش.',
-      'mistake': 'شەپۆلدانی لەش بە دواوە و پێشەوە بۆ بەرزکردنەوە.',
-      'breathing': 'بەرزکردنەوە: دانەوە، دابەزین: هەڵمژین.',
-      'keywords': ['hanging', 'leg', 'raise', 'سک', 'هەڵواسین'],
+          'Hang from bar with straight arms. Raise knees or straight legs upward by rolling your pelvis up toward your ribcage with zero torso swinging.',
+      'mistake': 'Swinging your body back and forth using momentum rather than abdominal contraction.',
+      'breathing': 'Exhale as you raise legs; inhale as you lower them with control.',
+      'keywords': ['hanging', 'leg', 'raise', 'abs'],
     },
   ];
 
@@ -509,7 +490,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: const Text(
-                  'کاتی پشوودان تەواو بوو! ئامادەبە بۆ سێتی داهاتوو 💪',
+                  'Rest time finished! Time for the next set 💪',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 backgroundColor: const Color(0xFF10B981),
@@ -550,11 +531,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       // Search filter
       if (_searchQuery.isNotEmpty) {
         final q = _searchQuery.toLowerCase();
-        final kurd = (item['kurdish'] as String).toLowerCase();
-        final eng = (item['title'] as String).toLowerCase();
+        final title = (item['title'] as String).toLowerCase();
+        final target = (item['target'] as String).toLowerCase();
         final keywords = (item['keywords'] as List<dynamic>).map((k) => k.toString()).toList();
         final matchesKeywords = keywords.any((k) => k.toLowerCase().contains(q));
-        if (!kurd.contains(q) && !eng.contains(q) && !matchesKeywords) {
+        if (!title.contains(q) && !target.contains(q) && !matchesKeywords) {
           return false;
         }
       }
@@ -567,7 +548,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     final showGridView = _selectedCategory == null && _searchQuery.isEmpty;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F8FA),
+      backgroundColor: const Color(0xFFF7F8FA),
       body: CustomScrollView(
         slivers: [
           // 1. Sleek Modern App Bar
@@ -583,32 +564,41 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             // Title for Grid
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Row(
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.grid_view_rounded, color: AppColors.primary, size: 18),
-                        SizedBox(width: 8),
                         Text(
-                          'شوێنی یارییەکان و بەشەکانی لەش',
+                          'Target Muscle Groups',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.w900,
                             color: Color(0xFF131519),
+                            letterSpacing: -0.5,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Select an area to explore calibrated video routines',
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF757A86),
                           ),
                         ),
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        '${_muscleCategories.length} بەش',
+                        '${_muscleCategories.length} Categories',
                         style: const TextStyle(
                           color: AppColors.primary,
                           fontSize: 11,
@@ -627,9 +617,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 1.05,
+                  crossAxisSpacing: 14,
+                  mainAxisSpacing: 14,
+                  childAspectRatio: 0.92,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -648,7 +638,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
             // Exercise Cards List
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 110),
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 110),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -677,17 +667,17 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       title: const Column(
         children: [
           Text(
-            'هەموو یارییەکان و ڤیدیۆ',
+            'Exercise & Video Hub',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w900,
               color: Color(0xFF131519),
-              letterSpacing: -0.3,
+              letterSpacing: -0.4,
             ),
           ),
           SizedBox(height: 2),
           Text(
-            'Exercise & Movement Video Hub',
+            'Master Movement Library & Form Guide',
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w500,
@@ -702,7 +692,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           onTap: _toggleTimer,
           child: Container(
             margin: const EdgeInsets.only(right: 16),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
             decoration: BoxDecoration(
               color: _isTimerActive ? AppColors.primary : const Color(0xFFF1F3F6),
               borderRadius: BorderRadius.circular(14),
@@ -718,9 +708,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                   size: 15,
                   color: _isTimerActive ? Colors.white : const Color(0xFF131519),
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: 5),
                 Text(
-                  _isTimerActive ? '${_currentTimerSeconds}s' : 'پشوو',
+                  _isTimerActive ? '${_currentTimerSeconds}s' : 'Rest 45s',
                   style: TextStyle(
                     fontSize: 11.5,
                     fontWeight: FontWeight.bold,
@@ -752,7 +742,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           onChanged: (val) => setState(() => _searchQuery = val),
           style: const TextStyle(fontSize: 13, color: Color(0xFF131519)),
           decoration: InputDecoration(
-            hintText: 'گەڕان بە ناوی یاری (سنگ، پشت، باربێڵ، سکوات...)',
+            hintText: 'Search exercises, muscles (Bench, Squat, Delts...)',
             hintStyle: const TextStyle(color: Color(0xFF9EA3AE), fontSize: 12.5),
             prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF9EA3AE), size: 20),
             suffixIcon: _searchQuery.isNotEmpty
@@ -774,133 +764,130 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
   // --- 3. BEAUTIFUL 2-COLUMN GRID MUSCLE CARD ---
   Widget _buildGridMuscleCard(Map<String, dynamic> cat) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedCategory = cat['id'];
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: Colors.black.withValues(alpha: 0.08), width: 1),
-          image: DecorationImage(
-            image: AssetImage(cat['image']),
-            fit: BoxFit.cover,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.08), width: 1),
+        image: DecorationImage(
+          image: AssetImage(cat['image']),
+          fit: BoxFit.cover,
         ),
-        child: Stack(
-          children: [
-            // Dark cinematic gradient
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(21),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: const [0.0, 0.45, 1.0],
-                  colors: [
-                    Colors.black.withValues(alpha: 0.25),
-                    Colors.black.withValues(alpha: 0.5),
-                    Colors.black.withValues(alpha: 0.92),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.12),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(24),
+          onTap: () {
+            setState(() {
+              _selectedCategory = cat['id'];
+            });
+          },
+          child: Stack(
+            children: [
+              // Dark cinematic gradient
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(23),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: const [0.0, 0.45, 1.0],
+                    colors: [
+                      Colors.black.withValues(alpha: 0.2),
+                      Colors.black.withValues(alpha: 0.45),
+                      Colors.black.withValues(alpha: 0.94),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Top Pill: Count Badge
+              Positioned(
+                top: 10,
+                right: 10,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.65),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                  ),
+                  child: Text(
+                    cat['count'],
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              // Bottom Content: Title, Subtitle, and Sleek Frosted Glass Button
+              Positioned(
+                bottom: 12,
+                left: 12,
+                right: 12,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      cat['title'],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.4,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      cat['subtitle'],
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Elegant Luxury Button
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.28)),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'View Exercises',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 12),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ),
-
-            // Top Pill: Count Badge
-            Positioned(
-              top: 10,
-              right: 10,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.65),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
-                ),
-                child: Text(
-                  cat['count'],
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-
-            // Bottom Content: Title, Subtitle, and Tap action button
-            Positioned(
-              bottom: 12,
-              left: 12,
-              right: 12,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    cat['title'],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.5,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -0.3,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    cat['subtitle'],
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.8),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Beautiful Button
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.4),
-                          blurRadius: 6,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'بینینی یارییەکان',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 9),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -941,10 +928,10 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.arrow_back_ios_new_rounded, size: 13, color: Color(0xFF131519)),
+                      Icon(Icons.arrow_back_rounded, size: 15, color: Color(0xFF131519)),
                       SizedBox(width: 6),
                       Text(
-                        'گەڕانەوە بۆ بەشەکان',
+                        'All Muscle Groups',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -968,7 +955,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     const Icon(Icons.video_collection_rounded, color: AppColors.primary, size: 14),
                     const SizedBox(width: 4),
                     Text(
-                      '$count یاری بەردەستە',
+                      '$count Exercises',
                       style: const TextStyle(
                         color: AppColors.primary,
                         fontSize: 11.5,
@@ -986,19 +973,19 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           Row(
             children: [
               Text(
-                'یارییەکانی ${activeCat['title']}',
+                activeCat['title'],
                 style: const TextStyle(
-                  fontSize: 17,
+                  fontSize: 18,
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF131519),
-                  letterSpacing: -0.3,
+                  letterSpacing: -0.4,
                 ),
               ),
               const SizedBox(width: 8),
               Text(
-                '(${activeCat['subtitle']})',
+                '• ${activeCat['subtitle']}',
                 style: const TextStyle(
-                  fontSize: 12.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
                   color: Color(0xFF757A86),
                 ),
@@ -1081,11 +1068,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
                     child: Image.asset(
                       ex['image'],
-                      height: 165,
+                      height: 170,
                       width: double.infinity,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Container(
-                        height: 165,
+                        height: 170,
                         color: Colors.grey.shade300,
                         child: const Icon(Icons.fitness_center_rounded, size: 40),
                       ),
@@ -1094,7 +1081,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
                   // Dark gradient overlay
                   Container(
-                    height: 165,
+                    height: 170,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
                       gradient: LinearGradient(
@@ -1114,7 +1101,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     top: 12,
                     left: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.7),
                         borderRadius: BorderRadius.circular(10),
@@ -1162,8 +1149,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
                   // Center Glowing Play Button
                   Container(
-                    width: 50,
-                    height: 50,
+                    width: 52,
+                    height: 52,
                     decoration: BoxDecoration(
                       color: AppColors.primary,
                       shape: BoxShape.circle,
@@ -1225,7 +1212,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: const Text(
-                            'سەیرکردنی ڤیدیۆ',
+                            'Watch Form Video',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10,
@@ -1245,21 +1232,21 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title in Kurdish (Bold & Prominent)
+                    // Title in English (Bold & Prominent)
                     Text(
-                      ex['kurdish'],
+                      ex['title'],
                       style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
                         color: Color(0xFF131519),
-                        letterSpacing: -0.3,
+                        letterSpacing: -0.4,
                       ),
                     ),
                     const SizedBox(height: 3),
 
-                    // English Name & Focus
+                    // Target Muscle Breakdown
                     Text(
-                      '${ex['title']} • ${ex['target']}',
+                      ex['target'],
                       style: const TextStyle(
                         fontSize: 12,
                         color: Color(0xFF757A86),
@@ -1290,7 +1277,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
   Widget _buildMetricChip(IconData icon, String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
       decoration: BoxDecoration(
         color: const Color(0xFFF6F8FA),
         borderRadius: BorderRadius.circular(10),
@@ -1316,7 +1303,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 }
 
 // ============================================================================
-// INTERACTIVE VIDEO TUTORIAL & MOVEMENT MODAL
+// INTERACTIVE VIDEO TUTORIAL & MOVEMENT MODAL (100% ENGLISH)
 // ============================================================================
 class _ExerciseVideoModal extends StatefulWidget {
   final Map<String, dynamic> exercise;
@@ -1480,7 +1467,7 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
-                                  _isSlowMotion ? '0.5x هێواش' : '1.0x خێرایی',
+                                  _isSlowMotion ? '0.5x Slow' : '1.0x Normal',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 10,
@@ -1548,7 +1535,7 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
                                     Icon(Icons.remove_red_eye_rounded, color: Colors.white70, size: 13),
                                     SizedBox(width: 4),
                                     Text(
-                                      'ڕێنمایی تەکنیکی جووڵە',
+                                      'Technique & Form Guide',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 10.5,
@@ -1611,16 +1598,17 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            ex['kurdish'],
+                            ex['title'],
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w900,
                               color: Color(0xFF131519),
+                              letterSpacing: -0.4,
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '${ex['title']} • ${ex['target']}',
+                            ex['target'],
                             style: const TextStyle(
                               fontSize: 13,
                               color: Color(0xFF676E7D),
@@ -1638,23 +1626,23 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
                 // 3. STATS TILES
                 Row(
                   children: [
-                    _buildSpecTile('سێت و دووبارە', ex['sets']),
+                    _buildSpecTile('Sets & Reps', ex['sets']),
                     const SizedBox(width: 8),
-                    _buildSpecTile('سووتاندن', ex['burn']),
+                    _buildSpecTile('Calories', ex['burn']),
                     const SizedBox(width: 8),
-                    _buildSpecTile('ئامێر', ex['equipment']),
+                    _buildSpecTile('Equipment', ex['equipment']),
                   ],
                 ),
 
                 const SizedBox(height: 20),
 
-                // 4. STEP-BY-STEP INSTRUCTIONS IN KURDISH
+                // 4. STEP-BY-STEP INSTRUCTIONS
                 const Row(
                   children: [
                     Icon(Icons.directions_run_rounded, color: AppColors.primary, size: 18),
                     SizedBox(width: 6),
                     Text(
-                      'چۆنیەتی ئەنجامدانی یارییەکە بە تەکنیکی دروست:',
+                      'Instructions & Movement Execution:',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
@@ -1701,7 +1689,7 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'تەکنیکی هەناسەدان:',
+                                'Breathing Technique:',
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -1744,7 +1732,7 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'هەڵە باوەکان کە دەبێت لێیان دووربکەویتەوە:',
+                                'Common Mistakes to Avoid:',
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -1780,7 +1768,7 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
                   ),
                   icon: const Icon(Icons.timer_rounded, size: 20),
                   label: const Text(
-                    'دەستپێکردنی کاتی پشوودان',
+                    'Start Rest Countdown',
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -1811,7 +1799,7 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
             Text(
               value,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF131519)),
+              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF131519)),
             ),
           ],
         ),
