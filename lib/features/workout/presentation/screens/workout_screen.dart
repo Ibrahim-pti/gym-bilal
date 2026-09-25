@@ -10,36 +10,34 @@ class WorkoutScreen extends StatefulWidget {
 }
 
 class _WorkoutScreenState extends State<WorkoutScreen> {
-  // Selected Muscle Filter
-  int _selectedMuscleIndex = 0;
+  // Active selected muscle category filter: null = Grid View of all categories!
+  String? _selectedCategory;
+
+  // Categories definitions with images
   final List<Map<String, dynamic>> _muscleCategories = [
-    {
-      'id': 'all',
-      'title': 'هەموو یارییەکان',
-      'subtitle': 'All Exercises',
-      'image': 'assets/images/card_gym_full.png',
-      'count': '19 یاری',
-    },
     {
       'id': 'chest',
       'title': 'سنگ',
       'subtitle': 'Chest Focus',
       'image': 'assets/images/workout_back.jpg',
       'count': '4 یاری',
+      'tag': 'Pectorals',
     },
     {
       'id': 'back',
-      'title': 'پشت',
+      'title': 'پشت و باڵ',
       'subtitle': 'Back & Lats',
       'image': 'assets/images/pullup_figure.jpg',
       'count': '4 یاری',
+      'tag': 'V-Taper',
     },
     {
       'id': 'shoulders',
-      'title': 'شان',
-      'subtitle': 'Deltoids',
+      'title': 'شانەکان',
+      'subtitle': 'Shoulders & Delts',
       'image': 'assets/images/male_fitness_banner.jpg',
       'count': '3 یاری',
+      'tag': '3D Deltoids',
     },
     {
       'id': 'arms',
@@ -47,13 +45,15 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       'subtitle': 'Biceps & Triceps',
       'image': 'assets/images/splash_athlete.jpg',
       'count': '3 یاری',
+      'tag': 'Arms Peak',
     },
     {
       'id': 'legs',
       'title': 'قاچ و سمت',
-      'subtitle': 'Quads & Glutes',
+      'subtitle': 'Legs & Quads',
       'image': 'assets/images/female_fitness_banner.jpg',
       'count': '3 یاری',
+      'tag': 'Squats & Glutes',
     },
     {
       'id': 'core',
@@ -61,6 +61,15 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       'subtitle': 'Abs & Core',
       'image': 'assets/images/posture_dark_3d.jpg',
       'count': '2 یاری',
+      'tag': 'Six Pack',
+    },
+    {
+      'id': 'all',
+      'title': 'هەموو یارییەکان',
+      'subtitle': 'All Exercises',
+      'image': 'assets/images/card_gym_full.png',
+      'count': '19 یاری',
+      'tag': 'Full Library',
     },
   ];
 
@@ -68,7 +77,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
-  // Bookmarked / Favorite Exercises
+  // Bookmarks
   final Set<String> _bookmarkedIds = {'bench_press', 'pull_ups', 'barbell_squat'};
 
   // Compact Floating Rest Timer State
@@ -532,11 +541,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Filtered exercises
     final filteredExercises = _allExercises.where((item) {
-      // Muscle Category filter
-      if (_selectedMuscleIndex > 0) {
-        final catId = _muscleCategories[_selectedMuscleIndex]['id'];
-        if (item['muscleCategory'] != catId) return false;
+      // If a category is selected (and not 'all')
+      if (_selectedCategory != null && _selectedCategory != 'all') {
+        if (item['muscleCategory'] != _selectedCategory) return false;
       }
       // Search filter
       if (_searchQuery.isNotEmpty) {
@@ -552,94 +561,105 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       return true;
     }).toList();
 
+    // Determine current view mode:
+    // If user has not chosen a category and search is empty -> show the GRID VIEW!
+    // If user chose a category OR searched -> show EXERCISES LIST!
+    final showGridView = _selectedCategory == null && _searchQuery.isEmpty;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF6F8FA),
       body: CustomScrollView(
         slivers: [
-          // 1. Sleek Modern App Bar with Compact Timer
+          // 1. Sleek Modern App Bar
           _buildSliverAppBar(),
 
-          // 2. Search & Category Filters (Sticky/Pinned Header)
+          // 2. Search Bar
           SliverToBoxAdapter(
-            child: _buildSearchAndFilterHeader(),
+            child: _buildSearchBarSection(),
           ),
 
-          // 3. Results Count Bar
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _selectedMuscleIndex == 0
-                        ? 'هەموو یارییەکان (${filteredExercises.length} یاری بەردەستە)'
-                        : 'یارییەکانی ${_muscleCategories[_selectedMuscleIndex]['title']} (${filteredExercises.length} یاری)',
-                    style: const TextStyle(
-                      fontSize: 14.5,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF131519),
-                    ),
-                  ),
-                  if (_selectedMuscleIndex > 0)
-                    GestureDetector(
-                      onTap: () => setState(() => _selectedMuscleIndex = 0),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.refresh_rounded, color: AppColors.primary, size: 14),
-                            SizedBox(width: 4),
-                            Text(
-                              'پیشاندانی هەمووی',
-                              style: TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  else
+          // 3. MAIN CONTENT: Either GRID OF MUSCLES or EXERCISES LIST
+          if (showGridView) ...[
+            // Title for Grid
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     const Row(
                       children: [
-                        Icon(Icons.video_library_rounded, color: AppColors.primary, size: 15),
-                        SizedBox(width: 4),
+                        Icon(Icons.grid_view_rounded, color: AppColors.primary, size: 18),
+                        SizedBox(width: 8),
                         Text(
-                          'فێرکاری بە ڤیدیۆ',
+                          'شوێنی یارییەکان و بەشەکانی لەش',
                           style: TextStyle(
-                            color: AppColors.primary,
-                            fontSize: 11.5,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF131519),
                           ),
                         ),
                       ],
                     ),
-                ],
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        '${_muscleCategories.length} بەش',
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
 
-          // 4. Exercise Cards List
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 110),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final ex = filteredExercises[index];
-                  return _buildUltraExerciseCard(ex);
-                },
-                childCount: filteredExercises.length,
+            // 2-Column Grid of Muscle Category Cards
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 110),
+              sliver: SliverGrid(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 1.05,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final cat = _muscleCategories[index];
+                    return _buildGridMuscleCard(cat);
+                  },
+                  childCount: _muscleCategories.length,
+                ),
               ),
             ),
-          ),
+          ] else ...[
+            // Header for Exercises List with Back Button
+            SliverToBoxAdapter(
+              child: _buildExercisesListHeader(filteredExercises.length),
+            ),
+
+            // Exercise Cards List
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 110),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final ex = filteredExercises[index];
+                    return _buildUltraExerciseCard(ex);
+                  },
+                  childCount: filteredExercises.length,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -715,219 +735,307 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     );
   }
 
-  // --- 2. SEARCH & VISUAL MUSCLE CATEGORY CARDS ---
-  Widget _buildSearchAndFilterHeader() {
+  // --- 2. SEARCH BAR ---
+  Widget _buildSearchBarSection() {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Modern Search Bar
-          Container(
-            height: 48,
-            decoration: BoxDecoration(
-              color: const Color(0xFFF6F8FA),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE8EBF0)),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 14),
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF6F8FA),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE8EBF0)),
+        ),
+        child: TextField(
+          controller: _searchController,
+          onChanged: (val) => setState(() => _searchQuery = val),
+          style: const TextStyle(fontSize: 13, color: Color(0xFF131519)),
+          decoration: InputDecoration(
+            hintText: 'گەڕان بە ناوی یاری (سنگ، پشت، باربێڵ، سکوات...)',
+            hintStyle: const TextStyle(color: Color(0xFF9EA3AE), fontSize: 12.5),
+            prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF9EA3AE), size: 20),
+            suffixIcon: _searchQuery.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.close_rounded, size: 16),
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() => _searchQuery = '');
+                    },
+                  )
+                : null,
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(vertical: 12),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // --- 3. BEAUTIFUL 2-COLUMN GRID MUSCLE CARD ---
+  Widget _buildGridMuscleCard(Map<String, dynamic> cat) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedCategory = cat['id'];
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: Colors.black.withValues(alpha: 0.08), width: 1),
+          image: DecorationImage(
+            image: AssetImage(cat['image']),
+            fit: BoxFit.cover,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (val) => setState(() => _searchQuery = val),
-              style: const TextStyle(fontSize: 13, color: Color(0xFF131519)),
-              decoration: InputDecoration(
-                hintText: 'گەڕان بە ناوی یاری (سنگ، پشت، باربێڵ، سکوات...)',
-                hintStyle: const TextStyle(color: Color(0xFF9EA3AE), fontSize: 12.5),
-                prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF9EA3AE), size: 20),
-                suffixIcon: _searchQuery.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.close_rounded, size: 16),
-                        onPressed: () {
-                          _searchController.clear();
-                          setState(() => _searchQuery = '');
-                        },
-                      )
-                    : null,
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+          ],
+        ),
+        child: Stack(
+          children: [
+            // Dark cinematic gradient
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(21),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: const [0.0, 0.45, 1.0],
+                  colors: [
+                    Colors.black.withValues(alpha: 0.25),
+                    Colors.black.withValues(alpha: 0.5),
+                    Colors.black.withValues(alpha: 0.92),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
 
-          // Title above Category Cards
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Row(
+            // Top Pill: Count Badge
+            Positioned(
+              top: 10,
+              right: 10,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.65),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                ),
+                child: Text(
+                  cat['count'],
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+
+            // Bottom Content: Title, Subtitle, and Tap action button
+            Positioned(
+              bottom: 12,
+              left: 12,
+              right: 12,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.category_rounded, color: AppColors.primary, size: 16),
-                  SizedBox(width: 6),
                   Text(
-                    'بەشەکانی لەش و شوێنی یارییەکان',
+                    cat['title'],
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.5,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    cat['subtitle'],
                     style: TextStyle(
-                      fontSize: 13.5,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF131519),
+                      color: Colors.white.withValues(alpha: 0.8),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Beautiful Button
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.4),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'بینینی یارییەکان',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 4),
+                        Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 9),
+                      ],
                     ),
                   ),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // --- 4. EXERCISES LIST HEADER (WITH BACK TO GRID BUTTON) ---
+  Widget _buildExercisesListHeader(int count) {
+    final activeCat = _muscleCategories.firstWhere(
+      (c) => c['id'] == _selectedCategory,
+      orElse: () => _muscleCategories.last,
+    );
+
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Back to Grid Button & Active Category Tag
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedCategory = null;
+                    _searchController.clear();
+                    _searchQuery = '';
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF1F3F6),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE2E5EA)),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.arrow_back_ios_new_rounded, size: 13, color: Color(0xFF131519)),
+                      SizedBox(width: 6),
+                      Text(
+                        'گەڕانەوە بۆ بەشەکان',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF131519),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Count Badge
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.video_collection_rounded, color: AppColors.primary, size: 14),
+                    const SizedBox(width: 4),
+                    Text(
+                      '$count یاری بەردەستە',
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Active Category Name
+          Row(
+            children: [
               Text(
-                'دەستنیشانکراو: ${_muscleCategories[_selectedMuscleIndex]['title']}',
+                'یارییەکانی ${activeCat['title']}',
                 style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFF131519),
+                  letterSpacing: -0.3,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '(${activeCat['subtitle']})',
+                style: const TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF757A86),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 10),
 
-          // Horizontal Visual Muscle Category Cards (Images on Cards!)
+          // Quick Filter Switcher Chips
           SizedBox(
-            height: 124,
+            height: 34,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              clipBehavior: Clip.none,
               itemCount: _muscleCategories.length,
               itemBuilder: (context, index) {
-                final isSelected = _selectedMuscleIndex == index;
                 final cat = _muscleCategories[index];
+                final isSelected = _selectedCategory == cat['id'];
 
                 return GestureDetector(
-                  onTap: () => setState(() => _selectedMuscleIndex = index),
+                  onTap: () => setState(() => _selectedCategory = cat['id']),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 220),
-                    curve: Curves.easeOutCubic,
-                    width: 136,
-                    margin: const EdgeInsets.only(right: 10),
+                    duration: const Duration(milliseconds: 180),
+                    margin: const EdgeInsets.only(right: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: isSelected ? AppColors.primary : Colors.black.withValues(alpha: 0.08),
-                        width: isSelected ? 2.5 : 1,
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage(cat['image'] as String),
-                        fit: BoxFit.cover,
-                      ),
-                      boxShadow: isSelected
-                          ? [
-                              BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.42),
-                                blurRadius: 14,
-                                offset: const Offset(0, 4),
-                              ),
-                            ]
-                          : [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.08),
-                                blurRadius: 6,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
+                      color: isSelected ? const Color(0xFF131519) : const Color(0xFFF4F6F8),
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Stack(
-                      children: [
-                        // Gradient Overlay for text contrast
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18),
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              stops: const [0.0, 0.4, 1.0],
-                              colors: [
-                                Colors.black.withValues(alpha: 0.2),
-                                Colors.black.withValues(alpha: 0.45),
-                                Colors.black.withValues(alpha: 0.88),
-                              ],
-                            ),
-                          ),
+                    child: Center(
+                      child: Text(
+                        cat['title'],
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : const Color(0xFF4A4E5A),
+                          fontSize: 11,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                         ),
-
-                        // Top Pill Badge: Selected Checkmark or Count
-                        Positioned(
-                          top: 8,
-                          right: 8,
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? AppColors.primary
-                                  : Colors.black.withValues(alpha: 0.65),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: isSelected
-                                    ? Colors.white.withValues(alpha: 0.4)
-                                    : Colors.white.withValues(alpha: 0.2),
-                              ),
-                            ),
-                            child: isSelected
-                                ? const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(Icons.check_rounded, color: Colors.white, size: 11),
-                                      SizedBox(width: 2),
-                                      Text(
-                                        'چالاک',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 9.5,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Text(
-                                    cat['count'] as String,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9.5,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                          ),
-                        ),
-
-                        // Bottom Titles
-                        Positioned(
-                          bottom: 10,
-                          left: 10,
-                          right: 10,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                cat['title'] as String,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: -0.3,
-                                ),
-                              ),
-                              const SizedBox(height: 1),
-                              Text(
-                                cat['subtitle'] as String,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.82),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 );
@@ -939,7 +1047,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     );
   }
 
-  // --- 3. ULTRA MODERN EXERCISE CARD WITH VIDEO SHOWCASE ---
+  // --- 5. ULTRA MODERN EXERCISE CARD WITH VIDEO SHOWCASE ---
   Widget _buildUltraExerciseCard(Map<String, dynamic> ex) {
     final isBookmarked = _bookmarkedIds.contains(ex['id']);
 
