@@ -10,345 +10,312 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
-  // Selected category filter: 'all', 'hypertrophy', 'shred', 'women', 'strength', 'beginner'
-  String _selectedCategory = 'all';
+  // 0: All Athletes, 1: Men Focus, 2: Women Focus
+  int _selectedGenderIndex = 0;
+
+  // Selected Goal Filter: 'all', 'hypertrophy', 'fatloss', 'toning', 'strength'
+  String _selectedGoal = 'all';
 
   // Search query
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
-  // Categories Filter
-  final List<Map<String, dynamic>> _categories = [
-    {'id': 'all', 'title': 'All Programs', 'icon': Icons.flash_on_rounded},
-    {'id': 'hypertrophy', 'title': 'Hypertrophy', 'icon': Icons.fitness_center_rounded},
-    {'id': 'shred', 'title': 'Fat Shred', 'icon': Icons.local_fire_department_rounded},
-    {'id': 'women', 'title': 'Women Sculpt', 'icon': Icons.auto_awesome_rounded},
+  // Goals List
+  final List<Map<String, dynamic>> _goals = [
+    {'id': 'all', 'title': 'All Goals', 'icon': Icons.tune_rounded},
+    {'id': 'hypertrophy', 'title': 'Muscle Mass', 'icon': Icons.fitness_center_rounded},
+    {'id': 'fatloss', 'title': 'Fat Loss', 'icon': Icons.local_fire_department_rounded},
+    {'id': 'toning', 'title': 'Toning & Shape', 'icon': Icons.auto_awesome_rounded},
     {'id': 'strength', 'title': 'Pure Strength', 'icon': Icons.bolt_rounded},
-    {'id': 'beginner', 'title': 'Beginner 30D', 'icon': Icons.flag_rounded},
   ];
 
-  // Programs Database (100% English)
+  // Rich Database of Programs calibrated by Gender & Goal
   final List<Map<String, dynamic>> _programs = [
+    // 1. MEN FOCUS - Muscle Mass
     {
-      'id': 'hypertrophy_pro',
-      'title': 'Pro Hypertrophy & Muscle Mass',
-      'subtitle': 'Maximum size & density program calibrated for advanced lifters',
-      'category': 'hypertrophy',
+      'id': 'pro_mass_hypertrophy',
+      'title': 'Pro Mass & Chest Blueprint',
+      'subtitle': 'Heavy compound overload for maximum chest, shoulders & back mass',
+      'gender': 'men',
+      'genderLabel': 'Men Focus 👨',
+      'goal': 'hypertrophy',
+      'goalLabel': 'Hypertrophy',
       'coach': 'Coach Bilal',
-      'coachTitle': 'Head Fitness Director',
+      'coachRole': 'Elite Strength Director',
       'rating': '4.9',
-      'reviews': '2.8k',
+      'reviews': '3.2k',
       'duration': '8 Weeks',
-      'frequency': '5 Days / Wk',
+      'frequency': '5 Days/Wk',
       'level': 'Advanced',
-      'intensity': 'High Intensity',
-      'calories': '550 kcal / session',
+      'calories': '580 kcal',
       'image': 'assets/images/workout_back.jpg',
-      'featured': true,
-      'tags': ['Chest & Back', 'Heavy Barbells', 'Mass Builder'],
-      'overview':
-          'A scientifically structured 8-week routine focusing on progressive overload, mechanical tension, and hypertrophic volume to pack on lean muscle mass.',
+      'accentColor': AppColors.primary,
+      'description':
+          'A scientifically calibrated 5-day split engineered for rapid hypertrophy, dense upper-body mass, and progressive barbell overload.',
       'schedule': [
         {
           'dayNumber': '1',
-          'dayTitle': 'Chest & Triceps Power',
-          'split': 'Push Day • Heavy Compound',
+          'dayTitle': 'Heavy Chest & Triceps Blitz',
+          'focus': 'Pec Major & Anterior Delts',
           'exercises': [
-            {
-              'name': 'Barbell Flat Bench Press',
-              'target': 'Pectorals & Anterior Delts',
-              'sets': '4 Sets × 8-10 Reps',
-              'image': 'assets/images/workout_back.jpg',
-            },
-            {
-              'name': 'Incline Dumbbell Press',
-              'target': 'Upper Clavicular Head',
-              'sets': '4 Sets × 12 Reps',
-              'image': 'assets/images/onboarding_athlete.jpg',
-            },
-            {
-              'name': 'Cable Crossover Fly',
-              'target': 'Sternal Pec Isolation',
-              'sets': '3 Sets × 15 Reps',
-              'image': 'assets/images/workout_back.jpg',
-            },
-            {
-              'name': 'Tricep Rope Pushdown',
-              'target': 'Lateral & Long Tricep Head',
-              'sets': '4 Sets × 12-15 Reps',
-              'image': 'assets/images/male_fitness_banner.jpg',
-            },
+            {'name': 'Barbell Flat Bench Press', 'sets': '4 Sets × 8 Reps', 'target': 'Mid/Lower Chest', 'image': 'assets/images/workout_back.jpg'},
+            {'name': 'Incline Dumbbell Press', 'sets': '4 Sets × 10 Reps', 'target': 'Upper Clavicular Head', 'image': 'assets/images/onboarding_athlete.jpg'},
+            {'name': 'Cable Crossover Fly', 'sets': '3 Sets × 15 Reps', 'target': 'Inner Pec Squeeze', 'image': 'assets/images/card_gym_full.png'},
+            {'name': 'Tricep Rope Pushdown', 'sets': '4 Sets × 12 Reps', 'target': 'Lateral Tricep Head', 'image': 'assets/images/male_fitness_banner.jpg'},
           ]
         },
         {
           'dayNumber': '2',
-          'dayTitle': 'Back & Biceps Thickness',
-          'split': 'Pull Day • Upper Lat & Rhomboid',
+          'dayTitle': 'Wide Back & V-Taper Lats',
+          'focus': 'Lats, Rhomboids & Biceps',
           'exercises': [
-            {
-              'name': 'Wide-Grip Pull Ups',
-              'target': 'Latissimus Dorsi',
-              'sets': '4 Sets × Max Reps',
-              'image': 'assets/images/pullup_figure.jpg',
-            },
-            {
-              'name': 'Seated Lat Pulldown',
-              'target': 'Upper & Mid Back',
-              'sets': '4 Sets × 10-12 Reps',
-              'image': 'assets/images/pullup_figure.jpg',
-            },
-            {
-              'name': 'Standing Dumbbell Curl',
-              'target': 'Biceps Brachii',
-              'sets': '4 Sets × 12 Reps',
-              'image': 'assets/images/splash_athlete.jpg',
-            },
+            {'name': 'Wide-Grip Weighted Pull Ups', 'sets': '4 Sets × Max Reps', 'target': 'Latissimus Dorsi', 'image': 'assets/images/pullup_figure.jpg'},
+            {'name': 'Seated Lat Pulldown', 'sets': '4 Sets × 10 Reps', 'target': 'Upper Lat Width', 'image': 'assets/images/pullup_figure.jpg'},
+            {'name': 'Standing Dumbbell Curl', 'sets': '4 Sets × 12 Reps', 'target': 'Biceps Brachii', 'image': 'assets/images/splash_athlete.jpg'},
           ]
         },
         {
           'dayNumber': '3',
-          'dayTitle': 'Active Recovery & Core',
-          'split': 'Rest & Mobility Day',
+          'dayTitle': 'Recovery & Mobility',
+          'focus': 'Rest & Hydration',
           'exercises': []
         },
         {
           'dayNumber': '4',
-          'dayTitle': 'Legs & Glutes Overload',
-          'split': 'Leg Day • Quad Dominant',
+          'dayTitle': 'Quad & Hamstring Power',
+          'focus': 'Squat Overload',
           'exercises': [
-            {
-              'name': 'Barbell Back Squat',
-              'target': 'Quadriceps & Glute Max',
-              'sets': '4 Sets × 8-10 Reps',
-              'image': 'assets/images/female_fitness_banner.jpg',
-            },
-            {
-              'name': '45-Degree Leg Press',
-              'target': 'Leg Hypertrophy',
-              'sets': '4 Sets × 12 Reps',
-              'image': 'assets/images/female_fitness_banner.jpg',
-            },
+            {'name': 'Barbell Back Squat', 'sets': '4 Sets × 8-10 Reps', 'target': 'Quads & Glutes', 'image': 'assets/images/female_fitness_banner.jpg'},
+            {'name': '45-Degree Leg Press', 'sets': '4 Sets × 12 Reps', 'target': 'Leg Thickness', 'image': 'assets/images/female_fitness_banner.jpg'},
           ]
         },
         {
           'dayNumber': '5',
-          'dayTitle': 'Shoulders & Core Stabilization',
-          'split': 'Shoulder Silhouette',
+          'dayTitle': 'Boulder Shoulders & Core',
+          'focus': '3D Delts & Abs',
           'exercises': [
-            {
-              'name': 'Overhead Barbell Military Press',
-              'target': 'Total Deltoid Complex',
-              'sets': '4 Sets × 10 Reps',
-              'image': 'assets/images/male_fitness_banner.jpg',
-            },
-            {
-              'name': 'Dumbbell Lateral Raise',
-              'target': 'Medial Deltoid Head',
-              'sets': '4 Sets × 15 Reps',
-              'image': 'assets/images/male_fitness_banner.jpg',
-            },
+            {'name': 'Overhead Barbell Military Press', 'sets': '4 Sets × 10 Reps', 'target': 'Deltoid Complex', 'image': 'assets/images/male_fitness_banner.jpg'},
+            {'name': 'Dumbbell Lateral Raise', 'sets': '4 Sets × 15 Reps', 'target': 'Side Delts', 'image': 'assets/images/male_fitness_banner.jpg'},
           ]
         },
-      ],
+      ]
     },
+
+    // 2. WOMEN FOCUS - Toning & Glutes
     {
-      'id': 'women_hourglass',
-      'title': 'Hourglass & Glute Sculpt',
-      'subtitle': 'Aesthetic glute isolation and waist tightening blueprint',
-      'category': 'women',
+      'id': 'women_hourglass_glutes',
+      'title': 'Hourglass, Glutes & Waist Sculpt',
+      'subtitle': 'Targeted glute isolation, slim waist cinching & aesthetic curves',
+      'gender': 'women',
+      'genderLabel': 'Women Focus 👩',
+      'goal': 'toning',
+      'goalLabel': 'Toning & Shape',
       'coach': 'Sarah Jenkins',
-      'coachTitle': 'Women Specialist Coach',
+      'coachRole': 'Physique & Glute Specialist',
       'rating': '5.0',
-      'reviews': '1.9k',
+      'reviews': '2.4k',
       'duration': '6 Weeks',
-      'frequency': '4 Days / Wk',
+      'frequency': '4 Days/Wk',
       'level': 'All Levels',
-      'intensity': 'Toning & Shape',
-      'calories': '420 kcal / session',
+      'calories': '450 kcal',
       'image': 'assets/images/female_fitness_banner.jpg',
-      'featured': false,
-      'tags': ['Glutes & Hamstrings', 'Waist Toning', 'Lower Body'],
-      'overview':
-          'Designed to shape, firm, and sculpt glute muscles while trimming the midsection with focused resistance training and high-metabolic circuits.',
+      'accentColor': const Color(0xFFFF4081),
+      'description':
+          'Specifically programmed to lift, tone, and grow glutes while maintaining a tight, athletic waistline and defined posture.',
       'schedule': [
         {
           'dayNumber': '1',
-          'dayTitle': 'Glute & Posterior Chain Hypertrophy',
-          'split': 'Glute Isolation',
+          'dayTitle': 'Glute Isolation & Hip Drive',
+          'focus': 'Glute Max & Upper Shelf',
           'exercises': [
-            {
-              'name': 'Barbell Hip Thrust',
-              'target': 'Gluteus Maximus Focus',
-              'sets': '4 Sets × 12-15 Reps',
-              'image': 'assets/images/female_fitness_banner.jpg',
-            },
-            {
-              'name': 'Bulgarian Split Squat',
-              'target': 'Single Leg Balance & Glute',
-              'sets': '3 Sets × 12 Reps',
-              'image': 'assets/images/female_fitness_banner.jpg',
-            },
+            {'name': 'Barbell Hip Thrust', 'sets': '4 Sets × 12-15 Reps', 'target': 'Gluteus Maximus', 'image': 'assets/images/female_fitness_banner.jpg'},
+            {'name': 'Bulgarian Split Squat', 'sets': '3 Sets × 12 Reps', 'target': 'Glute & Quads', 'image': 'assets/images/female_fitness_banner.jpg'},
+            {'name': 'Romanian Deadlift', 'sets': '4 Sets × 12 Reps', 'target': 'Hamstrings & Glutes', 'image': 'assets/images/workout_back.jpg'},
           ]
         },
         {
           'dayNumber': '2',
-          'dayTitle': 'Upper Body Toning & Core',
-          'split': 'Toned Arms & Flat Waist',
+          'dayTitle': 'Upper Body Tone & Core Cinch',
+          'focus': 'Sculpted Back & Flat Stomach',
           'exercises': [
-            {
-              'name': 'Lat Pulldown',
-              'target': 'V-Taper Back Line',
-              'sets': '4 Sets × 12 Reps',
-              'image': 'assets/images/pullup_figure.jpg',
-            },
-            {
-              'name': 'Plank Core Stabilization',
-              'target': 'Transverse Abdominis',
-              'sets': '3 Sets × 45 Sec',
-              'image': 'assets/images/posture_dark_3d.jpg',
-            },
+            {'name': 'Lat Pulldown', 'sets': '4 Sets × 12 Reps', 'target': 'V-Taper Waist Definition', 'image': 'assets/images/pullup_figure.jpg'},
+            {'name': 'Dumbbell Lateral Raise', 'sets': '3 Sets × 15 Reps', 'target': 'Shoulder Tone', 'image': 'assets/images/male_fitness_banner.jpg'},
+            {'name': 'Plank Core Stabilization', 'sets': '3 Sets × 45 Sec', 'target': 'Deep Transverse Abs', 'image': 'assets/images/posture_dark_3d.jpg'},
           ]
         },
         {
           'dayNumber': '3',
-          'dayTitle': 'Full Rest & Stretch',
-          'split': 'Recovery & Hydration',
+          'dayTitle': 'Active Rest & Recovery',
+          'focus': 'Mobility & Stretching',
           'exercises': []
         },
         {
           'dayNumber': '4',
-          'dayTitle': 'Hamstrings, Quads & Glute Burn',
-          'split': 'Lower Body Definition',
+          'dayTitle': 'Glute Pump & Hamstring Burn',
+          'focus': 'Posterior Chain Hypertrophy',
           'exercises': [
-            {
-              'name': 'Barbell Squat',
-              'target': 'Quads & Glutes',
-              'sets': '4 Sets × 12 Reps',
-              'image': 'assets/images/female_fitness_banner.jpg',
-            },
+            {'name': 'Sumo Squat with Dumbbell', 'sets': '4 Sets × 12 Reps', 'target': 'Inner Thighs & Glutes', 'image': 'assets/images/female_fitness_banner.jpg'},
+            {'name': 'Cable Kickbacks', 'sets': '3 Sets × 15 Reps', 'target': 'Glute Isolation', 'image': 'assets/images/card_gym_full.png'},
           ]
         },
-      ],
+      ]
     },
+
+    // 3. MEN FOCUS - Shred & V-Taper
     {
-      'id': 'fat_loss_shred',
-      'title': 'High-Intensity Shred & Cut',
-      'subtitle': 'Drop body fat fast while safeguarding hard-earned muscle',
-      'category': 'shred',
-      'coach': 'Marcus Cole',
-      'coachTitle': 'Conditioning Coach',
+      'id': 'men_v_taper_shred',
+      'title': 'V-Taper Shred & Arm Definition',
+      'subtitle': 'High-density supersets to carve broad shoulders, sharp lats & arms',
+      'gender': 'men',
+      'genderLabel': 'Men Focus 👨',
+      'goal': 'fatloss',
+      'goalLabel': 'Fat Loss',
+      'coach': 'Marcus Vance',
+      'coachRole': 'Conditioning Coach',
       'rating': '4.8',
-      'reviews': '3.2k',
+      'reviews': '1.8k',
       'duration': '6 Weeks',
-      'frequency': '5 Days / Wk',
+      'frequency': '4 Days/Wk',
       'level': 'Intermediate',
-      'intensity': 'Extreme Burn',
-      'calories': '650 kcal / session',
-      'image': 'assets/images/card_gym_full.png',
-      'featured': false,
-      'tags': ['Fat Loss', 'Metabolic Circuit', 'Lean Definition'],
-      'overview':
-          'Combines compound resistance movements with supersets and metabolic burn conditioning to maximize caloric deficit and muscular definition.',
+      'calories': '520 kcal',
+      'image': 'assets/images/male_fitness_banner.jpg',
+      'accentColor': const Color(0xFFFF6D00),
+      'description':
+          'Designed to melt body fat while chiseling an athletic aesthetic V-taper frame with capped deltoids and striated arms.',
       'schedule': [
         {
           'dayNumber': '1',
-          'dayTitle': 'Upper Body Torso Blitz',
-          'split': 'Chest, Core & Cardio',
+          'dayTitle': 'Shoulders & Arms Gunsmith',
+          'focus': 'Deltoids & Biceps/Triceps Supersets',
           'exercises': [
-            {
-              'name': 'High-to-Low Cable Fly',
-              'target': 'Lower Chest Cut',
-              'sets': '4 Sets × 15 Reps',
-              'image': 'assets/images/workout_back.jpg',
-            },
-            {
-              'name': 'Hanging Knee Raise',
-              'target': 'Lower Abdominal V-Line',
-              'sets': '4 Sets × 20 Reps',
-              'image': 'assets/images/posture_dark_3d.jpg',
-            },
+            {'name': 'Overhead Barbell Press', 'sets': '4 Sets × 10 Reps', 'target': 'Front & Mid Delts', 'image': 'assets/images/male_fitness_banner.jpg'},
+            {'name': 'Dumbbell Lateral Raise', 'sets': '4 Sets × 15 Reps', 'target': 'Side Delts', 'image': 'assets/images/male_fitness_banner.jpg'},
+            {'name': 'Incline Dumbbell Curl', 'sets': '4 Sets × 12 Reps', 'target': 'Bicep Peak', 'image': 'assets/images/splash_athlete.jpg'},
+            {'name': 'Tricep Rope Pushdown', 'sets': '4 Sets × 15 Reps', 'target': 'Triceps Cut', 'image': 'assets/images/male_fitness_banner.jpg'},
           ]
         },
         {
           'dayNumber': '2',
-          'dayTitle': 'Legs & Calorie Surge',
-          'split': 'Lower Body Supersets',
+          'dayTitle': 'Back Width & Lower Abs',
+          'focus': 'Lats & V-Line',
           'exercises': [
-            {
-              'name': 'Barbell Squat',
-              'target': 'Quads & High Heart Rate',
-              'sets': '4 Sets × 15 Reps',
-              'image': 'assets/images/female_fitness_banner.jpg',
-            },
+            {'name': 'Wide-Grip Lat Pulldown', 'sets': '4 Sets × 12 Reps', 'target': 'Lats', 'image': 'assets/images/pullup_figure.jpg'},
+            {'name': 'Hanging Knee Raise', 'sets': '4 Sets × 20 Reps', 'target': 'Lower Abs', 'image': 'assets/images/posture_dark_3d.jpg'},
           ]
         },
-      ],
+      ]
     },
+
+    // 4. ALL ATHLETES - Fat Loss & Metabolic Cut
     {
-      'id': 'beginner_blueprint',
-      'title': '30-Day Complete Foundation',
-      'subtitle': 'Step-by-step master plan for gym newcomers & rebooters',
-      'category': 'beginner',
-      'coach': 'Bilal Performance Team',
-      'coachTitle': 'Certified Master Trainers',
+      'id': 'all_metabolic_cut',
+      'title': 'High-Intensity Shred & Cut',
+      'subtitle': 'Rapid fat reduction with heavy lifting & metabolic circuits',
+      'gender': 'all',
+      'genderLabel': 'All Athletes ⚡',
+      'goal': 'fatloss',
+      'goalLabel': 'Fat Loss',
+      'coach': 'Coach Bilal',
+      'coachRole': 'Lead Head Coach',
       'rating': '4.9',
-      'reviews': '4.5k',
-      'duration': '4 Weeks',
-      'frequency': '3 Days / Wk',
-      'level': 'Beginner',
-      'intensity': 'Foundational',
-      'calories': '380 kcal / session',
-      'image': 'assets/images/onboarding_athlete.jpg',
-      'featured': false,
-      'tags': ['Form & Posture', 'No Experience Needed', 'Full Body'],
-      'overview':
-          'The ultimate starting point. Learn pristine exercise form, build tendon resilience, and establish consistent workout habits with zero intimidation.',
+      'reviews': '4.1k',
+      'duration': '6 Weeks',
+      'frequency': '5 Days/Wk',
+      'level': 'Intermediate',
+      'calories': '650 kcal',
+      'image': 'assets/images/card_gym_full.png',
+      'accentColor': const Color(0xFFFF3D00),
+      'description':
+          'High work capacity training combining compound resistance lifts with metabolic burners to strip body fat down fast.',
       'schedule': [
         {
           'dayNumber': '1',
-          'dayTitle': 'Upper Body Foundations',
-          'split': 'Chest, Back & Arms',
+          'dayTitle': 'Full Body Torso Shred',
+          'focus': 'Chest, Core & High Calorie',
           'exercises': [
-            {
-              'name': 'Incline Dumbbell Press',
-              'target': 'Chest Strength',
-              'sets': '3 Sets × 12 Reps',
-              'image': 'assets/images/onboarding_athlete.jpg',
-            },
-            {
-              'name': 'Seated Lat Pulldown',
-              'target': 'Back Posture',
-              'sets': '3 Sets × 12 Reps',
-              'image': 'assets/images/pullup_figure.jpg',
-            },
+            {'name': 'Incline Dumbbell Press', 'sets': '4 Sets × 12 Reps', 'target': 'Upper Chest', 'image': 'assets/images/onboarding_athlete.jpg'},
+            {'name': 'Hanging Leg Raise', 'sets': '4 Sets × 15 Reps', 'target': 'Lower Abs', 'image': 'assets/images/posture_dark_3d.jpg'},
+            {'name': 'Cable Chest Fly', 'sets': '3 Sets × 15 Reps', 'target': 'Pecs', 'image': 'assets/images/workout_back.jpg'},
           ]
         },
         {
           'dayNumber': '2',
-          'dayTitle': 'Active Recovery',
-          'split': 'Walking & Mobility',
-          'exercises': []
-        },
-        {
-          'dayNumber': '3',
-          'dayTitle': 'Lower Body & Core Health',
-          'split': 'Quads & Stability',
+          'dayTitle': 'Legs & Caloric Blitz',
+          'focus': 'Quads & Heart Rate Peak',
           'exercises': [
-            {
-              'name': 'Leg Press Machine',
-              'target': 'Safe Quad Strength',
-              'sets': '3 Sets × 12 Reps',
-              'image': 'assets/images/female_fitness_banner.jpg',
-            },
-            {
-              'name': 'Plank Hold',
-              'target': 'Spinal Brace',
-              'sets': '3 Sets × 30 Seconds',
-              'image': 'assets/images/posture_dark_3d.jpg',
-            },
+            {'name': 'Barbell Squat', 'sets': '4 Sets × 12 Reps', 'target': 'Quads', 'image': 'assets/images/female_fitness_banner.jpg'},
+            {'name': 'Leg Press', 'sets': '4 Sets × 15 Reps', 'target': 'Legs', 'image': 'assets/images/female_fitness_banner.jpg'},
           ]
         },
-      ],
+      ]
+    },
+
+    // 5. WOMEN FOCUS - Tone & Lean Legs
+    {
+      'id': 'women_lean_legs_pilates',
+      'title': 'Toned Legs, Core & Posture',
+      'subtitle': 'Firm inner thighs, calves, and strong lower back alignment',
+      'gender': 'women',
+      'genderLabel': 'Women Focus 👩',
+      'goal': 'toning',
+      'goalLabel': 'Toning & Shape',
+      'coach': 'Elena Rostova',
+      'coachRole': 'Mobility & Tone Coach',
+      'rating': '4.9',
+      'reviews': '1.5k',
+      'duration': '4 Weeks',
+      'frequency': '3 Days/Wk',
+      'level': 'Beginner',
+      'calories': '380 kcal',
+      'image': 'assets/images/onboarding_athlete.jpg',
+      'accentColor': const Color(0xFF9C27B0),
+      'description':
+          'Low-impact, high-frequency sculpting targeting long, lean leg muscles, posture symmetry, and a tight waist.',
+      'schedule': [
+        {
+          'dayNumber': '1',
+          'dayTitle': 'Lower Body Firm & Lift',
+          'focus': 'Hamstrings & Glute Medius',
+          'exercises': [
+            {'name': 'Bulgarian Split Squat', 'sets': '3 Sets × 12 Reps', 'target': 'Glute & Quads', 'image': 'assets/images/female_fitness_banner.jpg'},
+            {'name': 'Romanian Deadlift', 'sets': '3 Sets × 12 Reps', 'target': 'Hamstrings', 'image': 'assets/images/workout_back.jpg'},
+          ]
+        },
+      ]
+    },
+
+    // 6. ALL ATHLETES - Strength
+    {
+      'id': 'pure_strength_foundations',
+      'title': 'Powerlifting & Raw Strength',
+      'subtitle': 'Develop massive compound numbers in squat, bench & deadlift',
+      'gender': 'all',
+      'genderLabel': 'All Athletes ⚡',
+      'goal': 'strength',
+      'goalLabel': 'Pure Strength',
+      'coach': 'Coach Bilal',
+      'coachRole': 'Powerlifting Specialist',
+      'rating': '5.0',
+      'reviews': '2.1k',
+      'duration': '8 Weeks',
+      'frequency': '4 Days/Wk',
+      'level': 'Advanced',
+      'calories': '600 kcal',
+      'image': 'assets/images/pullup_figure.jpg',
+      'accentColor': const Color(0xFF2979FF),
+      'description':
+          'Built on periodized strength waves. Lift heavier, build bone density, and unlock your absolute maximum kinetic output.',
+      'schedule': [
+        {
+          'dayNumber': '1',
+          'dayTitle': 'Heavy Bench & Pressing Mechanics',
+          'focus': 'Max Upper Force',
+          'exercises': [
+            {'name': 'Barbell Flat Bench Press', 'sets': '5 Sets × 5 Reps', 'target': 'Chest Strength', 'image': 'assets/images/workout_back.jpg'},
+            {'name': 'Overhead Shoulder Press', 'sets': '4 Sets × 6 Reps', 'target': 'Shoulders', 'image': 'assets/images/male_fitness_banner.jpg'},
+          ]
+        },
+      ]
     },
   ];
 
@@ -358,16 +325,35 @@ class _ExploreScreenState extends State<ExploreScreen> {
     super.dispose();
   }
 
-  // Filtered Programs
+  // Filtered Programs list by Gender, Goal, and Search
   List<Map<String, dynamic>> get _filteredPrograms {
     return _programs.where((p) {
-      final matchesCategory =
-          _selectedCategory == 'all' || p['category'] == _selectedCategory;
-      final matchesSearch = _searchQuery.isEmpty ||
-          p['title'].toString().toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          p['subtitle'].toString().toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          p['coach'].toString().toLowerCase().contains(_searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
+      // 1. Gender Filter
+      if (_selectedGenderIndex == 1) {
+        // Men Focus selected
+        if (p['gender'] != 'men' && p['gender'] != 'all') return false;
+      } else if (_selectedGenderIndex == 2) {
+        // Women Focus selected
+        if (p['gender'] != 'women' && p['gender'] != 'all') return false;
+      }
+
+      // 2. Goal Filter
+      if (_selectedGoal != 'all' && p['goal'] != _selectedGoal) {
+        return false;
+      }
+
+      // 3. Search Query
+      if (_searchQuery.isNotEmpty) {
+        final q = _searchQuery.toLowerCase();
+        final title = p['title'].toString().toLowerCase();
+        final subtitle = p['subtitle'].toString().toLowerCase();
+        final coach = p['coach'].toString().toLowerCase();
+        if (!title.contains(q) && !subtitle.contains(q) && !coach.contains(q)) {
+          return false;
+        }
+      }
+
+      return true;
     }).toList();
   }
 
@@ -384,7 +370,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           widget.onNavigateTab?.call(2); // Jump to central Workout tab
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: const Color(0xFF15171B),
+              backgroundColor: const Color(0xFF131519),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -396,7 +382,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Routine "${program['title']}" is now active in Workout Hub!',
+                      '${program['title']} is now active in your Workout Hub!',
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -416,7 +402,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: const Color(0xFFF7F8FA),
       body: SafeArea(
         bottom: false,
         child: ListView(
@@ -424,43 +410,47 @@ class _ExploreScreenState extends State<ExploreScreen> {
           children: [
             const SizedBox(height: 12),
 
-            // 1. Ultra-clean Header
+            // 1. Header (Title, Subtitle & Active Shortcut)
             _buildHeader(),
 
             const SizedBox(height: 14),
 
-            // 2. Search & Filter Bar
+            // 2. Search Bar
             _buildSearchBar(),
+
+            const SizedBox(height: 14),
+
+            // 3. THE GENDER TOGGLE (All Athletes / Men Focus / Women Focus)
+            _buildGenderSegmentedControl(),
+
+            const SizedBox(height: 14),
+
+            // 4. Horizontal Goal Filter Chips
+            _buildGoalFilterChips(),
 
             const SizedBox(height: 18),
 
-            // 3. Featured Masterclass Hero (Cinematic Glassmorphism)
-            _buildCinematicHero(),
-
-            const SizedBox(height: 22),
-
-            // 4. Horizontal Category Filter Pills
-            _buildCategorySelector(),
-
-            const SizedBox(height: 20),
-
-            // 5. Section Header
+            // 5. Section Counter
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Training Blueprints',
-                    style: TextStyle(
-                      fontSize: 18,
+                  Text(
+                    _selectedGenderIndex == 1
+                        ? 'Men Blueprint Routines'
+                        : _selectedGenderIndex == 2
+                            ? 'Women Sculpt Routines'
+                            : 'All Workout Blueprints',
+                    style: const TextStyle(
+                      fontSize: 17,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF131519),
                       letterSpacing: -0.3,
                     ),
                   ),
                   Text(
-                    '${_filteredPrograms.length} Routines',
+                    '${_filteredPrograms.length} Programs',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -473,15 +463,25 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
             const SizedBox(height: 12),
 
-            // 6. Programs Cards Feed
-            ..._filteredPrograms.map((prog) => _buildModernProgramCard(prog)),
+            // 6. Immersive Full-Bleed Program Cards
+            if (_filteredPrograms.isEmpty)
+              Container(
+                margin: const EdgeInsets.all(40),
+                alignment: Alignment.center,
+                child: const Text(
+                  'No programs match your filter.',
+                  style: TextStyle(color: Colors.grey, fontSize: 13),
+                ),
+              )
+            else
+              ..._filteredPrograms.map((prog) => _buildImmersiveCard(prog)),
           ],
         ),
       ),
     );
   }
 
-  // --- 1. Clean Top Header ---
+  // --- 1. Top Header ---
   Widget _buildHeader() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -492,36 +492,35 @@ class _ExploreScreenState extends State<ExploreScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Training Programs',
+                'Training Blueprints',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF131519),
-                  letterSpacing: -0.6,
+                  letterSpacing: -0.5,
                 ),
               ),
               SizedBox(height: 2),
               Text(
-                'Curated routines for every physique goal',
+                'Targeted workout routines by certified coaches',
                 style: TextStyle(
-                  fontSize: 12.5,
+                  fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: Color(0xFF757A86),
                 ),
               ),
             ],
           ),
-          // Quick shortcut to Active Session
           GestureDetector(
             onTap: () => widget.onNavigateTab?.call(2),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: const Color(0xFF131519),
+                gradient: AppColors.buttonGradient,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
+                    color: AppColors.primary.withValues(alpha: 0.35),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -530,12 +529,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.bolt_rounded,
-                    color: AppColors.primary,
-                    size: 16,
-                  ),
-                  SizedBox(width: 5),
+                  Icon(Icons.flash_on_rounded, color: Colors.white, size: 15),
+                  SizedBox(width: 4),
                   Text(
                     'Workout',
                     style: TextStyle(
@@ -553,7 +548,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  // --- 2. Minimal Search Bar ---
+  // --- 2. Minimalist Search Bar ---
   Widget _buildSearchBar() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -562,12 +557,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE9ECF0)),
+          border: Border.all(color: const Color(0xFFE8EBF0)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.02),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -576,16 +571,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
           onChanged: (val) => setState(() => _searchQuery = val),
           style: const TextStyle(fontSize: 13.5, color: Color(0xFF131519)),
           decoration: InputDecoration(
-            hintText: 'Search programs, goals, or coaches...',
-            hintStyle: const TextStyle(
-              color: Color(0xFF9EA3AE),
-              fontSize: 13,
-            ),
-            prefixIcon: const Icon(
-              Icons.search_rounded,
-              color: Color(0xFF9EA3AE),
-              size: 20,
-            ),
+            hintText: 'Search by routine, muscle, or coach...',
+            hintStyle: const TextStyle(color: Color(0xFF9EA3AE), fontSize: 13),
+            prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF9EA3AE), size: 20),
             suffixIcon: _searchQuery.isNotEmpty
                 ? IconButton(
                     icon: const Icon(Icons.close_rounded, size: 16),
@@ -603,186 +591,103 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  // --- 3. Cinematic Hero Banner ---
-  Widget _buildCinematicHero() {
-    final hero = _programs[0];
+  // --- 3. GENDER SEGMENTED CONTROL (All Athletes / Men Focus / Women Focus) ---
+  Widget _buildGenderSegmentedControl() {
+    final segments = [
+      {'title': 'All Athletes ⚡', 'index': 0},
+      {'title': 'Men Focus 👨', 'index': 1},
+      {'title': 'Women Focus 👩', 'index': 2},
+    ];
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
-      height: 200,
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(26),
-        image: DecorationImage(
-          image: AssetImage(hero['image']),
-          fit: BoxFit.cover,
-        ),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE8EBF0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.16),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(26),
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.black.withValues(alpha: 0.2),
-              Colors.black.withValues(alpha: 0.85),
-            ],
-          ),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(26),
-            onTap: () => _openProgramDetails(hero),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.star_rounded,
-                                color: Colors.white, size: 13),
-                            SizedBox(width: 4),
-                            Text(
-                              'FEATURED BLUEPRINT',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 9, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.star_rounded,
-                                color: AppColors.accentGold, size: 13),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${hero['rating']} (${hero['reviews']})',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        hero['title'],
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -0.4,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${hero['duration']} • ${hero['frequency']} • By ${hero['coach']}',
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          const Text(
-                            'View Full Split & Schedule',
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.bold,
-                            ),
+      child: Row(
+        children: segments.map((seg) {
+          final isSelected = _selectedGenderIndex == seg['index'];
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedGenderIndex = seg['index'] as int;
+                });
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  color: isSelected ? const Color(0xFF131519) : Colors.transparent,
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.12),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
                           ),
-                          const SizedBox(width: 4),
-                          Icon(
-                            Icons.arrow_forward_rounded,
-                            color: AppColors.primary,
-                            size: 14,
-                          ),
-                        ],
-                      ),
-                    ],
+                        ]
+                      : [],
+                ),
+                child: Center(
+                  child: Text(
+                    seg['title'] as String,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                      color: isSelected ? Colors.white : const Color(0xFF676E7D),
+                    ),
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        }).toList(),
       ),
     );
   }
 
-  // --- 4. Category Filter Pills ---
-  Widget _buildCategorySelector() {
+  // --- 4. Goal Filter Chips ---
+  Widget _buildGoalFilterChips() {
     return SizedBox(
-      height: 40,
+      height: 38,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: _categories.length,
+        itemCount: _goals.length,
         itemBuilder: (context, index) {
-          final cat = _categories[index];
-          final isSelected = _selectedCategory == cat['id'];
+          final goal = _goals[index];
+          final isSelected = _selectedGoal == goal['id'];
 
           return GestureDetector(
-            onTap: () => setState(() => _selectedCategory = cat['id']),
+            onTap: () => setState(() => _selectedGoal = goal['id']),
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 180),
               margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF131519) : Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                color: isSelected ? AppColors.primary : Colors.white,
+                borderRadius: BorderRadius.circular(18),
                 border: Border.all(
-                  color: isSelected
-                      ? const Color(0xFF131519)
-                      : const Color(0xFFE9ECF0),
+                  color: isSelected ? AppColors.primary : const Color(0xFFE8EBF0),
                 ),
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.08),
+                          color: AppColors.primary.withValues(alpha: 0.3),
                           blurRadius: 8,
-                          offset: const Offset(0, 3),
+                          offset: const Offset(0, 2),
                         ),
                       ]
                     : [],
@@ -791,18 +696,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    cat['icon'],
-                    size: 14,
-                    color: isSelected ? AppColors.primary : const Color(0xFF757A86),
+                    goal['icon'] as IconData,
+                    size: 13,
+                    color: isSelected ? Colors.white : const Color(0xFF757A86),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 5),
                   Text(
-                    cat['title'],
+                    goal['title'] as String,
                     style: TextStyle(
                       color: isSelected ? Colors.white : const Color(0xFF33373F),
-                      fontSize: 12,
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.w600,
+                      fontSize: 11.5,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                     ),
                   ),
                 ],
@@ -814,177 +718,165 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  // --- 5. Modern Editorial Program Card ---
-  Widget _buildModernProgramCard(Map<String, dynamic> program) {
+  // --- 5. Immersive Full-Bleed Cinematic Card ---
+  Widget _buildImmersiveCard(Map<String, dynamic> prog) {
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+      height: 250,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFE9ECF0)),
+        borderRadius: BorderRadius.circular(26),
+        image: DecorationImage(
+          image: AssetImage(prog['image']),
+          fit: BoxFit.cover,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 14,
-            offset: const Offset(0, 5),
+            color: Colors.black.withValues(alpha: 0.12),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(24),
-          onTap: () => _openProgramDetails(program),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Image with gradient and badges
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(24)),
-                    child: Image.asset(
-                      program['image'],
-                      height: 160,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: Container(
+          borderRadius: BorderRadius.circular(26),
+          onTap: () => _openProgramDetails(prog),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(26),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withValues(alpha: 0.25),
+                  Colors.black.withValues(alpha: 0.88),
+                ],
+              ),
+            ),
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Top Badges Row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Gender Tag
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(24)),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.black.withValues(alpha: 0.1),
-                            Colors.black.withValues(alpha: 0.6),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 12,
-                    left: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.6),
-                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.black.withValues(alpha: 0.65),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
                       ),
                       child: Text(
-                        program['level'].toString().toUpperCase(),
+                        prog['genderLabel'],
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.4,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                    // Rating Badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.6),
-                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.black.withValues(alpha: 0.65),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.star_rounded,
-                              color: AppColors.accentGold, size: 12),
-                          const SizedBox(width: 3),
+                          const Icon(Icons.star_rounded, color: AppColors.accentGold, size: 14),
+                          const SizedBox(width: 4),
                           Text(
-                            program['rating'],
+                            '${prog['rating']} (${prog['reviews']})',
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 10.5,
+                              fontSize: 11,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 12,
-                    left: 14,
-                    right: 14,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          program['title'],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -0.3,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Coach ${program['coach']}',
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.8),
-                            fontSize: 11.5,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
 
-              // Bottom Info & Spec Badges
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
+                // Bottom Content
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      program['subtitle'],
-                      style: const TextStyle(
-                        fontSize: 12.5,
-                        color: Color(0xFF676E7D),
-                        height: 1.35,
+                    // Goal Chip
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        (prog['goalLabel'] as String).toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 9.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.5,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 6),
 
-                    // Quick Specs
+                    // Title
+                    Text(
+                      prog['title'],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.5,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.4,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+
+                    // Coach
+                    Text(
+                      'By ${prog['coach']} • ${prog['coachRole']}',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.75),
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Specs & Action Pill
                     Row(
                       children: [
-                        _buildSpecPill(
-                          Icons.date_range_rounded,
-                          program['duration'],
-                        ),
-                        const SizedBox(width: 8),
-                        _buildSpecPill(
-                          Icons.repeat_rounded,
-                          program['frequency'],
-                        ),
+                        _buildGlassPill(Icons.date_range_rounded, prog['duration']),
+                        const SizedBox(width: 6),
+                        _buildGlassPill(Icons.repeat_rounded, prog['frequency']),
+                        const SizedBox(width: 6),
+                        _buildGlassPill(Icons.local_fire_department_rounded, prog['calories']),
                         const Spacer(),
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.1),
+                            color: Colors.white,
                             shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.2),
+                                blurRadius: 6,
+                              ),
+                            ],
                           ),
                           child: const Icon(
                             Icons.arrow_forward_rounded,
-                            color: AppColors.primary,
+                            color: Color(0xFF131519),
                             size: 16,
                           ),
                         ),
@@ -992,32 +884,33 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildSpecPill(IconData icon, String label) {
+  Widget _buildGlassPill(IconData icon, String text) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF4F6F8),
-        borderRadius: BorderRadius.circular(10),
+        color: Colors.white.withValues(alpha: 0.18),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 13, color: const Color(0xFF676E7D)),
-          const SizedBox(width: 5),
+          Icon(icon, color: Colors.white, size: 11),
+          const SizedBox(width: 4),
           Text(
-            label,
+            text,
             style: const TextStyle(
-              fontSize: 11,
+              color: Colors.white,
+              fontSize: 10.5,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF33373F),
             ),
           ),
         ],
@@ -1027,7 +920,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 }
 
 // ============================================================================
-// MODAL: Modern Program Details & Day Schedule (100% English)
+// MODAL: High-End Program Details & Day-by-Day Schedule (100% English)
 // ============================================================================
 class _ProgramDetailModal extends StatefulWidget {
   final Map<String, dynamic> program;
@@ -1063,7 +956,7 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
           Center(
             child: Container(
               margin: const EdgeInsets.only(top: 12, bottom: 8),
-              width: 44,
+              width: 40,
               height: 5,
               decoration: BoxDecoration(
                 color: const Color(0xFFE2E5EA),
@@ -1076,7 +969,7 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
               children: [
-                // Top Hero
+                // Hero Banner
                 Stack(
                   children: [
                     ClipRRect(
@@ -1099,8 +992,26 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                             color: Colors.black.withValues(alpha: 0.6),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.close_rounded,
-                              color: Colors.white, size: 18),
+                          child: const Icon(Icons.close_rounded, color: Colors.white, size: 18),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 12,
+                      left: 12,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          widget.program['genderLabel'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -1108,72 +1019,46 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                 ),
                 const SizedBox(height: 16),
 
-                // Title & Subtitle
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.program['title'],
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              color: Color(0xFF131519),
-                              letterSpacing: -0.4,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Guided by ${widget.program['coach']} (${widget.program['coachTitle']})',
-                            style: const TextStyle(
-                              fontSize: 12.5,
-                              color: Color(0xFF676E7D),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                // Title
+                Text(
+                  widget.program['title'],
+                  style: const TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFF131519),
+                    letterSpacing: -0.4,
+                  ),
                 ),
-
+                const SizedBox(height: 4),
+                Text(
+                  'Created by ${widget.program['coach']} (${widget.program['coachRole']})',
+                  style: const TextStyle(
+                    fontSize: 12.5,
+                    color: Color(0xFF676E7D),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 const SizedBox(height: 12),
 
                 // Overview
                 Text(
-                  widget.program['overview'],
+                  widget.program['description'],
                   style: const TextStyle(
                     fontSize: 13,
                     color: Color(0xFF525763),
                     height: 1.45,
                   ),
                 ),
-
                 const SizedBox(height: 18),
 
-                // Stat Cards Row
+                // Specs Grid Row
                 Row(
                   children: [
-                    _buildStatCard(
-                      Icons.timer_outlined,
-                      'Duration',
-                      widget.program['duration'],
-                    ),
+                    _buildSpecTile(Icons.timer_outlined, 'Duration', widget.program['duration']),
                     const SizedBox(width: 8),
-                    _buildStatCard(
-                      Icons.calendar_today_rounded,
-                      'Split',
-                      widget.program['frequency'],
-                    ),
+                    _buildSpecTile(Icons.calendar_today_rounded, 'Split', widget.program['frequency']),
                     const SizedBox(width: 8),
-                    _buildStatCard(
-                      Icons.fitness_center_rounded,
-                      'Level',
-                      widget.program['level'],
-                    ),
+                    _buildSpecTile(Icons.local_fire_department_rounded, 'Burn', widget.program['calories']),
                   ],
                 ),
 
@@ -1181,11 +1066,11 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                 const Divider(height: 1, color: Color(0xFFEDF0F4)),
                 const SizedBox(height: 18),
 
-                // Weekly Split Day Tabs
+                // Day Selector Tabs
                 const Text(
-                  'Weekly Schedule & Exercises',
+                  'Weekly Workout Schedule',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 15.5,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF131519),
                   ),
@@ -1204,25 +1089,18 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 180),
                           margin: const EdgeInsets.only(right: 8),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
-                            color: isSelected
-                                ? const Color(0xFF131519)
-                                : const Color(0xFFF4F6F8),
+                            color: isSelected ? const Color(0xFF131519) : const Color(0xFFF4F6F8),
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Center(
                             child: Text(
                               'Day ${idx + 1}',
                               style: TextStyle(
-                                color: isSelected
-                                    ? Colors.white
-                                    : const Color(0xFF33373F),
+                                color: isSelected ? Colors.white : const Color(0xFF33373F),
                                 fontSize: 12,
-                                fontWeight: isSelected
-                                    ? FontWeight.bold
-                                    : FontWeight.w600,
+                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                               ),
                             ),
                           ),
@@ -1251,14 +1129,14 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                         Text(
                           currentDay['dayTitle'] ?? '',
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.5,
                             fontWeight: FontWeight.w800,
                             color: AppColors.primaryDark,
                           ),
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          currentDay['split'] ?? '',
+                          currentDay['focus'] ?? '',
                           style: const TextStyle(
                             fontSize: 12,
                             color: Color(0xFF676E7D),
@@ -1280,30 +1158,23 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                       ),
                       child: const Column(
                         children: [
-                          Icon(Icons.bedtime_rounded,
-                              size: 40, color: Color(0xFF90A4AE)),
+                          Icon(Icons.bedtime_rounded, size: 40, color: Color(0xFF90A4AE)),
                           SizedBox(height: 10),
                           Text(
-                            'Active Rest & Muscle Recovery',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
+                            'Active Rest & Recovery Day',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                           ),
                           SizedBox(height: 4),
                           Text(
-                            'Hydrate, rest, and hit your protein target for protein synthesis.',
+                            'Hydrate, hit your protein goals, and let muscle fibers repair.',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFF676E7D),
-                              fontSize: 12,
-                            ),
+                            style: TextStyle(color: Color(0xFF676E7D), fontSize: 12),
                           ),
                         ],
                       ),
                     ),
 
-                  // Exercises List
+                  // Exercises list
                   ...exercises.map((ex) {
                     return Container(
                       margin: const EdgeInsets.only(bottom: 10),
@@ -1319,8 +1190,8 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                             borderRadius: BorderRadius.circular(14),
                             child: Image.asset(
                               ex['image'],
-                              width: 62,
-                              height: 62,
+                              width: 60,
+                              height: 60,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -1366,7 +1237,7 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
 
                 const SizedBox(height: 24),
 
-                // Primary CTA: Activate Routine
+                // Activate Button
                 ElevatedButton.icon(
                   onPressed: widget.onActivateProgram,
                   style: ElevatedButton.styleFrom(
@@ -1396,10 +1267,10 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
     );
   }
 
-  Widget _buildStatCard(IconData icon, String label, String value) {
+  Widget _buildSpecTile(IconData icon, String label, String value) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         decoration: BoxDecoration(
           color: const Color(0xFFF8F9FA),
           borderRadius: BorderRadius.circular(14),
@@ -1411,21 +1282,13 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
             const SizedBox(height: 6),
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Color(0xFF757A86),
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(fontSize: 10, color: Color(0xFF757A86), fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 2),
             Text(
               value,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF131519),
-              ),
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF131519)),
             ),
           ],
         ),
