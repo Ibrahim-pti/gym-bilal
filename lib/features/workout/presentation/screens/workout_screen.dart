@@ -13,63 +13,77 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   // Active selected muscle category filter: null = Grid View of all categories
   String? _selectedCategory;
 
-  // Categories definitions in 100% English with high-impact assets
+  // Categories definitions in 100% English with signature colors and icons
   final List<Map<String, dynamic>> _muscleCategories = [
+    {
+      'id': 'all',
+      'title': 'All Movements',
+      'subtitle': 'Full Master Library',
+      'image': 'assets/images/onboarding_athlete.jpg',
+      'count': '19 Drills',
+      'tag': 'Master Suite',
+      'icon': Icons.bolt_rounded,
+      'accentColor': AppColors.primary,
+    },
     {
       'id': 'chest',
       'title': 'Chest',
       'subtitle': 'Pectorals & Push',
       'image': 'assets/images/workout_back.jpg',
-      'count': '4 Exercises',
+      'count': '4 Drills',
       'tag': 'Pectorals',
+      'icon': Icons.fitness_center_rounded,
+      'accentColor': const Color(0xFFFF5252),
     },
     {
       'id': 'back',
       'title': 'Back & Lats',
       'subtitle': 'V-Taper & Pull',
       'image': 'assets/images/pullup_figure.jpg',
-      'count': '4 Exercises',
+      'count': '4 Drills',
       'tag': 'V-Taper',
+      'icon': Icons.sports_gymnastics_rounded,
+      'accentColor': const Color(0xFF0284C7),
     },
     {
       'id': 'shoulders',
       'title': 'Shoulders',
       'subtitle': 'Deltoids & Traps',
       'image': 'assets/images/male_fitness_banner.jpg',
-      'count': '3 Exercises',
+      'count': '3 Drills',
       'tag': 'Deltoids',
+      'icon': Icons.shield_rounded,
+      'accentColor': const Color(0xFFF59E0B),
     },
     {
       'id': 'arms',
       'title': 'Arms & Biceps',
       'subtitle': 'Biceps & Triceps',
       'image': 'assets/images/splash_athlete.jpg',
-      'count': '3 Exercises',
+      'count': '3 Drills',
       'tag': 'Arm Definition',
+      'icon': Icons.fitness_center_outlined,
+      'accentColor': const Color(0xFF8B5CF6),
     },
     {
       'id': 'legs',
       'title': 'Legs & Glutes',
       'subtitle': 'Quads & Hamstrings',
       'image': 'assets/images/female_fitness_banner.jpg',
-      'count': '3 Exercises',
+      'count': '3 Drills',
       'tag': 'Lower Body',
+      'icon': Icons.directions_run_rounded,
+      'accentColor': const Color(0xFF10B981),
     },
     {
       'id': 'core',
       'title': 'Core & Abs',
       'subtitle': 'Transverse & Six-Pack',
       'image': 'assets/images/posture_dark_3d.jpg',
-      'count': '2 Exercises',
+      'count': '2 Drills',
       'tag': 'Core Stability',
-    },
-    {
-      'id': 'all',
-      'title': 'All Exercises',
-      'subtitle': 'Full Library',
-      'image': 'assets/images/onboarding_athlete.jpg',
-      'count': '19 Exercises',
-      'tag': 'Complete Suite',
+      'icon': Icons.self_improvement_rounded,
+      'accentColor': const Color(0xFFEC4899),
     },
   ];
 
@@ -546,6 +560,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     // If user has not chosen a category and search is empty -> show the GRID VIEW!
     // If user chose a category OR searched -> show EXERCISES LIST!
     final showGridView = _selectedCategory == null && _searchQuery.isEmpty;
+    final gridMuscleCategories = _muscleCategories.where((c) => c['id'] != 'all').toList();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7F8FA),
@@ -561,22 +576,32 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
           // 3. MAIN CONTENT: Either GRID OF MUSCLES or EXERCISES LIST
           if (showGridView) ...[
-            // 2-Column Grid of Muscle Category Cards (Immediate under search)
+            // Eye-Catching Hero Movement Showcase Banner
+            SliverToBoxAdapter(
+              child: _buildHeroShowcaseBanner(),
+            ),
+
+            // Interactive Quick Filter Category Chips
+            SliverToBoxAdapter(
+              child: _buildQuickFilterChips(),
+            ),
+
+            // 2-Column Grid of 6 Muscle Categories (Symmetric 2x3 Grid)
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 110),
+              padding: const EdgeInsets.fromLTRB(16, 2, 16, 110),
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 14,
                   mainAxisSpacing: 14,
-                  childAspectRatio: 0.90,
+                  childAspectRatio: 0.82,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final cat = _muscleCategories[index];
+                    final cat = gridMuscleCategories[index];
                     return _buildGridMuscleCard(cat);
                   },
-                  childCount: _muscleCategories.length,
+                  childCount: gridMuscleCategories.length,
                 ),
               ),
             ),
@@ -712,21 +737,303 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     );
   }
 
-  // --- 3. BEAUTIFUL 2-COLUMN GRID MUSCLE CARD ---
+  // --- 3. HERO SHOWCASE BANNER (EYE-CATCHING / WOW FACTOR) ---
+  Widget _buildHeroShowcaseBanner() {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 6, 16, 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.06)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: 0.22),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          children: [
+            // Background Image
+            Image.asset(
+              'assets/images/onboarding_athlete.jpg',
+              height: 180,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+            ),
+
+            // Deep dark cinematic gradient with warm orange rim
+            Container(
+              height: 180,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Colors.black.withValues(alpha: 0.94),
+                    Colors.black.withValues(alpha: 0.72),
+                    Colors.black.withValues(alpha: 0.35),
+                  ],
+                ),
+              ),
+            ),
+
+            // Content
+            Container(
+              height: 180,
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Top Pill & Video Tag
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [AppColors.primary, Color(0xFFFF8A00)],
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.4),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.bolt_rounded, color: Colors.white, size: 12),
+                            SizedBox(width: 4),
+                            Text(
+                              'MASTER MOVEMENT LIBRARY',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.55),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.videocam_rounded, color: Color(0xFF10B981), size: 12),
+                            SizedBox(width: 4),
+                            Text(
+                              '1080p HD',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // Headline & Description
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '19 Master Drills & Videos',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        'Calibrated cues & form mistakes for 6 target muscle groups',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.85),
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // Action Row
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedCategory = 'all';
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(14),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.25),
+                                blurRadius: 10,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Explore All Exercises',
+                                style: TextStyle(
+                                  color: Color(0xFF131519),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              SizedBox(width: 6),
+                              Icon(Icons.arrow_forward_rounded, color: AppColors.primary, size: 14),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Row(
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF10B981),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '6 Target Zones',
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.8),
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // --- 4. INTERACTIVE QUICK FILTER CATEGORY CHIPS ---
+  Widget _buildQuickFilterChips() {
+    return Container(
+      height: 38,
+      margin: const EdgeInsets.fromLTRB(16, 2, 16, 14),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _muscleCategories.length,
+        itemBuilder: (context, index) {
+          final cat = _muscleCategories[index];
+          final isSelected = _selectedCategory == cat['id'];
+
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedCategory = cat['id'];
+              });
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+              decoration: BoxDecoration(
+                color: isSelected ? const Color(0xFF131519) : Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: isSelected ? const Color(0xFF131519) : const Color(0xFFE5E7EB),
+                ),
+                boxShadow: [
+                  if (!isSelected)
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.03),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    cat['icon'] as IconData? ?? Icons.fitness_center_rounded,
+                    size: 13,
+                    color: isSelected ? AppColors.accentGold : (cat['accentColor'] as Color? ?? AppColors.primary),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    cat['title'],
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : const Color(0xFF2D3139),
+                      fontSize: 11.5,
+                      fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // --- 5. ULTRA-PREMIUM 2-COLUMN GRID MUSCLE CARD ---
   Widget _buildGridMuscleCard(Map<String, dynamic> cat) {
+    final Color accentColor = (cat['accentColor'] as Color?) ?? AppColors.primary;
+    final IconData icon = (cat['icon'] as IconData?) ?? Icons.fitness_center_rounded;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.08), width: 1),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12), width: 1.2),
         image: DecorationImage(
           image: AssetImage(cat['image']),
           fit: BoxFit.cover,
+          alignment: Alignment.center,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.14),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
+            color: accentColor.withValues(alpha: 0.18),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.12),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -741,52 +1048,63 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           },
           child: Stack(
             children: [
-              // Dark cinematic gradient
+              // Deep Dark Multi-Stop Vignette
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(23),
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    stops: const [0.0, 0.42, 1.0],
+                    stops: const [0.0, 0.36, 0.68, 1.0],
                     colors: [
-                      Colors.black.withValues(alpha: 0.2),
-                      Colors.black.withValues(alpha: 0.48),
-                      Colors.black.withValues(alpha: 0.95),
+                      Colors.black.withValues(alpha: 0.22),
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.68),
+                      Colors.black.withValues(alpha: 0.96),
                     ],
                   ),
                 ),
               ),
 
-              // Top Left: Floating Muscle Tag
+              // Top Left: Glowing Tag with Category Icon
               Positioned(
                 top: 10,
                 left: 10,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4.5),
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.65),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
-                  ),
-                  child: Text(
-                    (cat['tag'] as String).toUpperCase(),
-                    style: const TextStyle(
-                      color: Color(0xFFFFB74D),
-                      fontSize: 8.5,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.4,
+                    border: Border.all(
+                      color: accentColor.withValues(alpha: 0.5),
+                      width: 1,
                     ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(icon, color: accentColor, size: 11),
+                      const SizedBox(width: 4),
+                      Text(
+                        (cat['tag'] as String).toUpperCase(),
+                        style: TextStyle(
+                          color: accentColor,
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.4,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
 
-              // Top Right: Count Badge with active green dot
+              // Top Right: Drill Count with active green dot
               Positioned(
                 top: 10,
                 right: 10,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4.5),
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.65),
                     borderRadius: BorderRadius.circular(10),
@@ -817,7 +1135,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 ),
               ),
 
-              // Bottom Content: Title, Subtitle, and Eye-Catching Gradient Button
+              // Bottom Content: Title, Subtitle, and Eye-Catching Action Button
               Positioned(
                 bottom: 12,
                 left: 12,
@@ -830,9 +1148,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       (cat['title'] as String).toUpperCase(),
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 17,
+                        fontSize: 16.5,
                         fontWeight: FontWeight.w900,
-                        letterSpacing: -0.4,
+                        letterSpacing: -0.3,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -841,43 +1159,53 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.8),
-                        fontSize: 11,
+                        color: Colors.white.withValues(alpha: 0.78),
+                        fontSize: 10.5,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 9),
 
-                    // Eye-Catching Gradient Action Button
+                    // Tactile Eye-Catching Action Pill Button
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6.5),
+                      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6.5),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [AppColors.primary, Color(0xFFFF8A00)],
+                        gradient: LinearGradient(
+                          colors: [
+                            accentColor,
+                            accentColor.withValues(alpha: 0.85),
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.45),
+                            color: accentColor.withValues(alpha: 0.4),
                             blurRadius: 8,
                             offset: const Offset(0, 3),
                           ),
                         ],
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            'Explore',
+                          const Text(
+                            'View Drills',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
-                              letterSpacing: 0.3,
+                              letterSpacing: 0.2,
                             ),
                           ),
-                          SizedBox(width: 4),
-                          Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 12),
+                          const SizedBox(width: 4),
+                          Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.25),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 10),
+                          ),
                         ],
                       ),
                     ),
@@ -895,7 +1223,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   Widget _buildExercisesListHeader(int count) {
     final activeCat = _muscleCategories.firstWhere(
       (c) => c['id'] == _selectedCategory,
-      orElse: () => _muscleCategories.last,
+      orElse: () => _muscleCategories.first,
     );
 
     return Container(
