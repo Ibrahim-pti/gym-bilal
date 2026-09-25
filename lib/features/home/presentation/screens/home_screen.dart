@@ -306,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    widget.onNavigateTab?.call(1);
+                                    widget.onNavigateTab?.call(2);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -402,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(width: 10),
                                 ElevatedButton.icon(
                                   onPressed: () {
-                                    widget.onNavigateTab?.call(1);
+                                    widget.onNavigateTab?.call(2);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.primary,
@@ -490,7 +490,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // Card 1: Gym Workouts
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => widget.onNavigateTab?.call(1),
+                        onTap: () => widget.onNavigateTab?.call(2),
                         child: Image.asset(
                           'assets/images/card_gym_full.png',
                           fit: BoxFit.contain,
@@ -502,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // Card 2: Nutrition & Calories
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => widget.onNavigateTab?.call(3),
+                        onTap: () => widget.onNavigateTab?.call(4),
                         child: Image.asset(
                           'assets/images/card_nutrition_full.png',
                           fit: BoxFit.contain,
@@ -514,7 +514,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // Card 3: Progress & Analytics
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => widget.onNavigateTab?.call(4),
+                        onTap: () => widget.onNavigateTab?.call(5),
                         child: Image.asset(
                           'assets/images/card_progress_full.png',
                           fit: BoxFit.contain,
@@ -666,7 +666,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   unit: 'kcal',
                   targetText: '$_caloriesTarget kcal',
                   percent: caloriePercent,
-                  onTap: () => widget.onNavigateTab?.call(3),
+                  onTap: () => widget.onNavigateTab?.call(4),
                 ),
               ),
               const SizedBox(width: 10),
@@ -687,7 +687,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   unit: 'steps',
                   targetText: '${(_stepsTarget / 1000).toInt()}k steps',
                   percent: stepsPercent,
-                  onTap: () => widget.onNavigateTab?.call(4),
+                  onTap: () => widget.onNavigateTab?.call(5),
                 ),
               ),
             ],
@@ -1193,7 +1193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               GestureDetector(
-                onTap: () => widget.onNavigateTab?.call(1),
+                onTap: () => widget.onNavigateTab?.call(2),
                 child: const Row(
                   children: [
                     Text(
@@ -1488,7 +1488,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(width: 14),
                     ElevatedButton.icon(
-                      onPressed: () => widget.onNavigateTab?.call(1),
+                      onPressed: () => widget.onNavigateTab?.call(2),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
@@ -1549,7 +1549,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               GestureDetector(
-                onTap: () => widget.onNavigateTab?.call(3),
+                onTap: () => widget.onNavigateTab?.call(4),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 9,
@@ -1696,7 +1696,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     GestureDetector(
-                      onTap: () => widget.onNavigateTab?.call(3),
+                      onTap: () => widget.onNavigateTab?.call(4),
                       child: const Row(
                         children: [
                           Text(
