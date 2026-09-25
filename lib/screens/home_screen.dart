@@ -663,6 +663,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icons.water_drop_rounded,
                   iconColor: const Color(0xFF0284C7),
                   iconBg: const Color(0xFFE0F2FE),
+                  image3d: 'assets/images/icon_water_3d.jpg',
                   ringColor: const Color(0xFF0284C7),
                   ringBgColor: const Color(0xFFE0F2FE),
                   valueDisplay: _waterLiters.toStringAsFixed(1),
@@ -699,6 +700,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icons.local_fire_department_rounded,
                   iconColor: const Color(0xFFFF5722),
                   iconBg: const Color(0xFFFFEBE6),
+                  image3d: 'assets/images/icon_fire_3d.jpg',
                   ringColor: const Color(0xFFFF5722),
                   ringBgColor: const Color(0xFFFFEBE6),
                   valueDisplay: '$_caloriesBurned',
@@ -717,6 +719,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icons.directions_walk_rounded,
                   iconColor: const Color(0xFF10B981),
                   iconBg: const Color(0xFFD1FAE5),
+                  image3d: 'assets/images/icon_sneaker_3d.jpg',
                   ringColor: const Color(0xFF10B981),
                   ringBgColor: const Color(0xFFD1FAE5),
                   valueDisplay: _stepsCount >= 1000
@@ -740,6 +743,7 @@ class _HomeScreenState extends State<HomeScreen> {
     required IconData icon,
     required Color iconColor,
     required Color iconBg,
+    required String image3d,
     required Color ringColor,
     required Color ringBgColor,
     required String valueDisplay,
@@ -821,54 +825,78 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 10),
 
-            // Circular Progress Indicator with number inside
+            // Circular Progress Indicator with 3D Icon inside
             SizedBox(
-              width: 62,
-              height: 62,
+              width: 64,
+              height: 64,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   SizedBox(
-                    width: 62,
-                    height: 62,
+                    width: 64,
+                    height: 64,
                     child: CircularProgressIndicator(
                       value: percent,
-                      strokeWidth: 5.5,
+                      strokeWidth: 5.0,
                       strokeCap: StrokeCap.round,
                       backgroundColor: ringBgColor,
                       valueColor: AlwaysStoppedAnimation<Color>(ringColor),
                     ),
                   ),
-                  // Number and Unit inside circle
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        valueDisplay,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.lightTextPrimary,
-                          letterSpacing: -0.4,
-                          height: 1.0,
+                  // 3D Icon inside circle
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: ringColor.withValues(alpha: 0.12),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
                         ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        image3d,
+                        fit: BoxFit.cover,
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        unit,
-                        style: TextStyle(
-                          fontSize: 9,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey.shade500,
-                          height: 1.0,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
+
+            // Number and Unit
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text(
+                  valueDisplay,
+                  style: const TextStyle(
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.lightTextPrimary,
+                    letterSpacing: -0.4,
+                  ),
+                ),
+                const SizedBox(width: 2),
+                Text(
+                  unit,
+                  style: TextStyle(
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
 
             // Percentage Done Pill
             Container(
