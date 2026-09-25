@@ -3,8 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:gym_base/core/theme/app_theme.dart';
 import 'package:gym_base/features/splash/presentation/screens/splash_screen.dart';
 
-void main() {
+import 'package:gym_base/core/services/notification_service.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,

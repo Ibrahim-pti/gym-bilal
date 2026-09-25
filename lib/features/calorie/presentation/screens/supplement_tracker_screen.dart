@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
+import 'package:gym_base/core/services/notification_service.dart';
 
 class SupplementTrackerScreen extends StatefulWidget {
   const SupplementTrackerScreen({super.key});
@@ -12,10 +13,10 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
   // Selected category filter: 'all', 'pre', 'post', 'daily'
   String _selectedCategory = 'all';
 
-  // Daily Supplements List
+  // Daily Supplements List with reminder times
   final List<Map<String, dynamic>> _supplements = [
     {
-      'id': 'supp_1',
+      'id': 1,
       'name': 'Creatine Monohydrate',
       'brand': 'Creapure Micronized',
       'dosage': '5g',
@@ -27,9 +28,13 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
       'icon': Icons.bolt_rounded,
       'instructions': 'Dissolve in 300ml of water or fruit juice. Increases intramuscular phosphocreatine for raw strength output.',
       'streak': 18,
+      'reminderEnabled': true,
+      'reminderHour': 16,
+      'reminderMinute': 30,
+      'reminderTime': '04:30 PM',
     },
     {
-      'id': 'supp_2',
+      'id': 2,
       'name': 'Whey Isolate Protein',
       'brand': '100% Hydrolyzed Whey',
       'dosage': '30g Protein (1 Scoop)',
@@ -41,9 +46,13 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
       'icon': Icons.fitness_center_rounded,
       'instructions': 'Mix with cold water or almond milk. Rapid leucine spike to maximize Muscle Protein Synthesis (MPS).',
       'streak': 24,
+      'reminderEnabled': true,
+      'reminderHour': 18,
+      'reminderMinute': 0,
+      'reminderTime': '06:00 PM',
     },
     {
-      'id': 'supp_3',
+      'id': 3,
       'name': 'Pre-Workout Ignition',
       'brand': 'High Voltage Pump & Focus',
       'dosage': '1 Scoop (200mg Caffeine + 3g Citrulline)',
@@ -55,9 +64,13 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
       'icon': Icons.local_fire_department_rounded,
       'instructions': 'Enhances nitric oxide blood flow, muscular endurance, and neurological drive.',
       'streak': 9,
+      'reminderEnabled': true,
+      'reminderHour': 16,
+      'reminderMinute': 0,
+      'reminderTime': '04:00 PM',
     },
     {
-      'id': 'supp_4',
+      'id': 4,
       'name': 'Omega-3 Fish Oil (EPA / DHA)',
       'brand': 'Triple Strength Molecular Distilled',
       'dosage': '2 Capsules (1200mg EPA + 900mg DHA)',
@@ -69,9 +82,13 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
       'icon': Icons.favorite_rounded,
       'instructions': 'Supports joint cartilage integrity, reduces systemic inflammation, and accelerates muscle recovery.',
       'streak': 30,
+      'reminderEnabled': true,
+      'reminderHour': 8,
+      'reminderMinute': 30,
+      'reminderTime': '08:30 AM',
     },
     {
-      'id': 'supp_5',
+      'id': 5,
       'name': 'Multivitamin + Vitamin D3 & K2',
       'brand': 'Elite Athletic Spectrum',
       'dosage': '1 Tablet + 5000 IU D3',
@@ -83,9 +100,13 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
       'icon': Icons.eco_rounded,
       'instructions': 'Replenishes essential micronutrients lost during heavy sweat sessions.',
       'streak': 28,
+      'reminderEnabled': true,
+      'reminderHour': 8,
+      'reminderMinute': 30,
+      'reminderTime': '08:30 AM',
     },
     {
-      'id': 'supp_6',
+      'id': 6,
       'name': 'ZMA (Zinc, Magnesium & B6)',
       'brand': 'Nighttime Deep Sleep Formula',
       'dosage': '3 Capsules (30mg Zn + 450mg Mg)',
@@ -97,6 +118,10 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
       'icon': Icons.bedtime_rounded,
       'instructions': 'Promotes deep stage 4 REM sleep, nervous system relaxation, and natural testosterone synthesis.',
       'streak': 14,
+      'reminderEnabled': true,
+      'reminderHour': 22,
+      'reminderMinute': 30,
+      'reminderTime': '10:30 PM',
     },
   ];
 
@@ -117,6 +142,91 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
         supp['streak'] = (supp['streak'] as int) - 1;
       }
     });
+  }
+
+  // --- Pick & Schedule Local Notification ---
+  Future<void> _pickReminderTime(Map<String, dynamic> supp) async {
+    final initialHour = supp['reminderHour'] as int? ?? 8;
+    final initialMinute = supp['reminderMinute'] as int? ?? 0;
+
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: initialHour, minute: initialMinute),
+      helpText: 'Select daily reminder time for ${supp['name']}',
+    );
+
+    if (picked != null) {
+      final hourStr = picked.hourOfPeriod == 0 ? '12' : picked.hourOfPeriod.toString().padLeft(2, '0');
+      final minuteStr = picked.minute.toString().padLeft(2, '0');
+      final period = picked.period == DayPeriod.am ? 'AM' : 'PM';
+      final formattedTime = '$hourStr:$minuteStr $period';
+
+      setState(() {
+        supp['reminderHour'] = picked.hour;
+        supp['reminderMinute'] = picked.minute;
+        supp['reminderTime'] = formattedTime;
+        supp['reminderEnabled'] = true;
+      });
+
+      // Schedule with local notifications
+      await NotificationService().scheduleDailySupplementNotification(
+        id: supp['id'] as int,
+        title: 'Time for ${supp['name']} 💊',
+        body: 'Take ${supp['dosage']} • ${supp['instructions']}',
+        hour: picked.hour,
+        minute: picked.minute,
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.notifications_active_rounded, color: Colors.white, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Daily reminder set for ${supp['name']} at $formattedTime 🔔',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: AppColors.primary,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+
+  // --- Trigger Instant Test Notification ---
+  Future<void> _triggerTestNotification() async {
+    await NotificationService().showInstantNotification(
+      id: 999,
+      title: 'Gym Base • Supplement Reminder 💊',
+      body: 'Time to take your 5g Creatine Monohydrate with 300ml water! Stay consistent! 🔥',
+    );
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Row(
+            children: [
+              Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+              SizedBox(width: 10),
+              Text(
+                '🔔 Local notification triggered! Check your notification bar.',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+          backgroundColor: const Color(0xFF10B981),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+      );
+    }
   }
 
   void _showAddSupplementModal() {
@@ -202,7 +312,7 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
 
                     setState(() {
                       _supplements.add({
-                        'id': 'supp_${DateTime.now().millisecondsSinceEpoch}',
+                        'id': _supplements.length + 1,
                         'name': name,
                         'brand': 'Personal Stack',
                         'dosage': dosage.isNotEmpty ? dosage : '1 Serving',
@@ -214,6 +324,10 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
                         'icon': Icons.medication_rounded,
                         'instructions': 'Take with water consistently.',
                         'streak': 0,
+                        'reminderEnabled': true,
+                        'reminderHour': 9,
+                        'reminderMinute': 0,
+                        'reminderTime': '09:00 AM',
                       });
                     });
                     Navigator.of(ctx).pop();
@@ -278,7 +392,7 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
         title: const Row(
           children: [
             Text(
-              'Daily Supplements Stack',
+              'Supplement Reminders',
               style: TextStyle(
                 color: AppColors.lightTextPrimary,
                 fontSize: 17,
@@ -291,8 +405,15 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
           ],
         ),
         actions: [
+          // Instant Test Local Notification Trigger
           IconButton(
-            icon: const Icon(Icons.add_circle_outline_rounded, color: AppColors.primary),
+            tooltip: 'Test Local Notification',
+            icon: const Icon(Icons.notifications_active_rounded, color: AppColors.primary),
+            onPressed: _triggerTestNotification,
+          ),
+          IconButton(
+            tooltip: 'Add Custom Supplement',
+            icon: const Icon(Icons.add_circle_outline_rounded, color: AppColors.lightTextPrimary),
             onPressed: _showAddSupplementModal,
           ),
         ],
@@ -477,6 +598,8 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
     final isTaken = supp['taken'] as bool;
     final color = supp['color'] as Color;
     final icon = supp['icon'] as IconData;
+    final reminderTime = supp['reminderTime'] as String? ?? 'Set Time';
+    final reminderEnabled = supp['reminderEnabled'] as bool? ?? false;
 
     return Container(
       margin: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
@@ -572,36 +695,71 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
           ),
           const SizedBox(height: 12),
 
-          // Timing Strip & Instructions
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF9FAFB),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.alarm_rounded, size: 14, color: AppColors.primary),
-                const SizedBox(width: 6),
-                Text(
-                  supp['timeWindow'] as String,
-                  style: const TextStyle(
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.lightTextPrimary,
+          // Timing Strip & Local Notification Alarm Picker
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF9FAFB),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.schedule_rounded, size: 14, color: AppColors.primary),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          supp['timeWindow'] as String,
+                          style: const TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.lightTextPrimary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const Spacer(),
-                Text(
-                  '🔥 ${supp['streak']}d streak',
-                  style: TextStyle(
-                    fontSize: 10.5,
-                    color: Colors.grey.shade600,
-                    fontWeight: FontWeight.w700,
+              ),
+              const SizedBox(width: 8),
+
+              // Local Notification Reminder Button
+              GestureDetector(
+                onTap: () => _pickReminderTime(supp),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+                  decoration: BoxDecoration(
+                    color: reminderEnabled ? AppColors.primary.withValues(alpha: 0.12) : Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: reminderEnabled ? AppColors.primary.withValues(alpha: 0.4) : Colors.grey.shade300,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        reminderEnabled ? Icons.notifications_active_rounded : Icons.notifications_outlined,
+                        size: 14,
+                        color: reminderEnabled ? AppColors.primary : Colors.grey.shade600,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        reminderTime,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          color: reminderEnabled ? AppColors.primary : Colors.grey.shade700,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           const SizedBox(height: 8),
 
