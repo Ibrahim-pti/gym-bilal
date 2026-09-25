@@ -26,7 +26,7 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       HomeScreen(onNavigateTab: _onTabSelected),
-      const ExploreScreen(),
+      ExploreScreen(onNavigateTab: _onTabSelected),
       const WorkoutScreen(),
       const CalorieScreen(),
       const ProfileScreen(),
@@ -68,11 +68,11 @@ class _MainLayoutState extends State<MainLayout> {
                     label: 'Home',
                   ),
 
-                  // 2. Explore
+                  // 2. Programs / کۆرسەکان
                   _buildNavItem(
                     index: 1,
-                    icon: Icons.explore_rounded,
-                    label: 'Explore',
+                    icon: Icons.layers_rounded,
+                    label: 'Programs',
                   ),
 
                   // 3. Center Elevated Workout Button
