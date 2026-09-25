@@ -522,7 +522,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 22),
+
+              // ==========================================
+              // Daily Activity Rings Section ⚡ (Water, Calories, Steps)
+              // ==========================================
+              _buildDailyActivitySection(),
+
+              const SizedBox(height: 24),
 
               // 3 Quick Action Cards: Gym Workouts, Nutrition & Calories, Progress & Analytics
               Padding(
@@ -566,13 +573,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-
-              const SizedBox(height: 24),
-
-              // ==========================================
-              // Daily Activity Rings Section ⚡ (Water, Calories, Steps)
-              // ==========================================
-              _buildDailyActivitySection(),
 
               const SizedBox(height: 28),
 
