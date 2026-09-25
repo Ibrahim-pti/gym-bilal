@@ -934,7 +934,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ----------------------------------------------------
-  // SECTION 1: Gym Challenges (Simple, Clean, Soft Card) 🏆
+  // SECTION 1: Gym Challenges (Dark Luxury Banner Style) 🏆
   // ----------------------------------------------------
   Widget _buildChallengesSection() {
     return Padding(
@@ -942,9 +942,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Text(
+              const Text(
                 'Gym Challenges',
                 style: TextStyle(
                   fontSize: 18,
@@ -953,151 +953,219 @@ class _HomeScreenState extends State<HomeScreen> {
                   letterSpacing: -0.3,
                 ),
               ),
-              SizedBox(width: 6),
-              Text('🏆', style: TextStyle(fontSize: 16)),
+              const SizedBox(width: 6),
+              const Text('🏆', style: TextStyle(fontSize: 16)),
+              const Spacer(),
+              GestureDetector(
+                onTap: () => _showLeaderboardBottomSheet(context),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFB800).withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Leaderboard',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFFC76B00),
+                        ),
+                      ),
+                      SizedBox(width: 3),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 9.5,
+                        color: Color(0xFFC76B00),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
 
-          // Simple, Soft Luxury Card
+          // Dark Luxury Banner Card matching Top Banner
           GestureDetector(
             onTap: () => _showLeaderboardBottomSheet(context),
             child: Container(
-              padding: const EdgeInsets.all(16),
+              height: 156,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(
-                  color: Colors.grey.shade200,
-                  width: 1.2,
+                borderRadius: BorderRadius.circular(20),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1B1C1E), Color(0xFF141517)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.03),
-                    blurRadius: 16,
-                    offset: const Offset(0, 5),
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 18,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
-              child: Row(
+              child: Stack(
                 children: [
-                  // Left info & button
-                  Expanded(
+                  // Right Image with glowing victory trophy & smooth dark blend
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: 145,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.asset(
+                            'assets/images/challenge_trophy_3d.jpg',
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                          ),
+                          Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  Color(0xFF1B1C1E),
+                                  Colors.transparent,
+                                ],
+                                stops: [0.0, 0.55],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Card Content
+                  Padding(
+                    padding: const EdgeInsets.all(13),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Soft pill tag
+                        // Tag Badge
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 9,
-                            vertical: 3.5,
+                            horizontal: 8,
+                            vertical: 3,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFF3E0),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Text(
-                            '🔥 MONTHLY CHALLENGE',
-                            style: TextStyle(
-                              color: Color(0xFFE65100),
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.2,
+                            color: const Color(0xFFFFB800).withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: const Color(0xFFFFB800).withValues(alpha: 0.4),
+                              width: 1,
                             ),
                           ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('🔥', style: TextStyle(fontSize: 10)),
+                              SizedBox(width: 4),
+                              Text(
+                                'MONTHLY CHALLENGE',
+                                style: TextStyle(
+                                  color: Color(0xFFFFB800),
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.2,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 7),
 
                         // Title
-                        const Text(
-                          '30-Day Beast Mode',
-                          style: TextStyle(
-                            fontSize: 16.5,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.lightTextPrimary,
-                            letterSpacing: -0.2,
+                        RichText(
+                          text: const TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '30-Day\n',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.1,
+                                ),
+                              ),
+                              TextSpan(
+                                text: 'Beast Mode',
+                                style: TextStyle(
+                                  color: Color(0xFFFFB800),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.1,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 3),
 
                         // Subtitle
                         Text(
-                          '100 push-ups daily • 1.4k active members',
+                          '100 push-ups daily • 1.4k members',
                           style: TextStyle(
-                            fontSize: 11.5,
-                            color: Colors.grey.shade600,
-                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withValues(alpha: 0.7),
+                            fontSize: 9.5,
+                            height: 1.15,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const Spacer(),
 
-                        // Simple stylish action button
+                        // Button & Day tag
                         Row(
                           children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
+                            ElevatedButton.icon(
+                              onPressed: () => _showLeaderboardBottomSheet(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFFF9800),
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 11,
+                                  vertical: 5,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
                               ),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary,
-                                borderRadius: BorderRadius.circular(14),
+                              icon: const Icon(
+                                Icons.emoji_events_rounded,
+                                size: 13,
                               ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'View Challenge',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Icon(
-                                    Icons.arrow_forward_rounded,
-                                    size: 13,
-                                    color: Colors.white,
-                                  ),
-                                ],
+                              label: const Text(
+                                'View Challenge',
+                                style: TextStyle(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 10),
                             Text(
                               'Day 18 / 30',
                               style: TextStyle(
-                                color: Colors.grey.shade500,
-                                fontSize: 11,
+                                color: Colors.white.withValues(alpha: 0.65),
+                                fontSize: 10,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
                         ),
                       ],
-                    ),
-                  ),
-
-                  const SizedBox(width: 14),
-
-                  // Right 3D Trophy thumbnail
-                  Container(
-                    width: 85,
-                    height: 85,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF9E6),
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: const Color(0xFFFFE082),
-                        width: 1,
-                      ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(17),
-                      child: Image.asset(
-                        'assets/images/challenge_trophy_3d.jpg',
-                        fit: BoxFit.cover,
-                      ),
                     ),
                   ),
                 ],
@@ -1110,7 +1178,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ----------------------------------------------------
-  // SECTION 2: 3D Form Correction (Simple, Clean, Soft Card) 💡
+  // SECTION 2: 3D Form Correction (Dark Luxury Banner Style) 💡
   // ----------------------------------------------------
   Widget _buildFormTipsSection() {
     return Padding(
@@ -1118,9 +1186,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Text(
+              const Text(
                 'Exercise Posture',
                 style: TextStyle(
                   fontSize: 18,
@@ -1129,138 +1197,210 @@ class _HomeScreenState extends State<HomeScreen> {
                   letterSpacing: -0.3,
                 ),
               ),
-              SizedBox(width: 6),
-              Text('💡', style: TextStyle(fontSize: 16)),
+              const SizedBox(width: 6),
+              const Text('💡', style: TextStyle(fontSize: 16)),
+              const Spacer(),
+              GestureDetector(
+                onTap: () => _showFormGuideBottomSheet(context),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'AI Angles',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF059669),
+                        ),
+                      ),
+                      SizedBox(width: 3),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 9.5,
+                        color: Color(0xFF059669),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
 
-          // Simple, Soft Luxury Card
+          // Dark Luxury Banner Card matching Top Banner
           GestureDetector(
             onTap: () => _showFormGuideBottomSheet(context),
             child: Container(
-              padding: const EdgeInsets.all(16),
+              height: 156,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(
-                  color: Colors.grey.shade200,
-                  width: 1.2,
+                borderRadius: BorderRadius.circular(20),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1B1C1E), Color(0xFF141517)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.03),
-                    blurRadius: 16,
-                    offset: const Offset(0, 5),
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 18,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
-              child: Row(
+              child: Stack(
                 children: [
-                  // Left info & button
-                  Expanded(
+                  // Right Image with glowing biomechanics posture & smooth dark blend
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: 145,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.asset(
+                            'assets/images/posture_dark_3d.jpg',
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                          ),
+                          Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  Color(0xFF1B1C1E),
+                                  Colors.transparent,
+                                ],
+                                stops: [0.0, 0.55],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Card Content
+                  Padding(
+                    padding: const EdgeInsets.all(13),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Soft pill tag
+                        // Tag Badge
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 9,
-                            vertical: 3.5,
+                            horizontal: 8,
+                            vertical: 3,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE8F5E9),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Text(
-                            '🔬 3D POSTURE AI',
-                            style: TextStyle(
-                              color: Color(0xFF2E7D32),
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.2,
+                            color: const Color(0xFF10B981).withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: const Color(0xFF10B981).withValues(alpha: 0.4),
+                              width: 1,
                             ),
                           ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('🔬', style: TextStyle(fontSize: 10)),
+                              SizedBox(width: 4),
+                              Text(
+                                '3D POSTURE AI',
+                                style: TextStyle(
+                                  color: Color(0xFF34D399),
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.2,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 7),
 
                         // Title
-                        const Text(
-                          'Master Your Form',
-                          style: TextStyle(
-                            fontSize: 16.5,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.lightTextPrimary,
-                            letterSpacing: -0.2,
+                        RichText(
+                          text: const TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Master Your\n',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.1,
+                                ),
+                              ),
+                              TextSpan(
+                                text: 'Form & Angles',
+                                style: TextStyle(
+                                  color: Color(0xFF34D399),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.1,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 3),
 
                         // Subtitle
                         Text(
-                          'Prevent injury with 3D angle & posture guide',
+                          'Prevent injury with 3D joint sensors.',
                           style: TextStyle(
-                            fontSize: 11.5,
-                            color: Colors.grey.shade600,
-                            fontWeight: FontWeight.w500,
+                            color: Colors.white.withValues(alpha: 0.7),
+                            fontSize: 9.5,
+                            height: 1.15,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const Spacer(),
 
-                        // Simple stylish action button
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1B5E20),
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
+                        // Button
+                        Row(
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () => _showFormGuideBottomSheet(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF10B981),
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 11,
+                                  vertical: 5,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                              icon: const Icon(
+                                Icons.camera_alt_rounded,
+                                size: 13,
+                              ),
+                              label: const Text(
                                 'Check Form & Tips',
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 11,
+                                  fontSize: 10.5,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(width: 4),
-                              Icon(
-                                Icons.arrow_forward_rounded,
-                                size: 13,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ),
-
-                  const SizedBox(width: 14),
-
-                  // Right 3D Posture thumbnail
-                  Container(
-                    width: 85,
-                    height: 85,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF1F8F4),
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: const Color(0xFFA5D6A7),
-                        width: 1,
-                      ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(17),
-                      child: Image.asset(
-                        'assets/images/form_correction_3d.jpg',
-                        fit: BoxFit.cover,
-                      ),
                     ),
                   ),
                 ],
