@@ -214,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 14),
 
               // 2. Headline with orange underline brush
               Padding(
@@ -225,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Text(
                       'One Step Closer To',
                       style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 22,
                         fontWeight: FontWeight.w700,
                         color: AppColors.lightTextPrimary,
                         letterSpacing: -0.3,
@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const Text(
                           'Your Goal',
                           style: TextStyle(
-                            fontSize: 28,
+                            fontSize: 24,
                             fontWeight: FontWeight.w900,
                             color: AppColors.lightTextPrimary,
                             letterSpacing: -0.5,
@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           right: 0,
                           bottom: 0,
                           child: Container(
-                            height: 4,
+                            height: 3.5,
                             decoration: BoxDecoration(
                               color: AppColors.primary,
                               borderRadius: BorderRadius.circular(3),
@@ -261,15 +261,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 10),
 
-              // Featured Card: Full Body Workout
+              // Featured Card: Full Body Workout (Compact & Sleek)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
-                  height: 206,
+                  height: 156,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(20),
                     gradient: const LinearGradient(
                       colors: [Color(0xFF1B1C1E), Color(0xFF141517)],
                       begin: Alignment.topLeft,
@@ -283,11 +283,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         right: 0,
                         top: 0,
                         bottom: 0,
-                        width: 185,
+                        width: 145,
                         child: ClipRRect(
                           borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(24),
-                            bottomRight: Radius.circular(24),
+                            topRight: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
                           ),
                           child: Stack(
                             fit: StackFit.expand,
@@ -318,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       // Card Content
                       Padding(
-                        padding: const EdgeInsets.all(18),
+                        padding: const EdgeInsets.all(13),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -328,27 +328,27 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 4,
+                                    horizontal: 8,
+                                    vertical: 3,
                                   ),
                                   decoration: BoxDecoration(
                                     color: AppColors.primary,
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: const Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Icon(
                                         Icons.fitness_center,
-                                        size: 11,
+                                        size: 10,
                                         color: Colors.white,
                                       ),
-                                      SizedBox(width: 5),
+                                      SizedBox(width: 4),
                                       Text(
                                         'Workout',
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 11,
+                                          fontSize: 10.5,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -361,12 +361,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 4,
+                                      horizontal: 8,
+                                      vertical: 3,
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(alpha: 0.12),
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(16),
                                     ),
                                     child: const Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -375,14 +375,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                           'See All',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 11.5,
+                                            fontSize: 10.5,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        SizedBox(width: 3),
+                                        SizedBox(width: 2),
                                         Icon(
                                           Icons.arrow_forward_rounded,
-                                          size: 12,
+                                          size: 11,
                                           color: Colors.white,
                                         ),
                                       ],
@@ -391,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 7),
 
                             // Card Title with Orange Highlight
                             RichText(
@@ -401,32 +401,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                     text: 'Full Body\n',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 22,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w800,
-                                      height: 1.15,
+                                      height: 1.1,
                                     ),
                                   ),
                                   TextSpan(
                                     text: 'Workout',
                                     style: TextStyle(
                                       color: AppColors.primary,
-                                      fontSize: 22,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w800,
-                                      height: 1.15,
+                                      height: 1.1,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            const SizedBox(height: 3),
 
                             // Subtitle description
                             Text(
-                              'Build Strength, Boost Endurance,\nAnd Challenge Every Muscle.',
+                              'Build Strength & Challenge Muscle.',
                               style: TextStyle(
                                 color: Colors.white.withValues(alpha: 0.7),
-                                fontSize: 10.5,
-                                height: 1.25,
+                                fontSize: 9.5,
+                                height: 1.15,
                               ),
                             ),
                             const Spacer(),
@@ -436,19 +436,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 const Icon(
                                   Icons.access_time_rounded,
-                                  size: 13,
+                                  size: 11.5,
                                   color: Colors.white70,
                                 ),
-                                const SizedBox(width: 4),
+                                const SizedBox(width: 3),
                                 const Text(
-                                  '30 Minutes',
+                                  '30 Min',
                                   style: TextStyle(
                                     color: Colors.white70,
-                                    fontSize: 11,
+                                    fontSize: 10.5,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                const SizedBox(width: 14),
+                                const SizedBox(width: 10),
                                 ElevatedButton.icon(
                                   onPressed: () {
                                     widget.onNavigateTab?.call(2);
@@ -458,21 +458,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                     foregroundColor: Colors.white,
                                     elevation: 0,
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 14,
-                                      vertical: 7,
+                                      horizontal: 11,
+                                      vertical: 5,
                                     ),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18),
+                                      borderRadius: BorderRadius.circular(16),
                                     ),
                                   ),
                                   icon: const Icon(
                                     Icons.play_arrow_rounded,
-                                    size: 15,
+                                    size: 13,
                                   ),
                                   label: const Text(
                                     'Start Workout',
                                     style: TextStyle(
-                                      fontSize: 11.5,
+                                      fontSize: 10.5,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -487,33 +487,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(height: 14),
+              const SizedBox(height: 8),
 
               // Carousel Dots under Featured Card
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 7,
-                    height: 7,
+                    width: 6,
+                    height: 6,
                     decoration: const BoxDecoration(
                       color: AppColors.primary,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 5),
                   Container(
-                    width: 6,
-                    height: 6,
+                    width: 5,
+                    height: 5,
                     decoration: BoxDecoration(
                       color: Colors.grey.shade400,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 5),
                   Container(
-                    width: 6,
-                    height: 6,
+                    width: 5,
+                    height: 5,
                     decoration: BoxDecoration(
                       color: Colors.grey.shade400,
                       shape: BoxShape.circle,
@@ -522,14 +522,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
 
-              const SizedBox(height: 22),
+              const SizedBox(height: 12),
 
               // ==========================================
               // Daily Activity Rings Section ⚡ (Water, Calories, Steps)
               // ==========================================
               _buildDailyActivitySection(),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               // 3 Quick Action Cards: Gym Workouts, Nutrition & Calories, Progress & Analytics
               Padding(
