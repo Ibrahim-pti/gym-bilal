@@ -44,8 +44,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         transitionDuration: const Duration(milliseconds: 600),
-        pageBuilder: (_, __, ___) => const MainLayout(),
-        transitionsBuilder: (_, animation, __, child) {
+        pageBuilder: (_, _, _) => const MainLayout(),
+        transitionsBuilder: (_, animation, _, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
@@ -98,7 +98,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               shape: BoxShape.circle,
                               gradient: RadialGradient(
                                 colors: [
-                                  AppColors.primary.withOpacity(0.35),
+                                  AppColors.primary.withValues(alpha: 0.35),
                                   Colors.transparent,
                                 ],
                               ),
@@ -112,8 +112,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                               colors: [
-                                Colors.black.withOpacity(0.1),
-                                Colors.black.withOpacity(0.5),
+                                Colors.black.withValues(alpha: 0.1),
+                                Colors.black.withValues(alpha: 0.5),
                                 AppColors.darkBackground,
                               ],
                               stops: const [0.3, 0.75, 1.0],
@@ -138,7 +138,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   TextButton(
                     onPressed: _navigateToMain,
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white.withOpacity(0.8),
+                      foregroundColor: Colors.white.withValues(alpha: 0.8),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 8,
@@ -179,10 +179,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         vertical: 7,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(
-                          color: Colors.white.withOpacity(0.12),
+                          color: Colors.white.withValues(alpha: 0.12),
                         ),
                       ),
                       child: Row(
@@ -240,7 +240,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     Text(
                       _pages[_currentPage]['desc']!,
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.68),
+                        color: Colors.white.withValues(alpha: 0.68),
                         fontSize: 14.5,
                         height: 1.45,
                         fontWeight: FontWeight.w400,
@@ -261,7 +261,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           decoration: BoxDecoration(
                             color: _currentPage == index
                                 ? AppColors.primary
-                                : Colors.white.withOpacity(0.25),
+                                : Colors.white.withValues(alpha: 0.25),
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
@@ -279,7 +279,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withOpacity(0.4),
+                              color: AppColors.primary.withValues(alpha: 0.4),
                               blurRadius: 20,
                               offset: const Offset(0, 8),
                             ),

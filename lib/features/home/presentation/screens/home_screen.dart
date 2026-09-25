@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
+import 'package:gym_base/features/community/presentation/screens/community_screen.dart';
+import 'package:gym_base/features/community/presentation/screens/reels_viewer_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(int)? onNavigateTab;
@@ -129,6 +131,53 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
+
+                    // Reels & Feed Button
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const CommunityScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 11,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: AppColors.buttonGradient,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.35),
+                              blurRadius: 8,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.video_collection_rounded,
+                              color: Colors.white,
+                              size: 13,
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              'Reels',
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
 
                     // Pro Badge
                     Container(
@@ -524,6 +573,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+
+              const SizedBox(height: 16),
+
+              // ==========================================
+              // Trending Reels & Feed Spotlight 🎬
+              // ==========================================
+              _buildTrendingReelsSection(),
 
               const SizedBox(height: 16),
 
@@ -1795,6 +1851,241 @@ class _HomeScreenState extends State<HomeScreen> {
               fontSize: 9.5,
               fontWeight: FontWeight.w600,
               color: Colors.grey.shade500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTrendingReelsSection() {
+    final sampleReels = [
+      {
+        'id': 'reel_1',
+        'title': 'Heavy Barbell Deadlift PR 240kg Form Check',
+        'author': 'Coach Bilal',
+        'avatar': 'assets/images/user_avatar.jpg',
+        'videoThumbnail': 'assets/images/workout_back.jpg',
+        'duration': '0:34',
+        'views': '48.2k',
+        'likes': 3840,
+        'comments': 248,
+        'audioTrack': 'Gym Phonk High Voltage • 160 BPM',
+        'exerciseTag': 'Barbell Deadlift',
+        'caption':
+            'Clean lockout, tight core, lats packed tight before pulling. Always focus on driving feet through the platform! 💪🔥',
+      },
+      {
+        'id': 'reel_2',
+        'title': 'Upper Pec Clavicular Squeeze • Incline Dumbbell Press',
+        'author': 'Alex Hunter',
+        'avatar': 'assets/images/male_fitness_banner.jpg',
+        'videoThumbnail': 'assets/images/card_gym_full.png',
+        'duration': '0:42',
+        'views': '31.5k',
+        'likes': 2890,
+        'comments': 112,
+        'audioTrack': 'Heavy Bass Workout Mix • DJ Hype',
+        'exerciseTag': 'Incline Dumbbell Press',
+        'caption':
+            'Set bench to 30 degrees. Keep elbows tucked at 45-60 degrees for chest activation! 🔥',
+      },
+      {
+        'id': 'reel_3',
+        'title': 'Wide-Grip Pull-Up V-Taper Mastery',
+        'author': 'Maya Stone',
+        'avatar': 'assets/images/female_fitness_banner.jpg',
+        'videoThumbnail': 'assets/images/pullup_figure.jpg',
+        'duration': '0:28',
+        'views': '54.1k',
+        'likes': 4210,
+        'comments': 310,
+        'audioTrack': 'Deep Focus Instrumental • Beats',
+        'exerciseTag': 'Wide-Grip Pull Up',
+        'caption':
+            'Engage hollow body, pull chest to bar, pause 1s at top! ⚡🧗‍♀️',
+      },
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  Text(
+                    'Trending Reels & Feed',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.lightTextPrimary,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                  SizedBox(width: 6),
+                  Text('🎬', style: TextStyle(fontSize: 16)),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const CommunityScreen()),
+                  );
+                },
+                child: const Row(
+                  children: [
+                    Text(
+                      'Explore All',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SizedBox(width: 2),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 10,
+                      color: AppColors.primary,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 160,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: sampleReels.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                final reel = sampleReels[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ReelsViewerScreen(
+                          reels: sampleReels,
+                          initialIndex: index,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 115,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      image: DecorationImage(
+                        image: AssetImage(reel['videoThumbnail'] as String),
+                        fit: BoxFit.cover,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withValues(alpha: 0.8),
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          left: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 5,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.55),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.play_arrow_rounded,
+                                  color: Colors.white,
+                                  size: 10,
+                                ),
+                                Text(
+                                  reel['duration'] as String,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 8.5,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.all(7),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.25),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.play_arrow_rounded,
+                              color: Colors.white,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 8,
+                          right: 8,
+                          bottom: 8,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                reel['author'] as String,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                reel['views'] as String,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 8.5,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
