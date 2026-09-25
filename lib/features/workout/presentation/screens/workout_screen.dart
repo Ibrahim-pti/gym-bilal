@@ -661,42 +661,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           ),
         ],
       ),
-      actions: [
-        // Sleek Compact Timer Pill Button in AppBar
-        GestureDetector(
-          onTap: _toggleTimer,
-          child: Container(
-            margin: const EdgeInsets.only(right: 16),
-            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-            decoration: BoxDecoration(
-              color: _isTimerActive ? AppColors.primary : const Color(0xFFF1F3F6),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: _isTimerActive ? AppColors.primary : const Color(0xFFE2E5EA),
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  _isTimerActive ? Icons.stop_rounded : Icons.timer_outlined,
-                  size: 15,
-                  color: _isTimerActive ? Colors.white : const Color(0xFF131519),
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  _isTimerActive ? '${_currentTimerSeconds}s' : 'Rest 45s',
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.bold,
-                    color: _isTimerActive ? Colors.white : const Color(0xFF131519),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 
