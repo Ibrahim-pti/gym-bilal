@@ -22,11 +22,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   // Goals List
   final List<Map<String, dynamic>> _goals = [
-    {'id': 'all', 'title': 'All Goals', 'icon': Icons.tune_rounded},
-    {'id': 'mass', 'title': 'Hypertrophy 💪', 'icon': Icons.fitness_center_rounded},
-    {'id': 'shred', 'title': 'Fat Loss 🔥', 'icon': Icons.local_fire_department_rounded},
-    {'id': 'sculpt', 'title': 'Tone & Curves ✨', 'icon': Icons.auto_awesome_rounded},
-    {'id': 'strength', 'title': 'Max Strength ⚡', 'icon': Icons.bolt_rounded},
+    {'id': 'all', 'title': 'All Goals'},
+    {'id': 'mass', 'title': 'Hypertrophy'},
+    {'id': 'shred', 'title': 'Fat Loss'},
+    {'id': 'sculpt', 'title': 'Toning & Shape'},
+    {'id': 'strength', 'title': 'Max Strength'},
   ];
 
   // Comprehensive Programs Database
@@ -491,28 +491,32 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget _buildHeader() {
     return const Padding(
       padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Training Blueprints',
-            style: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.w900,
-              color: Color(0xFF131519),
-              letterSpacing: -0.6,
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Training Blueprints',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFF131519),
+                letterSpacing: -0.6,
+              ),
             ),
-          ),
-          SizedBox(height: 3),
-          Text(
-            'Curated multi-week routines calibrated for your goals',
-            style: TextStyle(
-              fontSize: 12.5,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF757A86),
+            SizedBox(height: 3),
+            Text(
+              'Curated multi-week routines calibrated for your goals',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12.5,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF757A86),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -620,10 +624,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  // --- 4. Goal Filter Chips ---
+  // --- 4. Goal Filter Chips (Clean Typography, No Clutter Icons) ---
   Widget _buildGoalFilterChips() {
     return SizedBox(
-      height: 36,
+      height: 38,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -637,32 +641,32 @@ class _ExploreScreenState extends State<ExploreScreen> {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 180),
               margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.primary : Colors.white,
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: isSelected ? AppColors.primary : const Color(0xFFE8EBF0),
                 ),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.28),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
+                    : [],
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    goal['icon'] as IconData,
-                    size: 13,
-                    color: isSelected ? Colors.white : const Color(0xFF757A86),
+              child: Center(
+                child: Text(
+                  goal['title'] as String,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : const Color(0xFF4A4E5A),
+                    fontSize: 12,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
                   ),
-                  const SizedBox(width: 5),
-                  Text(
-                    goal['title'] as String,
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : const Color(0xFF33373F),
-                      fontSize: 11,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           );
