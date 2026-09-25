@@ -28,6 +28,77 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // Weekly Streak State
+  int _selectedStreakDay = 4; // Friday is selected (today)
+  final List<Map<String, dynamic>> _weekDays = [
+    {'day': 'M', 'date': '21', 'status': 'done'},
+    {'day': 'T', 'date': '22', 'status': 'done'},
+    {'day': 'W', 'date': '23', 'status': 'done'},
+    {'day': 'T', 'date': '24', 'status': 'done'},
+    {'day': 'F', 'date': '25', 'status': 'today'},
+    {'day': 'S', 'date': '26', 'status': 'upcoming'},
+    {'day': 'S', 'date': '27', 'status': 'rest'},
+  ];
+
+  // Today's Routine Checklist State
+  final List<Map<String, dynamic>> _todayExercises = [
+    {
+      'title': 'Incline Dumbbell Press',
+      'setsReps': '4 Sets × 10 Reps',
+      'weight': '28 kg',
+      'done': true,
+    },
+    {
+      'title': 'Barbell Flat Bench Press',
+      'setsReps': '4 Sets × 8 Reps',
+      'weight': '85 kg',
+      'done': true,
+    },
+    {
+      'title': 'Cable Pec Flyes (Low-to-High)',
+      'setsReps': '3 Sets × 12 Reps',
+      'weight': '15 kg',
+      'done': false,
+    },
+    {
+      'title': 'Triceps Overhead Rope Push',
+      'setsReps': '3 Sets × 15 Reps',
+      'weight': '22 kg',
+      'done': false,
+    },
+  ];
+
+  // Quick Routines List
+  final List<Map<String, dynamic>> _quickRoutines = [
+    {
+      'title': 'HIIT Fat Burn',
+      'subtitle': 'High energy cardio',
+      'duration': '15 Min',
+      'calories': '190 kcal',
+      'icon': Icons.local_fire_department_rounded,
+      'gradient': [Color(0xFF2E150F), Color(0xFF1B0C08)],
+      'accent': Color(0xFFFF5722),
+    },
+    {
+      'title': 'Core & Abs Shred',
+      'subtitle': 'Midsection strength',
+      'duration': '12 Min',
+      'calories': '140 kcal',
+      'icon': Icons.bolt_rounded,
+      'gradient': [Color(0xFF191330), Color(0xFF100C1F)],
+      'accent': Color(0xFF8B5CF6),
+    },
+    {
+      'title': 'Mobility & Stretch',
+      'subtitle': 'Joints & recovery',
+      'duration': '10 Min',
+      'calories': '65 kcal',
+      'icon': Icons.self_improvement_rounded,
+      'gradient': [Color(0xFF0F261C), Color(0xFF091711)],
+      'accent': Color(0xFF10B981),
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -486,6 +557,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               const SizedBox(height: 24),
+
+              // ==========================================
+              // 1. Weekly Momentum Streak Strip 🔥
+              // ==========================================
+              _buildWeeklyStreakSection(),
+
+              const SizedBox(height: 24),
+
+              // ==========================================
+              // 2. Today's Target Routine & Checklist 🏋️‍♂️
+              // ==========================================
+              _buildTodayRoutineSection(),
+
+              const SizedBox(height: 24),
+
+              // ==========================================
+              // 3. Daily Fuel & Macros Breakdown 🥗
+              // ==========================================
+              _buildMacrosSection(),
+
+              const SizedBox(height: 24),
+
+              // ==========================================
+              // 4. Quick Routines Carousel ⚡
+              // ==========================================
+              _buildQuickRoutinesCarousel(),
+
+              const SizedBox(height: 28),
             ],
           ),
         ),
@@ -829,6 +928,1076 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  // ----------------------------------------------------
+  // SECTION 1: Weekly Momentum & Streak Strip 🔥
+  // ----------------------------------------------------
+  Widget _buildWeeklyStreakSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(22),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 18,
+              offset: const Offset(0, 6),
+            ),
+          ],
+          border: Border.all(
+            color: Colors.grey.shade100,
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            // Top Header Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.local_fire_department_rounded,
+                        color: AppColors.primary,
+                        size: 18,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Weekly Momentum',
+                          style: TextStyle(
+                            fontSize: 15.5,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.lightTextPrimary,
+                            letterSpacing: -0.2,
+                          ),
+                        ),
+                        Text(
+                          '5-Day Streak Active 🔥',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text(
+                    'Sep 21 - 27',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.lightTextSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+
+            // 7 Days Interactive Pills
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: List.generate(_weekDays.length, (index) {
+                final dayData = _weekDays[index];
+                final isSelected = _selectedStreakDay == index;
+                final isToday = dayData['status'] == 'today';
+                final isDone = dayData['status'] == 'done';
+                final isRest = dayData['status'] == 'rest';
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedStreakDay = index;
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.primary
+                          : (isDone
+                              ? AppColors.primary.withValues(alpha: 0.08)
+                              : Colors.grey.shade50),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: isSelected
+                            ? AppColors.primary
+                            : (isToday
+                                ? AppColors.primary
+                                : (isDone
+                                    ? AppColors.primary.withValues(alpha: 0.25)
+                                    : Colors.grey.shade200)),
+                        width: isToday || isSelected ? 1.5 : 1,
+                      ),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.3),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          dayData['day'] as String,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: isSelected
+                                ? Colors.white.withValues(alpha: 0.85)
+                                : Colors.grey.shade500,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          dayData['date'] as String,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: isSelected
+                                ? Colors.white
+                                : AppColors.lightTextPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        if (isDone)
+                          Container(
+                            width: 16,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              color: isSelected ? Colors.white : AppColors.primary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.check_rounded,
+                              size: 11,
+                              color: isSelected ? AppColors.primary : Colors.white,
+                            ),
+                          )
+                        else if (isToday)
+                          Container(
+                            width: 16,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              color: isSelected ? Colors.white : AppColors.primary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Text(
+                                '🔥',
+                                style: TextStyle(fontSize: 8.5),
+                              ),
+                            ),
+                          )
+                        else if (isRest)
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: isSelected ? Colors.white : Colors.grey.shade400,
+                              shape: BoxShape.circle,
+                            ),
+                          )
+                        else
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: isSelected ? Colors.white : Colors.grey.shade300,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ),
+            const SizedBox(height: 12),
+
+            // Motivation Banner Strip
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF9FAFB),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  const Text('🎯', style: TextStyle(fontSize: 14)),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: Text(
+                      '5 of 6 workouts completed this week. Keep it up!',
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.lightTextSecondary,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      '83%',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF059669),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ----------------------------------------------------
+  // SECTION 2: Today's Target Routine & Checklist 🏋️‍♂️
+  // ----------------------------------------------------
+  Widget _buildTodayRoutineSection() {
+    final completedCount =
+        _todayExercises.where((e) => e['done'] == true).length;
+    final progress = (_todayExercises.isEmpty)
+        ? 0.0
+        : (completedCount / _todayExercises.length);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Section Title Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  Text(
+                    "Today's Routine",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.lightTextPrimary,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                  SizedBox(width: 6),
+                  Text('🏋️‍♂️', style: TextStyle(fontSize: 16)),
+                ],
+              ),
+              GestureDetector(
+                onTap: () => widget.onNavigateTab?.call(2),
+                child: const Row(
+                  children: [
+                    Text(
+                      'All Workouts',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SizedBox(width: 2),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 10,
+                      color: AppColors.primary,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Dark Luxury Interactive Card
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF1B1C1E), Color(0xFF141517)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(
+                color: AppColors.primary.withValues(alpha: 0.25),
+                width: 1.2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.12),
+                  blurRadius: 18,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Top Tags
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3.5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppColors.primary.withValues(alpha: 0.4),
+                          width: 1,
+                        ),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.fitness_center_rounded,
+                            size: 11,
+                            color: AppColors.primary,
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            'CHEST & TRICEPS FOCUS',
+                            style: TextStyle(
+                              color: Color(0xFFFFB038),
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3.5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Text(
+                        '⏱️ 45 Min • 340 kcal',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                // Routine Title
+                const Text(
+                  'Push Power & Hypertrophy',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Build strength with high tension & strict form.',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.65),
+                    fontSize: 11.5,
+                  ),
+                ),
+                const SizedBox(height: 14),
+
+                // Interactive Exercise Checklist
+                Column(
+                  children: List.generate(_todayExercises.length, (idx) {
+                    final item = _todayExercises[idx];
+                    final isDone = item['done'] as bool;
+
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          item['done'] = !isDone;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 9,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isDone
+                              ? const Color(0xFF10B981).withValues(alpha: 0.12)
+                              : Colors.white.withValues(alpha: 0.05),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: isDone
+                                ? const Color(0xFF10B981)
+                                    .withValues(alpha: 0.35)
+                                : Colors.white.withValues(alpha: 0.08),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            // Custom Animated Checkbox
+                            Container(
+                              width: 22,
+                              height: 22,
+                              decoration: BoxDecoration(
+                                color: isDone
+                                    ? const Color(0xFF10B981)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(7),
+                                border: Border.all(
+                                  color: isDone
+                                      ? const Color(0xFF10B981)
+                                      : Colors.white.withValues(alpha: 0.3),
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: isDone
+                                  ? const Icon(
+                                      Icons.check_rounded,
+                                      size: 14,
+                                      color: Colors.white,
+                                    )
+                                  : null,
+                            ),
+                            const SizedBox(width: 12),
+
+                            // Exercise Name & Sets
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item['title'] as String,
+                                    style: TextStyle(
+                                      color: isDone
+                                          ? Colors.white.withValues(alpha: 0.5)
+                                          : Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                      decoration: isDone
+                                          ? TextDecoration.lineThrough
+                                          : TextDecoration.none,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    item['setsReps'] as String,
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(alpha: 0.6),
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            // Weight Badge
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 7,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.08),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                item['weight'] as String,
+                                style: const TextStyle(
+                                  color: AppColors.primary,
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+
+                const SizedBox(height: 12),
+
+                // Footer: Progress Bar + Action Button
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '$completedCount of ${_todayExercises.length} Completed',
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                '${(progress * 100).toInt()}%',
+                                style: const TextStyle(
+                                  color: Color(0xFF34D399),
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(6),
+                            child: LinearProgressIndicator(
+                              value: progress,
+                              minHeight: 5,
+                              backgroundColor:
+                                  Colors.white.withValues(alpha: 0.12),
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                Color(0xFF10B981),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    ElevatedButton.icon(
+                      onPressed: () => widget.onNavigateTab?.call(2),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 9,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      icon: const Icon(Icons.play_arrow_rounded, size: 16),
+                      label: const Text(
+                        'Start',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ----------------------------------------------------
+  // SECTION 3: Daily Fuel & Macros Breakdown 🥗
+  // ----------------------------------------------------
+  Widget _buildMacrosSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Section Title Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  Text(
+                    'Daily Fuel & Macros',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.lightTextPrimary,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                  SizedBox(width: 6),
+                  Text('🥗', style: TextStyle(fontSize: 16)),
+                ],
+              ),
+              GestureDetector(
+                onTap: () => widget.onNavigateTab?.call(3),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.add_rounded,
+                          size: 13, color: Color(0xFF059669)),
+                      SizedBox(width: 3),
+                      Text(
+                        'Log Food',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF059669),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // Macros Card
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(22),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 18,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+              border: Border.all(
+                color: Colors.grey.shade100,
+                width: 1,
+              ),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    // 1. Protein
+                    Expanded(
+                      child: _buildMacroItem(
+                        name: 'Protein',
+                        current: 124,
+                        target: 160,
+                        unit: 'g',
+                        percent: 0.78,
+                        color: const Color(0xFF10B981),
+                        icon: Icons.fitness_center_rounded,
+                        subtext: 'Repair',
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 70,
+                      color: Colors.grey.shade200,
+                    ),
+
+                    // 2. Carbs
+                    Expanded(
+                      child: _buildMacroItem(
+                        name: 'Carbs',
+                        current: 185,
+                        target: 240,
+                        unit: 'g',
+                        percent: 0.77,
+                        color: const Color(0xFFF59E0B),
+                        icon: Icons.bolt_rounded,
+                        subtext: 'Energy',
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 70,
+                      color: Colors.grey.shade200,
+                    ),
+
+                    // 3. Fats
+                    Expanded(
+                      child: _buildMacroItem(
+                        name: 'Fats',
+                        current: 48,
+                        target: 65,
+                        unit: 'g',
+                        percent: 0.74,
+                        color: const Color(0xFFEC4899),
+                        icon: Icons.opacity_rounded,
+                        subtext: 'Hormones',
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Divider(height: 1, color: Colors.grey.shade100),
+                const SizedBox(height: 10),
+
+                // Bottom Calorie Remaining Strip
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.local_fire_department_rounded,
+                          size: 15,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        RichText(
+                          text: const TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '480 kcal ',
+                                style: TextStyle(
+                                  color: AppColors.lightTextPrimary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              TextSpan(
+                                text: 'remaining today',
+                                style: TextStyle(
+                                  color: AppColors.lightTextSecondary,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () => widget.onNavigateTab?.call(3),
+                      child: const Row(
+                        children: [
+                          Text(
+                            'Calorie Details',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          SizedBox(width: 2),
+                          Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 9.5,
+                            color: AppColors.primary,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMacroItem({
+    required String name,
+    required int current,
+    required int target,
+    required String unit,
+    required double percent,
+    required Color color,
+    required IconData icon,
+    required String subtext,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 12, color: color),
+              const SizedBox(width: 4),
+              Text(
+                name,
+                style: const TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.lightTextSecondary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 5),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: '$current',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.lightTextPrimary,
+                  ),
+                ),
+                TextSpan(
+                  text: ' /$target$unit',
+                  style: TextStyle(
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 6),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: percent.clamp(0.0, 1.0),
+              minHeight: 4.5,
+              backgroundColor: color.withValues(alpha: 0.15),
+              valueColor: AlwaysStoppedAnimation<Color>(color),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${(percent * 100).toInt()}% • $subtext',
+            style: TextStyle(
+              fontSize: 9.5,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ----------------------------------------------------
+  // SECTION 4: Quick Workouts Carousel ⚡
+  // ----------------------------------------------------
+  Widget _buildQuickRoutinesCarousel() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Section Title
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  Text(
+                    'Quick Workouts',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.lightTextPrimary,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                  SizedBox(width: 6),
+                  Text('⚡', style: TextStyle(fontSize: 16)),
+                ],
+              ),
+              GestureDetector(
+                onTap: () => widget.onNavigateTab?.call(2),
+                child: const Row(
+                  children: [
+                    Text(
+                      'Explore',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SizedBox(width: 2),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 10,
+                      color: AppColors.primary,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // Horizontal List
+        SizedBox(
+          height: 116,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            scrollDirection: Axis.horizontal,
+            itemCount: _quickRoutines.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              final routine = _quickRoutines[index];
+              final gradient = routine['gradient'] as List<Color>;
+              final accent = routine['accent'] as Color;
+
+              return GestureDetector(
+                onTap: () => widget.onNavigateTab?.call(2),
+                child: Container(
+                  width: 200,
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: gradient,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: accent.withValues(alpha: 0.3),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: accent.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Icon(
+                              routine['icon'] as IconData,
+                              size: 16,
+                              color: accent,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 7,
+                              vertical: 2.5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              routine['duration'] as String,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            routine['title'] as String,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Row(
+                            children: [
+                              Text(
+                                routine['calories'] as String,
+                                style: TextStyle(
+                                  color: accent,
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Text(
+                                ' • ${routine['subtitle']}',
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.6),
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
