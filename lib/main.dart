@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'theme/app_theme.dart';
-import 'screens/splash_screen.dart';
+import 'package:gym_base/core/theme/app_theme.dart';
+import 'package:gym_base/features/splash/presentation/screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

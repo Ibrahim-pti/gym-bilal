@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'main_layout.dart';
-
-import '../theme/app_colors.dart';
+import 'package:gym_base/core/theme/app_colors.dart';
+import 'package:gym_base/features/layout/presentation/screens/main_layout.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

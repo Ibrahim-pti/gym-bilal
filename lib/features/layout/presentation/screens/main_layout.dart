@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import 'home_screen.dart';
-import 'reels_screen.dart';
-import 'workout_screen.dart';
-import 'calorie_screen.dart';
-import 'profile_screen.dart';
+import 'package:gym_base/core/theme/app_colors.dart';
+import 'package:gym_base/features/home/presentation/screens/home_screen.dart';
+import 'package:gym_base/features/reels/presentation/screens/reels_screen.dart';
+import 'package:gym_base/features/workout/presentation/screens/workout_screen.dart';
+import 'package:gym_base/features/calorie/presentation/screens/calorie_screen.dart';
+import 'package:gym_base/features/profile/presentation/screens/profile_screen.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
