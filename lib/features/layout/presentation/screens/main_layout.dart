@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
+import 'package:gym_base/features/explore/presentation/screens/explore_screen.dart';
 import 'package:gym_base/features/home/presentation/screens/home_screen.dart';
-import 'package:gym_base/features/reels/presentation/screens/reels_screen.dart';
 import 'package:gym_base/features/workout/presentation/screens/workout_screen.dart';
 import 'package:gym_base/features/calorie/presentation/screens/calorie_screen.dart';
 import 'package:gym_base/features/profile/presentation/screens/profile_screen.dart';
@@ -26,23 +26,18 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       HomeScreen(onNavigateTab: _onTabSelected),
-      const ReelsScreen(),
+      const ExploreScreen(),
       const WorkoutScreen(),
       const CalorieScreen(),
       const ProfileScreen(),
     ];
 
     return Scaffold(
-      backgroundColor: _currentIndex == 1
-          ? Colors.black
-          : AppColors.lightBackground,
+      backgroundColor: AppColors.lightBackground,
       body: Stack(
         children: [
           // Current Page
-          IndexedStack(
-            index: _currentIndex,
-            children: pages,
-          ),
+          IndexedStack(index: _currentIndex, children: pages),
 
           // Floating Bottom Navigation Bar (Matching Screen 3)
           Positioned(
@@ -57,7 +52,7 @@ class _MainLayoutState extends State<MainLayout> {
                 borderRadius: BorderRadius.circular(36),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 24,
                     offset: const Offset(0, 8),
                   ),
@@ -73,11 +68,11 @@ class _MainLayoutState extends State<MainLayout> {
                     label: 'Home',
                   ),
 
-                  // 2. Reels
+                  // 2. Explore
                   _buildNavItem(
                     index: 1,
-                    icon: Icons.play_arrow_rounded,
-                    label: 'Reels',
+                    icon: Icons.explore_rounded,
+                    label: 'Explore',
                   ),
 
                   // 3. Center Elevated Workout Button
@@ -91,7 +86,7 @@ class _MainLayoutState extends State<MainLayout> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withOpacity(0.4),
+                            color: AppColors.primary.withValues(alpha: 0.4),
                             blurRadius: 14,
                             offset: const Offset(0, 5),
                           ),
