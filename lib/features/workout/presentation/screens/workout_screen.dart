@@ -94,12 +94,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   // Bookmarks
   final Set<String> _bookmarkedIds = {'bench_press', 'pull_ups', 'barbell_squat'};
 
-  // Compact Floating Rest Timer State
-  final int _timerSeconds = 45;
-  int _currentTimerSeconds = 45;
-  bool _isTimerActive = false;
-  Timer? _activeTimer;
-
   // Featured Workout Courses for Top Interactive Showcase Banner
   int _activeCourseIndex = 0;
   final PageController _coursePageController = PageController();
@@ -531,58 +525,28 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   @override
   void dispose() {
     _coursePageController.dispose();
-    _activeTimer?.cancel();
     _searchController.dispose();
     super.dispose();
   }
 
-  // Timer Methods
-  void _toggleTimer() {
-    if (_isTimerActive) {
-      _activeTimer?.cancel();
-      setState(() => _isTimerActive = false);
-    } else {
-      setState(() {
-        _isTimerActive = true;
-        _currentTimerSeconds = _timerSeconds;
-      });
-      _activeTimer?.cancel();
-      _activeTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        if (_currentTimerSeconds > 0) {
-          setState(() => _currentTimerSeconds--);
-        } else {
-          _activeTimer?.cancel();
-          setState(() => _isTimerActive = false);
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text(
-                  'Rest time finished! Time for the next set 💪',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                backgroundColor: const Color(0xFF10B981),
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-            );
-          }
-        }
-      });
-    }
-  }
-
-  // Open Full Screen Video & Detail Modal
+  // Open Full Screen Dedicated Exercise Detail Page
   void _openExerciseVideoDetail(Map<String, dynamic> exercise) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => _ExerciseVideoModal(
-        exercise: exercise,
-        onStartRestTimer: () {
-          Navigator.pop(context);
-          _toggleTimer();
-        },
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ExerciseDetailScreen(
+          exercise: exercise,
+          isBookmarked: _bookmarkedIds.contains(exercise['id']),
+          onToggleBookmark: () {
+            setState(() {
+              if (_bookmarkedIds.contains(exercise['id'])) {
+                _bookmarkedIds.remove(exercise['id']);
+              } else {
+                _bookmarkedIds.add(exercise['id']);
+              }
+            });
+          },
+        ),
       ),
     );
   }
@@ -1722,32 +1686,36 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 }
 
 // ============================================================================
-// INTERACTIVE VIDEO TUTORIAL & MOVEMENT MODAL (100% ENGLISH)
+// DEDICATED FULL-SCREEN EXERCISE DETAIL & VIDEO GUIDE PAGE
 // ============================================================================
-class _ExerciseVideoModal extends StatefulWidget {
+class ExerciseDetailScreen extends StatefulWidget {
   final Map<String, dynamic> exercise;
-  final VoidCallback onStartRestTimer;
+  final bool isBookmarked;
+  final VoidCallback onToggleBookmark;
 
-  const _ExerciseVideoModal({
+  const ExerciseDetailScreen({
+    super.key,
     required this.exercise,
-    required this.onStartRestTimer,
+    required this.isBookmarked,
+    required this.onToggleBookmark,
   });
 
   @override
-  State<_ExerciseVideoModal> createState() => _ExerciseVideoModalState();
+  State<ExerciseDetailScreen> createState() => _ExerciseDetailScreenState();
 }
 
-class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
+class _ExerciseDetailScreenState extends State<ExerciseDetailScreen> {
   bool _isPlaying = true;
-  double _progress = 0.3;
+  double _progress = 0.35;
   bool _isSlowMotion = false;
   bool _isLooping = true;
+  late bool _bookmarked = widget.isBookmarked;
   Timer? _videoTicker;
 
   @override
   void initState() {
     super.initState();
-    // Live playback ticker simulation
+    // Simulate real video playback ticker
     _videoTicker = Timer.periodic(const Duration(milliseconds: 300), (timer) {
       if (_isPlaying && mounted) {
         setState(() {
@@ -1766,271 +1734,488 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
     super.dispose();
   }
 
+  Color _getCategoryColor(String? catId) {
+    switch (catId) {
+      case 'chest':
+        return const Color(0xFFFF5252);
+      case 'back':
+        return const Color(0xFF0284C7);
+      case 'shoulders':
+        return const Color(0xFFF59E0B);
+      case 'arms':
+        return const Color(0xFF8B5CF6);
+      case 'legs':
+        return const Color(0xFF10B981);
+      case 'core':
+        return const Color(0xFFEC4899);
+      default:
+        return AppColors.primary;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ex = widget.exercise;
+    final categoryColor = _getCategoryColor(ex['muscleCategory']);
 
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.92,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-      ),
-      child: Column(
-        children: [
-          // Drag handle
-          Center(
+    return Scaffold(
+      backgroundColor: const Color(0xFFF7F8FA),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        centerTitle: true,
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF2F4F7),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFFE4E7EC)),
+            ),
+            child: const Icon(Icons.arrow_back_rounded, color: Color(0xFF131519), size: 18),
+          ),
+        ),
+        title: Column(
+          children: [
+            Text(
+              ex['title'],
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w900,
+                color: Color(0xFF131519),
+                letterSpacing: -0.3,
+              ),
+            ),
+            const SizedBox(height: 1),
+            Text(
+              '${ex['muscle']} • HD Form Guide',
+              style: const TextStyle(
+                fontSize: 11,
+                color: Color(0xFF757A86),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _bookmarked = !_bookmarked;
+              });
+              widget.onToggleBookmark();
+            },
             child: Container(
-              margin: const EdgeInsets.only(top: 12, bottom: 8),
-              width: 40,
-              height: 5,
+              margin: const EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.all(9),
               decoration: BoxDecoration(
-                color: const Color(0xFFE2E5EA),
-                borderRadius: BorderRadius.circular(10),
+                color: _bookmarked ? AppColors.accentGold.withValues(alpha: 0.12) : const Color(0xFFF2F4F7),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: _bookmarked ? AppColors.accentGold : const Color(0xFFE4E7EC),
+                ),
+              ),
+              child: Icon(
+                _bookmarked ? Icons.bookmark_rounded : Icons.bookmark_outline_rounded,
+                color: _bookmarked ? AppColors.accentGold : const Color(0xFF131519),
+                size: 18,
               ),
             ),
           ),
-
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(20, 4, 20, 34),
-              children: [
-                // 1. FULL INTERACTIVE VIDEO PLAYER SIMULATOR
-                Container(
-                  height: 230,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(22),
-                    image: DecorationImage(
-                      image: AssetImage(ex['image']),
-                      fit: BoxFit.cover,
-                      opacity: 0.85,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.25),
-                        blurRadius: 16,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 1. FULL INTERACTIVE VIDEO PLAYER SIMULATOR
+            Container(
+              height: 235,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(22),
+                image: DecorationImage(
+                  image: AssetImage(ex['image']),
+                  fit: BoxFit.cover,
+                  opacity: 0.88,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.25),
+                    blurRadius: 18,
+                    offset: const Offset(0, 8),
                   ),
-                  child: Stack(
-                    children: [
-                      // Gradient Overlay
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22),
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.black.withValues(alpha: 0.45),
-                              Colors.transparent,
-                              Colors.black.withValues(alpha: 0.85),
+                ],
+              ),
+              child: Stack(
+                children: [
+                  // Gradient Overlay
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.45),
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.85),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Top Row Controls (HD Badge, Loop, Slow-mo)
+                  Positioned(
+                    top: 12,
+                    left: 12,
+                    right: 12,
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.7),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.hd_rounded, color: AppColors.accentGold, size: 16),
+                              const SizedBox(width: 4),
+                              Text(
+                                ex['videoQuality'] ?? '1080p HD',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                      ),
+                        const Spacer(),
 
-                      // Top Row Controls (HD Badge, Loop, Slow-mo, Close)
-                      Positioned(
-                        top: 12,
-                        left: 12,
-                        right: 12,
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withValues(alpha: 0.7),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.hd_rounded, color: AppColors.accentGold, size: 16),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    ex['videoQuality'] ?? '1080p HD',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Spacer(),
-
-                            // Loop Toggle
-                            GestureDetector(
-                              onTap: () => setState(() => _isLooping = !_isLooping),
-                              child: Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: _isLooping ? AppColors.primary : Colors.black.withValues(alpha: 0.65),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: const Icon(Icons.repeat_rounded, color: Colors.white, size: 15),
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-
-                            // 0.5x Slow motion
-                            GestureDetector(
-                              onTap: () => setState(() => _isSlowMotion = !_isSlowMotion),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: _isSlowMotion ? AppColors.primary : Colors.black.withValues(alpha: 0.65),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  _isSlowMotion ? '0.5x Slow' : '1.0x Normal',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-
-                            // Close Button
-                            GestureDetector(
-                              onTap: () => Navigator.pop(context),
-                              child: Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withValues(alpha: 0.65),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(Icons.close_rounded, color: Colors.white, size: 16),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Center Big Play/Pause
-                      Center(
-                        child: GestureDetector(
-                          onTap: () => setState(() => _isPlaying = !_isPlaying),
+                        // Loop Toggle
+                        GestureDetector(
+                          onTap: () => setState(() => _isLooping = !_isLooping),
                           child: Container(
-                            width: 56,
-                            height: 56,
+                            padding: const EdgeInsets.all(6.5),
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withValues(alpha: 0.9),
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primary.withValues(alpha: 0.5),
-                                  blurRadius: 16,
-                                ),
-                              ],
+                              color: _isLooping ? AppColors.primary : Colors.black.withValues(alpha: 0.65),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Icon(
-                              _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                              color: Colors.white,
-                              size: 32,
-                            ),
+                            child: const Icon(Icons.repeat_rounded, color: Colors.white, size: 15),
                           ),
                         ),
-                      ),
+                        const SizedBox(width: 6),
 
-                      // Bottom Progress bar & Video duration
-                      Positioned(
-                        bottom: 12,
-                        left: 14,
-                        right: 14,
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Row(
-                                  children: [
-                                    Icon(Icons.remove_red_eye_rounded, color: Colors.white70, size: 13),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      'Technique & Form Guide',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10.5,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  ex['videoDuration'] ?? '0:45',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10.5,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: LinearProgressIndicator(
-                                value: _progress,
-                                minHeight: 4,
-                                backgroundColor: Colors.white.withValues(alpha: 0.3),
-                                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 18),
-
-                // 2. TITLE & MUSCLE
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                        // 0.5x Slow motion
+                        GestureDetector(
+                          onTap: () => setState(() => _isSlowMotion = !_isSlowMotion),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4.5),
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withValues(alpha: 0.1),
+                              color: _isSlowMotion ? AppColors.primary : Colors.black.withValues(alpha: 0.65),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
-                              ex['muscle'],
+                              _isSlowMotion ? '0.5x Slow' : '1.0x Normal',
                               style: const TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 11,
+                                color: Colors.white,
+                                fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 6),
-                          Text(
-                            ex['title'],
-                            style: const TextStyle(
-                              fontSize: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Center Big Play/Pause
+                  Center(
+                    child: GestureDetector(
+                      onTap: () => setState(() => _isPlaying = !_isPlaying),
+                      child: Container(
+                        width: 58,
+                        height: 58,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.95),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.5),
+                              blurRadius: 18,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Bottom Progress bar & Video duration
+                  Positioned(
+                    bottom: 12,
+                    left: 14,
+                    right: 14,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(Icons.remove_red_eye_rounded, color: Colors.white70, size: 13),
+                                SizedBox(width: 4),
+                                Text(
+                                  'Technique & Movement Cues',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10.5,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              ex['videoDuration'] ?? '0:45',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: LinearProgressIndicator(
+                            value: _progress,
+                            minHeight: 4,
+                            backgroundColor: Colors.white.withValues(alpha: 0.3),
+                            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // 2. EXERCISE TITLE & TARGET MUSCLE CARD
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFFE8EBF0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: categoryColor.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: categoryColor.withValues(alpha: 0.3)),
+                        ),
+                        child: Text(
+                          ex['muscle'],
+                          style: TextStyle(
+                            color: categoryColor,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF2F4F7),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          ex['level'] ?? 'Intermediate',
+                          style: const TextStyle(
+                            color: Color(0xFF475467),
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    ex['title'],
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xFF131519),
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Icon(Icons.gps_fixed_rounded, color: Color(0xFF757A86), size: 14),
+                      const SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          ex['target'],
+                          style: const TextStyle(
+                            fontSize: 12.5,
+                            color: Color(0xFF676E7D),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
+            // 3. KEY METRICS TILES (SETS, REPS, CALORIES, EQUIPMENT)
+            Row(
+              children: [
+                _buildMetricBox('Sets & Reps', ex['sets'], Icons.repeat_rounded, AppColors.primary),
+                const SizedBox(width: 10),
+                _buildMetricBox('Calories', ex['burn'], Icons.local_fire_department_rounded, const Color(0xFFFF5252)),
+                const SizedBox(width: 10),
+                _buildMetricBox('Equipment', ex['equipment'], Icons.fitness_center_rounded, const Color(0xFF0284C7)),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // 4. STEP-BY-STEP MOVEMENT EXECUTION CARD
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFFE8EBF0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(Icons.directions_run_rounded, color: AppColors.primary, size: 18),
+                      SizedBox(width: 6),
+                      Text(
+                        'Instructions & Movement Execution',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w900,
+                          color: Color(0xFF131519),
+                          letterSpacing: -0.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF9FAFB),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: const Color(0xFFEEF0F4)),
+                    ),
+                    child: Text(
+                      ex['instructions'],
+                      style: const TextStyle(
+                        fontSize: 13,
+                        height: 1.6,
+                        color: Color(0xFF33373F),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // 5. BREATHING TECHNIQUE CARD
+            if (ex['breathing'] != null) ...[
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF0F7FF),
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: const Color(0xFFBAE6FD)),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0284C7).withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.air_rounded, color: Color(0xFF0284C7), size: 17),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Breathing Technique',
+                            style: TextStyle(
+                              fontSize: 12.5,
                               fontWeight: FontWeight.w900,
-                              color: Color(0xFF131519),
-                              letterSpacing: -0.4,
+                              color: Color(0xFF0369A1),
                             ),
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 3),
                           Text(
-                            ex['target'],
+                            ex['breathing'],
                             style: const TextStyle(
-                              fontSize: 13,
-                              color: Color(0xFF676E7D),
+                              fontSize: 12,
+                              height: 1.45,
+                              color: Color(0xFF0C4A6E),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -2039,177 +2224,109 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
                     ),
                   ],
                 ),
+              ),
+            ],
 
-                const SizedBox(height: 16),
-
-                // 3. STATS TILES
-                Row(
-                  children: [
-                    _buildSpecTile('Sets & Reps', ex['sets']),
-                    const SizedBox(width: 8),
-                    _buildSpecTile('Calories', ex['burn']),
-                    const SizedBox(width: 8),
-                    _buildSpecTile('Equipment', ex['equipment']),
-                  ],
+            // 6. COMMON MISTAKES TO AVOID CARD
+            if (ex['mistake'] != null) ...[
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF1F2),
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: const Color(0xFFFECDD3)),
                 ),
-
-                const SizedBox(height: 20),
-
-                // 4. STEP-BY-STEP INSTRUCTIONS
-                const Row(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.directions_run_rounded, color: AppColors.primary, size: 18),
-                    SizedBox(width: 6),
-                    Text(
-                      'Instructions & Movement Execution:',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF131519),
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE11D48).withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.warning_amber_rounded, color: Color(0xFFE11D48), size: 17),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Common Mistakes to Avoid',
+                            style: TextStyle(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xFFBE123C),
+                            ),
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            ex['mistake'],
+                            style: const TextStyle(
+                              fontSize: 12,
+                              height: 1.45,
+                              color: Color(0xFF881337),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF9FAFB),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFE8EBF0)),
-                  ),
-                  child: Text(
-                    ex['instructions'],
-                    style: const TextStyle(
-                      fontSize: 13,
-                      height: 1.55,
-                      color: Color(0xFF33373F),
-                    ),
-                  ),
+              ),
+            ],
+
+            const SizedBox(height: 24),
+
+            // 7. CLEAN RETURN BUTTON (ZERO REST TIMER!)
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton.icon(
+                onPressed: () => Navigator.pop(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF131519),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-
-                // 5. BREATHING GUIDELINE
-                if (ex['breathing'] != null) ...[
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade50,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.blue.shade100),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.air_rounded, color: Colors.blue, size: 18),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Breathing Technique:',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                ex['breathing'],
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.blue.shade900,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-
-                // 6. COMMON MISTAKES TO AVOID
-                if (ex['mistake'] != null) ...[
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade50,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.red.shade100),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 18),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Common Mistakes to Avoid:',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.redAccent,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                ex['mistake'],
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.red.shade900,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-
-                const SizedBox(height: 24),
-
-                // 7. ACTION BUTTON: START REST TIMER
-                ElevatedButton.icon(
-                  onPressed: widget.onStartRestTimer,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  ),
-                  icon: const Icon(Icons.timer_rounded, size: 20),
-                  label: const Text(
-                    'Start Rest Countdown',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
+                icon: const Icon(Icons.check_circle_rounded, size: 18),
+                label: const Text(
+                  'Back to Exercises',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSpecTile(String label, String value) {
+  Widget _buildMetricBox(String label, String value, IconData icon, Color color) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F8FA),
-          borderRadius: BorderRadius.circular(14),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(color: const Color(0xFFE8EBF0)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: Column(
           children: [
+            Icon(icon, color: color, size: 18),
+            const SizedBox(height: 5),
             Text(
               label,
               style: const TextStyle(fontSize: 10, color: Color(0xFF757A86), fontWeight: FontWeight.w600),
@@ -2218,7 +2335,9 @@ class _ExerciseVideoModalState extends State<_ExerciseVideoModal> {
             Text(
               value,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Color(0xFF131519)),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Color(0xFF131519)),
             ),
           ],
         ),
