@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 140),
+          padding: const EdgeInsets.only(bottom: 96),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -526,27 +526,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               // ==========================================
               // 1. Weekly Momentum Streak Strip 🔥
               // ==========================================
               _buildWeeklyStreakSection(),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               // ==========================================
               // 2. Today's Target Routine & Checklist 🏋️‍♂️
               // ==========================================
               _buildTodayRoutineSection(),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               // ==========================================
               // 3. Daily Fuel & Macros Breakdown 🥗
               // ==========================================
               _buildMacrosSection(),
-              const SizedBox(height: 28),
+              const SizedBox(height: 12),
             ],
           ),
         ),
