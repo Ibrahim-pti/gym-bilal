@@ -13,13 +13,55 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   // Selected Muscle Filter
   int _selectedMuscleIndex = 0;
   final List<Map<String, dynamic>> _muscleCategories = [
-    {'title': 'هەموو یارییەکان', 'id': 'all'},
-    {'title': 'سنگ (Chest)', 'id': 'chest'},
-    {'title': 'پشت (Back)', 'id': 'back'},
-    {'title': 'شان (Shoulders)', 'id': 'shoulders'},
-    {'title': 'باڵ و بازوو (Arms)', 'id': 'arms'},
-    {'title': 'قاچ و سمت (Legs)', 'id': 'legs'},
-    {'title': 'سک و ناوەند (Core)', 'id': 'core'},
+    {
+      'id': 'all',
+      'title': 'هەموو یارییەکان',
+      'subtitle': 'All Exercises',
+      'image': 'assets/images/card_gym_full.png',
+      'count': '19 یاری',
+    },
+    {
+      'id': 'chest',
+      'title': 'سنگ',
+      'subtitle': 'Chest Focus',
+      'image': 'assets/images/workout_back.jpg',
+      'count': '4 یاری',
+    },
+    {
+      'id': 'back',
+      'title': 'پشت',
+      'subtitle': 'Back & Lats',
+      'image': 'assets/images/pullup_figure.jpg',
+      'count': '4 یاری',
+    },
+    {
+      'id': 'shoulders',
+      'title': 'شان',
+      'subtitle': 'Deltoids',
+      'image': 'assets/images/male_fitness_banner.jpg',
+      'count': '3 یاری',
+    },
+    {
+      'id': 'arms',
+      'title': 'باڵ و بازوو',
+      'subtitle': 'Biceps & Triceps',
+      'image': 'assets/images/splash_athlete.jpg',
+      'count': '3 یاری',
+    },
+    {
+      'id': 'legs',
+      'title': 'قاچ و سمت',
+      'subtitle': 'Quads & Glutes',
+      'image': 'assets/images/female_fitness_banner.jpg',
+      'count': '3 یاری',
+    },
+    {
+      'id': 'core',
+      'title': 'سک و ناوەند',
+      'subtitle': 'Abs & Core',
+      'image': 'assets/images/posture_dark_3d.jpg',
+      'count': '2 یاری',
+    },
   ];
 
   // Search
@@ -530,27 +572,56 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'هەموو یارییەکان (${filteredExercises.length} یاری بەردەستە)',
+                    _selectedMuscleIndex == 0
+                        ? 'هەموو یارییەکان (${filteredExercises.length} یاری بەردەستە)'
+                        : 'یارییەکانی ${_muscleCategories[_selectedMuscleIndex]['title']} (${filteredExercises.length} یاری)',
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.5,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF131519),
                     ),
                   ),
-                  const Row(
-                    children: [
-                      Icon(Icons.video_library_rounded, color: AppColors.primary, size: 15),
-                      SizedBox(width: 4),
-                      Text(
-                        'فێرکاری بە ڤیدیۆ',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.bold,
+                  if (_selectedMuscleIndex > 0)
+                    GestureDetector(
+                      onTap: () => setState(() => _selectedMuscleIndex = 0),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.refresh_rounded, color: AppColors.primary, size: 14),
+                            SizedBox(width: 4),
+                            Text(
+                              'پیشاندانی هەمووی',
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    )
+                  else
+                    const Row(
+                      children: [
+                        Icon(Icons.video_library_rounded, color: AppColors.primary, size: 15),
+                        SizedBox(width: 4),
+                        Text(
+                          'فێرکاری بە ڤیدیۆ',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -644,12 +715,13 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     );
   }
 
-  // --- 2. SEARCH & MUSCLE FILTERS HEADER ---
+  // --- 2. SEARCH & VISUAL MUSCLE CATEGORY CARDS ---
   Widget _buildSearchAndFilterHeader() {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.fromLTRB(16, 6, 16, 14),
+      padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Modern Search Bar
           Container(
@@ -681,13 +753,44 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
 
-          // Horizontal Category Chips
+          // Title above Category Cards
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Row(
+                children: [
+                  Icon(Icons.category_rounded, color: AppColors.primary, size: 16),
+                  SizedBox(width: 6),
+                  Text(
+                    'بەشەکانی لەش و شوێنی یارییەکان',
+                    style: TextStyle(
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF131519),
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                'دەستنیشانکراو: ${_muscleCategories[_selectedMuscleIndex]['title']}',
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+
+          // Horizontal Visual Muscle Category Cards (Images on Cards!)
           SizedBox(
-            height: 38,
+            height: 124,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
+              clipBehavior: Clip.none,
               itemCount: _muscleCategories.length,
               itemBuilder: (context, index) {
                 final isSelected = _selectedMuscleIndex == index;
@@ -696,22 +799,135 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 return GestureDetector(
                   onTap: () => setState(() => _selectedMuscleIndex = index),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    duration: const Duration(milliseconds: 220),
+                    curve: Curves.easeOutCubic,
+                    width: 136,
+                    margin: const EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFF131519) : const Color(0xFFF4F6F8),
                       borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(
-                      child: Text(
-                        cat['title'] as String,
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : const Color(0xFF4A4E5A),
-                          fontSize: 12,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                        ),
+                      border: Border.all(
+                        color: isSelected ? AppColors.primary : Colors.black.withValues(alpha: 0.08),
+                        width: isSelected ? 2.5 : 1,
                       ),
+                      image: DecorationImage(
+                        image: AssetImage(cat['image'] as String),
+                        fit: BoxFit.cover,
+                      ),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.42),
+                                blurRadius: 14,
+                                offset: const Offset(0, 4),
+                              ),
+                            ]
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.08),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                    ),
+                    child: Stack(
+                      children: [
+                        // Gradient Overlay for text contrast
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              stops: const [0.0, 0.4, 1.0],
+                              colors: [
+                                Colors.black.withValues(alpha: 0.2),
+                                Colors.black.withValues(alpha: 0.45),
+                                Colors.black.withValues(alpha: 0.88),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // Top Pill Badge: Selected Checkmark or Count
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? AppColors.primary
+                                  : Colors.black.withValues(alpha: 0.65),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: isSelected
+                                    ? Colors.white.withValues(alpha: 0.4)
+                                    : Colors.white.withValues(alpha: 0.2),
+                              ),
+                            ),
+                            child: isSelected
+                                ? const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.check_rounded, color: Colors.white, size: 11),
+                                      SizedBox(width: 2),
+                                      Text(
+                                        'چالاک',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 9.5,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Text(
+                                    cat['count'] as String,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 9.5,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                          ),
+                        ),
+
+                        // Bottom Titles
+                        Positioned(
+                          bottom: 10,
+                          left: 10,
+                          right: 10,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                cat['title'] as String,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -0.3,
+                                ),
+                              ),
+                              const SizedBox(height: 1),
+                              Text(
+                                cat['subtitle'] as String,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.82),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
