@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -68,37 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  // Quick Routines List
-  final List<Map<String, dynamic>> _quickRoutines = [
-    {
-      'title': 'HIIT Fat Burn',
-      'subtitle': 'High energy cardio',
-      'duration': '15 Min',
-      'calories': '190 kcal',
-      'icon': Icons.local_fire_department_rounded,
-      'gradient': [Color(0xFF2E150F), Color(0xFF1B0C08)],
-      'accent': Color(0xFFFF5722),
-    },
-    {
-      'title': 'Core & Abs Shred',
-      'subtitle': 'Midsection strength',
-      'duration': '12 Min',
-      'calories': '140 kcal',
-      'icon': Icons.bolt_rounded,
-      'gradient': [Color(0xFF191330), Color(0xFF100C1F)],
-      'accent': Color(0xFF8B5CF6),
-    },
-    {
-      'title': 'Mobility & Stretch',
-      'subtitle': 'Joints & recovery',
-      'duration': '10 Min',
-      'calories': '65 kcal',
-      'icon': Icons.self_improvement_rounded,
-      'gradient': [Color(0xFF0F261C), Color(0xFF091711)],
-      'accent': Color(0xFF10B981),
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,8 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: const CircleAvatar(
                         radius: 24,
-                        backgroundImage:
-                            AssetImage('assets/images/user_avatar.jpg'),
+                        backgroundImage: AssetImage(
+                          'assets/images/user_avatar.jpg',
+                        ),
                       ),
                     ),
                     const SizedBox(width: 14),
@@ -185,10 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(width: 4),
-                          Text(
-                            '👑',
-                            style: TextStyle(fontSize: 12),
-                          ),
+                          Text('👑', style: TextStyle(fontSize: 12)),
                         ],
                       ),
                     ),
@@ -347,7 +315,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       vertical: 3,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.12),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.12,
+                                      ),
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     child: const Row(
@@ -576,14 +546,6 @@ class _HomeScreenState extends State<HomeScreen> {
               // 3. Daily Fuel & Macros Breakdown 🥗
               // ==========================================
               _buildMacrosSection(),
-
-              const SizedBox(height: 24),
-
-              // ==========================================
-              // 4. Quick Routines Carousel ⚡
-              // ==========================================
-              _buildQuickRoutinesCarousel(),
-
               const SizedBox(height: 28),
             ],
           ),
@@ -759,10 +721,7 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Colors.grey.shade200,
-            width: 1.2,
-          ),
+          border: Border.all(color: Colors.grey.shade200, width: 1.2),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -783,11 +742,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: iconBg,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    icon,
-                    size: 11.5,
-                    color: iconColor,
-                  ),
+                  child: Icon(icon, size: 11.5, color: iconColor),
                 ),
                 const SizedBox(width: 5),
                 Expanded(
@@ -857,10 +812,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     child: ClipOval(
-                      child: Image.asset(
-                        image3d,
-                        fit: BoxFit.cover,
-                      ),
+                      child: Image.asset(image3d, fit: BoxFit.cover),
                     ),
                   ),
                 ],
@@ -949,10 +901,7 @@ class _HomeScreenState extends State<HomeScreen> {
               offset: const Offset(0, 6),
             ),
           ],
-          border: Border.all(
-            color: Colors.grey.shade100,
-            width: 1,
-          ),
+          border: Border.all(color: Colors.grey.shade100, width: 1),
         ),
         child: Column(
           children: [
@@ -1000,7 +949,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(12),
@@ -1036,22 +988,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
                       color: isSelected
                           ? AppColors.primary
                           : (isDone
-                              ? AppColors.primary.withValues(alpha: 0.08)
-                              : Colors.grey.shade50),
+                                ? AppColors.primary.withValues(alpha: 0.08)
+                                : Colors.grey.shade50),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: isSelected
                             ? AppColors.primary
                             : (isToday
-                                ? AppColors.primary
-                                : (isDone
-                                    ? AppColors.primary.withValues(alpha: 0.25)
-                                    : Colors.grey.shade200)),
+                                  ? AppColors.primary
+                                  : (isDone
+                                        ? AppColors.primary.withValues(
+                                            alpha: 0.25,
+                                          )
+                                        : Colors.grey.shade200)),
                         width: isToday || isSelected ? 1.5 : 1,
                       ),
                       boxShadow: isSelected
@@ -1093,13 +1050,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 16,
                             height: 16,
                             decoration: BoxDecoration(
-                              color: isSelected ? Colors.white : AppColors.primary,
+                              color: isSelected
+                                  ? Colors.white
+                                  : AppColors.primary,
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               Icons.check_rounded,
                               size: 11,
-                              color: isSelected ? AppColors.primary : Colors.white,
+                              color: isSelected
+                                  ? AppColors.primary
+                                  : Colors.white,
                             ),
                           )
                         else if (isToday)
@@ -1107,7 +1068,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 16,
                             height: 16,
                             decoration: BoxDecoration(
-                              color: isSelected ? Colors.white : AppColors.primary,
+                              color: isSelected
+                                  ? Colors.white
+                                  : AppColors.primary,
                               shape: BoxShape.circle,
                             ),
                             child: const Center(
@@ -1122,7 +1085,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 6,
                             height: 6,
                             decoration: BoxDecoration(
-                              color: isSelected ? Colors.white : Colors.grey.shade400,
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.grey.shade400,
                               shape: BoxShape.circle,
                             ),
                           )
@@ -1131,7 +1096,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 6,
                             height: 6,
                             decoration: BoxDecoration(
-                              color: isSelected ? Colors.white : Colors.grey.shade300,
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.grey.shade300,
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -1165,7 +1132,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 7,
+                      vertical: 2.5,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFF10B981).withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(8),
@@ -1192,8 +1162,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // SECTION 2: Today's Target Routine & Checklist 🏋️‍♂️
   // ----------------------------------------------------
   Widget _buildTodayRoutineSection() {
-    final completedCount =
-        _todayExercises.where((e) => e['done'] == true).length;
+    final completedCount = _todayExercises
+        .where((e) => e['done'] == true)
+        .length;
     final progress = (_todayExercises.isEmpty)
         ? 0.0
         : (completedCount / _todayExercises.length);
@@ -1377,7 +1348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           border: Border.all(
                             color: isDone
                                 ? const Color(0xFF10B981)
-                                    .withValues(alpha: 0.35)
+                                      .withValues(alpha: 0.35)
                                 : Colors.white.withValues(alpha: 0.08),
                             width: 1,
                           ),
@@ -1432,7 +1403,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     item['setsReps'] as String,
                                     style: TextStyle(
-                                      color: Colors.white.withValues(alpha: 0.6),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.6,
+                                      ),
                                       fontSize: 10.5,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -1503,8 +1476,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: LinearProgressIndicator(
                               value: progress,
                               minHeight: 5,
-                              backgroundColor:
-                                  Colors.white.withValues(alpha: 0.12),
+                              backgroundColor: Colors.white.withValues(
+                                alpha: 0.12,
+                              ),
                               valueColor: const AlwaysStoppedAnimation<Color>(
                                 Color(0xFF10B981),
                               ),
@@ -1578,16 +1552,21 @@ class _HomeScreenState extends State<HomeScreen> {
               GestureDetector(
                 onTap: () => widget.onNavigateTab?.call(3),
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 3.5,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF10B981).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Row(
                     children: [
-                      Icon(Icons.add_rounded,
-                          size: 13, color: Color(0xFF059669)),
+                      Icon(
+                        Icons.add_rounded,
+                        size: 13,
+                        color: Color(0xFF059669),
+                      ),
                       SizedBox(width: 3),
                       Text(
                         'Log Food',
@@ -1618,10 +1597,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   offset: const Offset(0, 6),
                 ),
               ],
-              border: Border.all(
-                color: Colors.grey.shade100,
-                width: 1,
-              ),
+              border: Border.all(color: Colors.grey.shade100, width: 1),
             ),
             child: Column(
               children: [
@@ -1824,180 +1800,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  // ----------------------------------------------------
-  // SECTION 4: Quick Workouts Carousel ⚡
-  // ----------------------------------------------------
-  Widget _buildQuickRoutinesCarousel() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Section Title
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Row(
-                children: [
-                  Text(
-                    'Quick Workouts',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.lightTextPrimary,
-                      letterSpacing: -0.3,
-                    ),
-                  ),
-                  SizedBox(width: 6),
-                  Text('⚡', style: TextStyle(fontSize: 16)),
-                ],
-              ),
-              GestureDetector(
-                onTap: () => widget.onNavigateTab?.call(2),
-                child: const Row(
-                  children: [
-                    Text(
-                      'Explore',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    SizedBox(width: 2),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 10,
-                      color: AppColors.primary,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12),
-
-        // Horizontal List
-        SizedBox(
-          height: 116,
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            scrollDirection: Axis.horizontal,
-            itemCount: _quickRoutines.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              final routine = _quickRoutines[index];
-              final gradient = routine['gradient'] as List<Color>;
-              final accent = routine['accent'] as Color;
-
-              return GestureDetector(
-                onTap: () => widget.onNavigateTab?.call(2),
-                child: Container(
-                  width: 200,
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: gradient,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(
-                      color: accent.withValues(alpha: 0.3),
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: accent.withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Icon(
-                              routine['icon'] as IconData,
-                              size: 16,
-                              color: accent,
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 7,
-                              vertical: 2.5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              routine['duration'] as String,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            routine['title'] as String,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Row(
-                            children: [
-                              Text(
-                                routine['calories'] as String,
-                                style: TextStyle(
-                                  color: accent,
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              Text(
-                                ' • ${routine['subtitle']}',
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.6),
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
     );
   }
 }
