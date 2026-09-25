@@ -574,19 +574,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(height: 28),
-
-              // ==========================================
-              // 1. Gym Challenges & Leaderboard Section 🏆
-              // ==========================================
-              _buildChallengesSection(),
-
-              const SizedBox(height: 28),
-
-              // ==========================================
-              // 2. Form Tips: Do's & Don'ts Section 💡
-              // ==========================================
-              _buildFormTipsSection(),
+              const SizedBox(height: 24),
             ],
           ),
         ),
