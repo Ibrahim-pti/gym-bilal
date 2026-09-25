@@ -13,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // Form Tips state
   int _selectedFormIndex = 0;
-  bool _isChallengeJoined = false;
 
   final List<Map<String, dynamic>> _formGuides = [
     {
@@ -572,7 +571,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ----------------------------------------------------
-  // SECTION 1: Gym Challenges (Soft Glassy Modern Card) 🏆
+  // SECTION 1: Gym Challenges (Simple, Clean, Soft Card) 🏆
   // ----------------------------------------------------
   Widget _buildChallengesSection() {
     return Padding(
@@ -580,427 +579,166 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section Title
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          const Row(
             children: [
-              const Row(
-                children: [
-                  Text(
-                    'Gym Challenges',
-                    style: TextStyle(
-                      fontSize: 18.5,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.lightTextPrimary,
-                      letterSpacing: -0.3,
-                    ),
-                  ),
-                  SizedBox(width: 6),
-                  Text('🏆', style: TextStyle(fontSize: 16)),
-                ],
-              ),
-              GestureDetector(
-                onTap: () => _showLeaderboardBottomSheet(context),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.3),
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('🥇', style: TextStyle(fontSize: 12)),
-                      SizedBox(width: 4),
-                      Text(
-                        'Leaderboard',
-                        style: TextStyle(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      SizedBox(width: 2),
-                      Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 10,
-                        color: AppColors.primary,
-                      ),
-                    ],
-                  ),
+              Text(
+                'Gym Challenges',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.lightTextPrimary,
+                  letterSpacing: -0.3,
                 ),
               ),
+              SizedBox(width: 6),
+              Text('🏆', style: TextStyle(fontSize: 16)),
             ],
           ),
-
           const SizedBox(height: 12),
 
-          // Glassy Modern Challenge Card
-          Container(
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF222630), Color(0xFF14171E)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.12),
-                width: 1.2,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF14171E).withValues(alpha: 0.35),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
+          // Simple, Soft Luxury Card
+          GestureDetector(
+            onTap: () => _showLeaderboardBottomSheet(context),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(
+                  color: Colors.grey.shade200,
+                  width: 1.2,
                 ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Top Tag & Timer & Leaderboard Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 9,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.35),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.03),
+                    blurRadius: 16,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  // Left info & button
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Soft pill tag
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 9,
+                            vertical: 3.5,
                           ),
-                        ],
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.bolt_rounded,
-                            size: 12,
-                            color: Colors.white,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFF3E0),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          SizedBox(width: 3),
-                          Text(
-                            'Monthly Challenge',
+                          child: const Text(
+                            '🔥 MONTHLY CHALLENGE',
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 3.5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.15),
-                          width: 1,
-                        ),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.timer_outlined,
-                            size: 11,
-                            color: Colors.white70,
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '12 Days Left',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 14),
-
-                // Title + 3D Trophy Graphic Row
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Text Column
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '30-Day Beast Mode',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
+                              color: Color(0xFFE65100),
+                              fontSize: 10,
                               fontWeight: FontWeight.w800,
-                              letterSpacing: -0.2,
+                              letterSpacing: 0.2,
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Daily 100 Push-ups + 30 Mins Workout',
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.7),
-                              fontSize: 11.5,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-
-                          // Athletes Joined stack
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 54,
-                                height: 22,
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      left: 0,
-                                      child: Container(
-                                        width: 22,
-                                        height: 22,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                              color: Colors.white, width: 1.2),
-                                          image: const DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/user_avatar.jpg'),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 14,
-                                      child: Container(
-                                        width: 22,
-                                        height: 22,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                              color: Colors.white, width: 1.2),
-                                          image: const DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/workout_back.jpg'),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      left: 28,
-                                      child: Container(
-                                        width: 22,
-                                        height: 22,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                              color: Colors.white, width: 1.2),
-                                          image: const DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/pullup_figure.jpg'),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              const Text(
-                                '🔥 1.4k+ Joined',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-
-                    // 3D Trophy Graphic
-                    Container(
-                      width: 68,
-                      height: 68,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(
-                          color: AppColors.accentGold.withValues(alpha: 0.35),
-                          width: 1.5,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.accentGold.withValues(alpha: 0.2),
-                            blurRadius: 14,
-                            offset: const Offset(0, 4),
+                        const SizedBox(height: 8),
+
+                        // Title
+                        const Text(
+                          '30-Day Beast Mode',
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.lightTextPrimary,
+                            letterSpacing: -0.2,
                           ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          'assets/images/challenge_trophy_3d.jpg',
-                          fit: BoxFit.cover,
                         ),
-                      ),
-                    ),
-                  ],
-                ),
+                        const SizedBox(height: 3),
 
-                const SizedBox(height: 14),
-
-                // Bottom row: Progress + Join Button
-                Row(
-                  children: [
-                    // Progress text pill
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(12),
+                        // Subtitle
+                        Text(
+                          '100 push-ups daily • 1.4k active members',
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        const SizedBox(height: 12),
+
+                        // Simple stylish action button
+                        Row(
                           children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'View Challenge',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Icon(
+                                    Icons.arrow_forward_rounded,
+                                    size: 13,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
                             Text(
                               'Day 18 / 30',
                               style: TextStyle(
-                                color: Colors.white70,
+                                color: Colors.grey.shade500,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Text(
-                              '60%',
-                              style: TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 11.5,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
                           ],
                         ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(width: 10),
+                  ),
 
-                    // Join Button
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isChallengeJoined = !_isChallengeJoined;
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: _isChallengeJoined
-                                ? const Color(0xFF1E824C)
-                                : Colors.grey.shade800,
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            content: Text(
-                              _isChallengeJoined
-                                  ? '🎉 Awesome! You joined Beast Mode Challenge!'
-                                  : 'Left challenge.',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: _isChallengeJoined
-                              ? const Color(0xFF1E3A28)
-                              : AppColors.primary,
-                          borderRadius: BorderRadius.circular(14),
-                          border: _isChallengeJoined
-                              ? Border.all(
-                                  color: const Color(0xFF4CAF50), width: 1.2)
-                              : null,
-                          boxShadow: [
-                            BoxShadow(
-                              color: (_isChallengeJoined
-                                      ? const Color(0xFF4CAF50)
-                                      : AppColors.primary)
-                                  .withValues(alpha: 0.35),
-                              blurRadius: 8,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              _isChallengeJoined
-                                  ? Icons.check_circle_rounded
-                                  : Icons.flash_on_rounded,
-                              size: 14,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              _isChallengeJoined ? 'Active ✓' : 'Join Now',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 11.5,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                  const SizedBox(width: 14),
+
+                  // Right 3D Trophy thumbnail
+                  Container(
+                    width: 85,
+                    height: 85,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF9E6),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: const Color(0xFFFFE082),
+                        width: 1,
                       ),
                     ),
-                  ],
-                ),
-              ],
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(17),
+                      child: Image.asset(
+                        'assets/images/challenge_trophy_3d.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -1009,7 +747,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ----------------------------------------------------
-  // SECTION 2: 3D Form Correction Card (Glassy & Clean with Button) 💡
+  // SECTION 2: 3D Form Correction (Simple, Clean, Soft Card) 💡
   // ----------------------------------------------------
   Widget _buildFormTipsSection() {
     return Padding(
@@ -1017,13 +755,12 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section Title
           const Row(
             children: [
               Text(
                 'Exercise Posture',
                 style: TextStyle(
-                  fontSize: 18.5,
+                  fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: AppColors.lightTextPrimary,
                   letterSpacing: -0.3,
@@ -1033,214 +770,138 @@ class _HomeScreenState extends State<HomeScreen> {
               Text('💡', style: TextStyle(fontSize: 16)),
             ],
           ),
-
           const SizedBox(height: 12),
 
-          // Glassy Compact 3D Form Card
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF1F2E2B), Color(0xFF131D1B)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: const Color(0xFF64FFDA).withValues(alpha: 0.25),
-                width: 1.2,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF64FFDA).withValues(alpha: 0.08),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+          // Simple, Soft Luxury Card
+          GestureDetector(
+            onTap: () => _showFormGuideBottomSheet(context),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(
+                  color: Colors.grey.shade200,
+                  width: 1.2,
                 ),
-              ],
-            ),
-            child: Row(
-              children: [
-                // Left Column: Info & Action Button
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Badge
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 9,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF00E676).withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: const Color(0xFF00E676).withValues(alpha: 0.35),
-                            width: 1,
-                          ),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.view_in_ar_rounded,
-                              size: 12,
-                              color: Color(0xFF00E676),
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              '3D AI Form Correction',
-                              style: TextStyle(
-                                color: Color(0xFF00E676),
-                                fontSize: 10.5,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      // Card Headline
-                      const Text(
-                        'Master Your Form',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17.5,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.2,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Real-time joint angle analysis & injury prevention guide.',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.72),
-                          fontSize: 11.5,
-                          height: 1.3,
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // Clean Action Button to Open Form Guide Modal
-                      GestureDetector(
-                        onTap: () => _showFormGuideBottomSheet(context),
-                        child: Container(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.03),
+                    blurRadius: 16,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  // Left info & button
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Soft pill tag
+                        Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 8,
+                            horizontal: 9,
+                            vertical: 3.5,
                           ),
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF00E676), Color(0xFF00B0FF)],
+                            color: const Color(0xFFE8F5E9),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Text(
+                            '🔬 3D POSTURE AI',
+                            style: TextStyle(
+                              color: Color(0xFF2E7D32),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.2,
                             ),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF00E676)
-                                    .withValues(alpha: 0.3),
-                                blurRadius: 10,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Title
+                        const Text(
+                          'Master Your Form',
+                          style: TextStyle(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.lightTextPrimary,
+                            letterSpacing: -0.2,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+
+                        // Subtitle
+                        Text(
+                          'Prevent injury with 3D angle & posture guide',
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+
+                        // Simple stylish action button
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1B5E20),
+                            borderRadius: BorderRadius.circular(14),
                           ),
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'View Form Guide',
+                                'Check Form & Tips',
                                 style: TextStyle(
-                                  color: Color(0xFF0A1F18),
-                                  fontSize: 11.5,
-                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(width: 5),
+                              SizedBox(width: 4),
                               Icon(
                                 Icons.arrow_forward_rounded,
-                                size: 14,
-                                color: Color(0xFF0A1F18),
+                                size: 13,
+                                color: Colors.white,
                               ),
                             ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(width: 14),
-
-                // Right 3D Visual with soft neon border
-                Container(
-                  width: 105,
-                  height: 130,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(
-                      color: const Color(0xFF64FFDA).withValues(alpha: 0.35),
-                      width: 1.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF64FFDA).withValues(alpha: 0.15),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Image.asset(
-                          'assets/images/form_correction_3d.jpg',
-                          fit: BoxFit.cover,
-                          alignment: Alignment.center,
-                        ),
-                        Positioned(
-                          bottom: 6,
-                          left: 6,
-                          right: 6,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 3),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withValues(alpha: 0.7),
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                width: 0.8,
-                              ),
-                            ),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.threed_rotation_rounded,
-                                  size: 11,
-                                  color: Color(0xFF64FFDA),
-                                ),
-                                SizedBox(width: 3),
-                                Text(
-                                  '3D Form',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 9.5,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+
+                  const SizedBox(width: 14),
+
+                  // Right 3D Posture thumbnail
+                  Container(
+                    width: 85,
+                    height: 85,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1F8F4),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: const Color(0xFFA5D6A7),
+                        width: 1,
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(17),
+                      child: Image.asset(
+                        'assets/images/form_correction_3d.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
