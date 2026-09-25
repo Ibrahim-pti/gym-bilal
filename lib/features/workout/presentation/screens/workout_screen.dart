@@ -818,17 +818,20 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       children: [
-                        Icon(Icons.timer_rounded,
-                            color: AppColors.primary, size: 16),
-                        SizedBox(width: 4),
-                        Text(
-                          'تایمەری پشووی نێوان سێتەکان',
-                          style: TextStyle(
-                            color: AppColors.lightTextPrimary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13.5,
+                        const Icon(Icons.timer_rounded,
+                            color: AppColors.primary, size: 15),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            'تایمەری پشووی نێوان سێتەکان',
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: AppColors.lightTextPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12.5,
+                            ),
                           ),
                         ),
                       ],
