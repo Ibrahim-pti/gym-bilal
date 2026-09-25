@@ -561,65 +561,15 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
           // 3. MAIN CONTENT: Either GRID OF MUSCLES or EXERCISES LIST
           if (showGridView) ...[
-            // Title for Grid
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Target Muscle Groups',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFF131519),
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          'Select an area to explore calibrated video routines',
-                          style: TextStyle(
-                            fontSize: 11.5,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF757A86),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        '${_muscleCategories.length} Categories',
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            // 2-Column Grid of Muscle Category Cards
+            // 2-Column Grid of Muscle Category Cards (Immediate under search)
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 110),
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 110),
               sliver: SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 14,
                   mainAxisSpacing: 14,
-                  childAspectRatio: 0.92,
+                  childAspectRatio: 0.90,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -774,7 +724,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
+            color: Colors.black.withValues(alpha: 0.14),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -798,17 +748,40 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    stops: const [0.0, 0.45, 1.0],
+                    stops: const [0.0, 0.42, 1.0],
                     colors: [
                       Colors.black.withValues(alpha: 0.2),
-                      Colors.black.withValues(alpha: 0.45),
-                      Colors.black.withValues(alpha: 0.94),
+                      Colors.black.withValues(alpha: 0.48),
+                      Colors.black.withValues(alpha: 0.95),
                     ],
                   ),
                 ),
               ),
 
-              // Top Pill: Count Badge
+              // Top Left: Floating Muscle Tag
+              Positioned(
+                top: 10,
+                left: 10,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.65),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+                  ),
+                  child: Text(
+                    (cat['tag'] as String).toUpperCase(),
+                    style: const TextStyle(
+                      color: Color(0xFFFFB74D),
+                      fontSize: 8.5,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                ),
+              ),
+
+              // Top Right: Count Badge with active green dot
               Positioned(
                 top: 10,
                 right: 10,
@@ -817,20 +790,34 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.65),
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
                   ),
-                  child: Text(
-                    cat['count'],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 5,
+                        height: 5,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF10B981),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        cat['count'],
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 9.5,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
 
-              // Bottom Content: Title, Subtitle, and Sleek Frosted Glass Button
+              // Bottom Content: Title, Subtitle, and Eye-Catching Gradient Button
               Positioned(
                 bottom: 12,
                 left: 12,
@@ -840,7 +827,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      cat['title'],
+                      (cat['title'] as String).toUpperCase(),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 17,
@@ -851,6 +838,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     const SizedBox(height: 2),
                     Text(
                       cat['subtitle'],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.8),
                         fontSize: 11,
@@ -859,23 +848,32 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                     ),
                     const SizedBox(height: 10),
 
-                    // Elegant Luxury Button
+                    // Eye-Catching Gradient Action Button
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6.5),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
+                        gradient: const LinearGradient(
+                          colors: [AppColors.primary, Color(0xFFFF8A00)],
+                        ),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.28)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.45),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                       ),
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'View Exercises',
+                            'Explore',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 11,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.3,
                             ),
                           ),
                           SizedBox(width: 4),
