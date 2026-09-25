@@ -157,56 +157,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 18),
 
-              // 4. Section: Your Plan  See All ->
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Your Plan',
-                      style: TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.lightTextPrimary,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        widget.onNavigateTab?.call(2); // Jump to workout tab
-                      },
-                      child: Row(
-                        children: const [
-                          Text(
-                            'See All',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: AppColors.lightTextSecondary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(width: 4),
-                          Icon(
-                            Icons.arrow_forward_rounded,
-                            size: 14,
-                            color: AppColors.lightTextSecondary,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 14),
-
-              // 5. Featured Card: Full Body Workout (Dark Card)
+              // Featured Card: Full Body Workout
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
-                  height: 200,
+                  height: 206,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
                     gradient: const LinearGradient(
@@ -214,13 +171,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.18),
-                        blurRadius: 18,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
                   ),
                   child: Stack(
                     children: [
@@ -229,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         right: 0,
                         top: 0,
                         bottom: 0,
-                        width: 175,
+                        width: 185,
                         child: ClipRRect(
                           borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(24),
@@ -262,52 +212,106 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
 
-                      // Left Content
+                      // Card Content
                       Padding(
                         padding: const EdgeInsets.all(18),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Muscle Badge
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF382618),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.fitness_center,
-                                    size: 11,
-                                    color: AppColors.primary,
+                            // Top Row: Workout Badge + See All Button
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
                                   ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    'Muscle',
-                                    style: TextStyle(
-                                      color: AppColors.primary,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.fitness_center,
+                                        size: 11,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        'Workout',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    widget.onNavigateTab?.call(2);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.12),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          'See All',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 11.5,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        SizedBox(width: 3),
+                                        Icon(
+                                          Icons.arrow_forward_rounded,
+                                          size: 12,
+                                          color: Colors.white,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 10),
 
-                            // Card Title
-                            const Text(
-                              'Full Body\nWorkout',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800,
-                                height: 1.15,
+                            // Card Title with Orange Highlight
+                            RichText(
+                              text: const TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Full Body\n',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w800,
+                                      height: 1.15,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'Workout',
+                                    style: TextStyle(
+                                      color: AppColors.primary,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w800,
+                                      height: 1.15,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(height: 6),
@@ -316,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Text(
                               'Build Strength, Boost Endurance,\nAnd Challenge Every Muscle.',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.65),
+                                color: Colors.white.withValues(alpha: 0.7),
                                 fontSize: 10.5,
                                 height: 1.25,
                               ),
@@ -350,11 +354,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     foregroundColor: Colors.white,
                                     elevation: 0,
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 6,
+                                      horizontal: 14,
+                                      vertical: 7,
                                     ),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
+                                      borderRadius: BorderRadius.circular(18),
                                     ),
                                   ),
                                   icon: const Icon(
@@ -364,7 +368,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   label: const Text(
                                     'Start Workout',
                                     style: TextStyle(
-                                      fontSize: 11,
+                                      fontSize: 11.5,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -379,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
 
               // Carousel Dots under Featured Card
               Row(
@@ -393,7 +397,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 6),
                   Container(
                     width: 6,
                     height: 6,
@@ -402,7 +406,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 6),
                   Container(
                     width: 6,
                     height: 6,
@@ -414,216 +418,44 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
 
-              // 6. Secondary Workout Card: Pull Up Workout (Light Card)
+              // 3 Quick Action Cards: Gym Workouts, Nutrition & Calories, Progress & Analytics
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(22),
-                    border: Border.all(color: Colors.grey.shade200),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      // 3D Sculpted Mannequin Image
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF3F4F6),
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(18),
-                          child: Image.asset(
-                            'assets/images/pullup_figure.jpg',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-
-                      // Card Details
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Cardio tag
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 3,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.tagCardio,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.star_rounded,
-                                        size: 11,
-                                        color: AppColors.primary,
-                                      ),
-                                      SizedBox(width: 4),
-                                      Text(
-                                        'Cardio',
-                                        style: TextStyle(
-                                          color: AppColors.primary,
-                                          fontSize: 10.5,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-
-                            // Title
-                            const Text(
-                              'Pull Up Workout',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.lightTextPrimary,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-
-                            // Subtitle
-                            Text(
-                              'Build your back, arms and core with pull up variations.',
-                              style: TextStyle(
-                                fontSize: 11.5,
-                                color: Colors.grey.shade600,
-                                height: 1.25,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Arrow right chevron
-                      Icon(
-                        Icons.chevron_right_rounded,
-                        color: Colors.grey.shade400,
-                        size: 26,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // 7. Quick Shortcuts to New Viral Features
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    // Reels Shortcut
+                    // Card 1: Gym Workouts
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => widget.onNavigateTab?.call(1),
-                        child: Container(
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF23252A), Color(0xFF17181C)],
-                            ),
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          child: const Row(
-                            children: [
-                              Icon(
-                                Icons.play_circle_filled_rounded,
-                                color: AppColors.primary,
-                                size: 24,
-                              ),
-                              SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'ڕیڵزی فیتنس',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                  Text(
-                                    'ڤیدیۆی کورت',
-                                    style: TextStyle(
-                                      color: Colors.white60,
-                                      fontSize: 10.5,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                        onTap: () => widget.onNavigateTab?.call(2),
+                        child: Image.asset(
+                          'assets/images/card_gym_full.png',
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 10),
 
-                    // Calorie Tracker Shortcut
+                    // Card 2: Nutrition & Calories
                     Expanded(
                       child: GestureDetector(
                         onTap: () => widget.onNavigateTab?.call(3),
-                        child: Container(
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(18),
-                            border: Border.all(color: Colors.grey.shade200),
-                          ),
-                          child: const Row(
-                            children: [
-                              Icon(
-                                Icons.pie_chart_rounded,
-                                color: AppColors.primary,
-                                size: 24,
-                              ),
-                              SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'کالۆری و خواردن',
-                                    style: TextStyle(
-                                      color: AppColors.lightTextPrimary,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                  Text(
-                                    'AI Scanner',
-                                    style: TextStyle(
-                                      color: AppColors.lightTextSecondary,
-                                      fontSize: 10.5,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                        child: Image.asset(
+                          'assets/images/card_nutrition_full.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+
+                    // Card 3: Progress & Analytics
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => widget.onNavigateTab?.call(4),
+                        child: Image.asset(
+                          'assets/images/card_progress_full.png',
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ),
