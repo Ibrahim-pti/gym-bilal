@@ -10,154 +10,140 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
-  // Selected Program Category filter: 'all', 'bulk', 'shred', 'women', 'beginner'
+  // Selected category filter: 'all', 'hypertrophy', 'shred', 'women', 'strength', 'beginner'
   String _selectedCategory = 'all';
 
   // Search query
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
-  // Programs Categories List
+  // Categories Filter
   final List<Map<String, dynamic>> _categories = [
-    {
-      'id': 'all',
-      'name': 'هەموو کۆرسەکان',
-      'english': 'All Programs',
-      'icon': Icons.grid_view_rounded,
-    },
-    {
-      'id': 'bulk',
-      'name': 'زەخامەت و ماسولکە',
-      'english': 'Hypertrophy',
-      'icon': Icons.fitness_center_rounded,
-    },
-    {
-      'id': 'shred',
-      'name': 'چەوری سووتاندن',
-      'english': 'Fat Loss & Shred',
-      'icon': Icons.local_fire_department_rounded,
-    },
-    {
-      'id': 'women',
-      'name': 'تایبەت بە کچان',
-      'english': 'Women Sculpt',
-      'icon': Icons.accessibility_new_rounded,
-    },
-    {
-      'id': 'beginner',
-      'name': 'سەرەتایی و دەستپێک',
-      'english': 'Beginner 30-Day',
-      'icon': Icons.flag_rounded,
-    },
+    {'id': 'all', 'title': 'All Programs', 'icon': Icons.flash_on_rounded},
+    {'id': 'hypertrophy', 'title': 'Hypertrophy', 'icon': Icons.fitness_center_rounded},
+    {'id': 'shred', 'title': 'Fat Shred', 'icon': Icons.local_fire_department_rounded},
+    {'id': 'women', 'title': 'Women Sculpt', 'icon': Icons.auto_awesome_rounded},
+    {'id': 'strength', 'title': 'Pure Strength', 'icon': Icons.bolt_rounded},
+    {'id': 'beginner', 'title': 'Beginner 30D', 'icon': Icons.flag_rounded},
   ];
 
-  // Comprehensive Programs Database
+  // Programs Database (100% English)
   final List<Map<String, dynamic>> _programs = [
     {
       'id': 'hypertrophy_pro',
-      'title': 'کۆرسی زەخامەت و دروستکردنی ماسولکە',
-      'english': 'Pro Hypertrophy & Muscle Mass',
-      'category': 'bulk',
-      'coach': 'ڕاهێنەر بیلال',
-      'rating': '4.9 ⭐ (2.4k)',
-      'weeks': '8 هەفتە',
-      'daysPerWeek': '5 ڕۆژ لە هەفتەیەکدا',
-      'level': 'مامناوەند / پێشکەوتوو',
+      'title': 'Pro Hypertrophy & Muscle Mass',
+      'subtitle': 'Maximum size & density program calibrated for advanced lifters',
+      'category': 'hypertrophy',
+      'coach': 'Coach Bilal',
+      'coachTitle': 'Head Fitness Director',
+      'rating': '4.9',
+      'reviews': '2.8k',
+      'duration': '8 Weeks',
+      'frequency': '5 Days / Wk',
+      'level': 'Advanced',
+      'intensity': 'High Intensity',
+      'calories': '550 kcal / session',
       'image': 'assets/images/workout_back.jpg',
-      'description':
-          'پرۆگرامێکی زانستی و توند بۆ گەورەکردنی قەبارەی ماسولکە و دەمار بە تەکنیکی فرە-سێت و کێشی مامناوەند بۆ قورس.',
-      'tagColor': AppColors.primary,
+      'featured': true,
+      'tags': ['Chest & Back', 'Heavy Barbells', 'Mass Builder'],
+      'overview':
+          'A scientifically structured 8-week routine focusing on progressive overload, mechanical tension, and hypertrophic volume to pack on lean muscle mass.',
       'schedule': [
         {
-          'day': 'ڕۆژی ١: سنگ و بەشی پێشەوە',
-          'focus': 'سنگ و تڕایسێپس (Chest & Triceps)',
+          'dayNumber': '1',
+          'dayTitle': 'Chest & Triceps Power',
+          'split': 'Push Day • Heavy Compound',
           'exercises': [
             {
-              'name': 'Barbell Bench Press',
-              'kurdish': 'بێنچ پرێس بە باربێڵ',
-              'sets': '4 Sets × 10 Reps',
+              'name': 'Barbell Flat Bench Press',
+              'target': 'Pectorals & Anterior Delts',
+              'sets': '4 Sets × 8-10 Reps',
               'image': 'assets/images/workout_back.jpg',
             },
             {
               'name': 'Incline Dumbbell Press',
-              'kurdish': 'پرێسی سنگ بە دەمبڵی لار',
+              'target': 'Upper Clavicular Head',
               'sets': '4 Sets × 12 Reps',
               'image': 'assets/images/onboarding_athlete.jpg',
             },
             {
-              'name': 'Cable Chest Fly',
-              'kurdish': 'کەیبڵ فلای بۆ سنگ',
+              'name': 'Cable Crossover Fly',
+              'target': 'Sternal Pec Isolation',
               'sets': '3 Sets × 15 Reps',
               'image': 'assets/images/workout_back.jpg',
             },
             {
               'name': 'Tricep Rope Pushdown',
-              'kurdish': 'تڕایسێپس بە حەبل',
-              'sets': '4 Sets × 12 Reps',
+              'target': 'Lateral & Long Tricep Head',
+              'sets': '4 Sets × 12-15 Reps',
               'image': 'assets/images/male_fitness_banner.jpg',
             },
           ]
         },
         {
-          'day': 'ڕۆژی ٢: پشت و باڵەکان',
-          'focus': 'پشت و بایسێپس (Back & Biceps)',
+          'dayNumber': '2',
+          'dayTitle': 'Back & Biceps Thickness',
+          'split': 'Pull Day • Upper Lat & Rhomboid',
           'exercises': [
             {
               'name': 'Wide-Grip Pull Ups',
-              'kurdish': 'پول ئەپس بە گرتنی پان',
-              'sets': '4 Sets × 10 Reps',
+              'target': 'Latissimus Dorsi',
+              'sets': '4 Sets × Max Reps',
               'image': 'assets/images/pullup_figure.jpg',
             },
             {
-              'name': 'Lat Pulldown',
-              'kurdish': 'لات پولداون بە دانیشتن',
-              'sets': '4 Sets × 12 Reps',
+              'name': 'Seated Lat Pulldown',
+              'target': 'Upper & Mid Back',
+              'sets': '4 Sets × 10-12 Reps',
               'image': 'assets/images/pullup_figure.jpg',
             },
             {
-              'name': 'Standing Dumbbell Bicep Curl',
-              'kurdish': 'کێرڵی دەمبڵ بۆ بازوو',
+              'name': 'Standing Dumbbell Curl',
+              'target': 'Biceps Brachii',
               'sets': '4 Sets × 12 Reps',
               'image': 'assets/images/splash_athlete.jpg',
             },
           ]
         },
         {
-          'day': 'ڕۆژی ٣: پشوودان',
-          'focus': 'پشووی ماسولکە و خۆراک (Active Recovery)',
+          'dayNumber': '3',
+          'dayTitle': 'Active Recovery & Core',
+          'split': 'Rest & Mobility Day',
           'exercises': []
         },
         {
-          'day': 'ڕۆژی ٤: قاچ و سمت',
-          'focus': 'تەواوی ماسولکەکانی قاچ (Legs Power)',
+          'dayNumber': '4',
+          'dayTitle': 'Legs & Glutes Overload',
+          'split': 'Leg Day • Quad Dominant',
           'exercises': [
             {
-              'name': 'Barbell Squat',
-              'kurdish': 'سکوات بە باربێڵ',
-              'sets': '4 Sets × 10 Reps',
+              'name': 'Barbell Back Squat',
+              'target': 'Quadriceps & Glute Max',
+              'sets': '4 Sets × 8-10 Reps',
               'image': 'assets/images/female_fitness_banner.jpg',
             },
             {
               'name': '45-Degree Leg Press',
-              'kurdish': 'پرێسی قاچ بە ئامێر',
+              'target': 'Leg Hypertrophy',
               'sets': '4 Sets × 12 Reps',
               'image': 'assets/images/female_fitness_banner.jpg',
             },
           ]
         },
         {
-          'day': 'ڕۆژی ٥: شان و سک',
-          'focus': 'شان و کەمەر (Shoulders & Core)',
+          'dayNumber': '5',
+          'dayTitle': 'Shoulders & Core Stabilization',
+          'split': 'Shoulder Silhouette',
           'exercises': [
             {
-              'name': 'Overhead Shoulder Press',
-              'kurdish': 'پرێسی شان بە باربێڵ',
+              'name': 'Overhead Barbell Military Press',
+              'target': 'Total Deltoid Complex',
               'sets': '4 Sets × 10 Reps',
               'image': 'assets/images/male_fitness_banner.jpg',
             },
             {
               'name': 'Dumbbell Lateral Raise',
-              'kurdish': 'بەرزکردنەوەی دەمبڵ بۆ تەنیشت',
+              'target': 'Medial Deltoid Head',
               'sets': '4 Sets × 15 Reps',
               'image': 'assets/images/male_fitness_banner.jpg',
             },
@@ -166,68 +152,77 @@ class _ExploreScreenState extends State<ExploreScreen> {
       ],
     },
     {
-      'id': 'women_glutes_tone',
-      'title': 'کۆرسی شێپین و قاچ و کەمەر (تایبەت بە خانمان)',
-      'english': 'Hourglass & Glute Sculpt Program',
+      'id': 'women_hourglass',
+      'title': 'Hourglass & Glute Sculpt',
+      'subtitle': 'Aesthetic glute isolation and waist tightening blueprint',
       'category': 'women',
-      'coach': 'ڕاهێنەر سارە',
-      'rating': '5.0 ⭐ (1.9k)',
-      'weeks': '6 هەفتە',
-      'daysPerWeek': '4 ڕۆژ لە هەفتەیەکدا',
-      'level': 'هەموو ئاستەکان',
+      'coach': 'Sarah Jenkins',
+      'coachTitle': 'Women Specialist Coach',
+      'rating': '5.0',
+      'reviews': '1.9k',
+      'duration': '6 Weeks',
+      'frequency': '4 Days / Wk',
+      'level': 'All Levels',
+      'intensity': 'Toning & Shape',
+      'calories': '420 kcal / session',
       'image': 'assets/images/female_fitness_banner.jpg',
-      'description':
-          'دیزاینکراو بە تایبەت بۆ بەهێزکردنی سمت، ڕان، تەنگکردنی کەمەر و شێوەیەکی ڕێک و وەرزشی بۆ تەواوی جەستە.',
-      'tagColor': const Color(0xFFE91E63),
+      'featured': false,
+      'tags': ['Glutes & Hamstrings', 'Waist Toning', 'Lower Body'],
+      'overview':
+          'Designed to shape, firm, and sculpt glute muscles while trimming the midsection with focused resistance training and high-metabolic circuits.',
       'schedule': [
         {
-          'day': 'ڕۆژی ١: بەهێزکردنی سمت و ڕان',
-          'focus': 'Glutes & Hamstrings',
+          'dayNumber': '1',
+          'dayTitle': 'Glute & Posterior Chain Hypertrophy',
+          'split': 'Glute Isolation',
           'exercises': [
             {
               'name': 'Barbell Hip Thrust',
-              'kurdish': 'هیپ ترەست بە باربێڵ',
-              'sets': '4 Sets × 15 Reps',
+              'target': 'Gluteus Maximus Focus',
+              'sets': '4 Sets × 12-15 Reps',
               'image': 'assets/images/female_fitness_banner.jpg',
             },
             {
               'name': 'Bulgarian Split Squat',
-              'kurdish': 'بولگاریان سکوات بە دەمبڵ',
+              'target': 'Single Leg Balance & Glute',
               'sets': '3 Sets × 12 Reps',
               'image': 'assets/images/female_fitness_banner.jpg',
             },
           ]
         },
         {
-          'day': 'ڕۆژی ٢: بەشی سەرەوە و کەمەر',
-          'focus': 'Back, Shoulders & Waist',
+          'dayNumber': '2',
+          'dayTitle': 'Upper Body Toning & Core',
+          'split': 'Toned Arms & Flat Waist',
           'exercises': [
             {
               'name': 'Lat Pulldown',
-              'kurdish': 'لات پولداون',
+              'target': 'V-Taper Back Line',
               'sets': '4 Sets × 12 Reps',
               'image': 'assets/images/pullup_figure.jpg',
             },
             {
               'name': 'Plank Core Stabilization',
-              'kurdish': 'پلانک بۆ توندکردنی سک',
+              'target': 'Transverse Abdominis',
               'sets': '3 Sets × 45 Sec',
               'image': 'assets/images/posture_dark_3d.jpg',
             },
           ]
         },
         {
-          'day': 'ڕۆژی ٣: پشوودان',
-          'focus': 'Rest & Stretch',
+          'dayNumber': '3',
+          'dayTitle': 'Full Rest & Stretch',
+          'split': 'Recovery & Hydration',
           'exercises': []
         },
         {
-          'day': 'ڕۆژی ٤: سوتاندنی چەوری و قاچ',
-          'focus': 'Legs Definition & Cardio Burn',
+          'dayNumber': '4',
+          'dayTitle': 'Hamstrings, Quads & Glute Burn',
+          'split': 'Lower Body Definition',
           'exercises': [
             {
               'name': 'Barbell Squat',
-              'kurdish': 'سکوات بە باربێڵ',
+              'target': 'Quads & Glutes',
               'sets': '4 Sets × 12 Reps',
               'image': 'assets/images/female_fitness_banner.jpg',
             },
@@ -237,44 +232,51 @@ class _ExploreScreenState extends State<ExploreScreen> {
     },
     {
       'id': 'fat_loss_shred',
-      'title': 'کۆرسی چەوری سووتاندن و وشککردنەوە',
-      'english': 'Maximum Fat Shred & High Intensity',
+      'title': 'High-Intensity Shred & Cut',
+      'subtitle': 'Drop body fat fast while safeguarding hard-earned muscle',
       'category': 'shred',
-      'coach': 'ڕاهێنەر ئاراس',
-      'rating': '4.8 ⭐ (3.1k)',
-      'weeks': '6 هەفتە',
-      'daysPerWeek': '5 ڕۆژ لە هەفتەیەکدا',
-      'level': 'مامناوەند',
+      'coach': 'Marcus Cole',
+      'coachTitle': 'Conditioning Coach',
+      'rating': '4.8',
+      'reviews': '3.2k',
+      'duration': '6 Weeks',
+      'frequency': '5 Days / Wk',
+      'level': 'Intermediate',
+      'intensity': 'Extreme Burn',
+      'calories': '650 kcal / session',
       'image': 'assets/images/card_gym_full.png',
-      'description':
-          'تێکەڵەیەک لە یاری قورس بە دووبارەی بەرز و کاردیۆی چڕ بۆ تواندنەوەی چەوری ژێر پێست و دەرخستنی هێڵەکانی ماسولکە.',
-      'tagColor': const Color(0xFFFF5722),
+      'featured': false,
+      'tags': ['Fat Loss', 'Metabolic Circuit', 'Lean Definition'],
+      'overview':
+          'Combines compound resistance movements with supersets and metabolic burn conditioning to maximize caloric deficit and muscular definition.',
       'schedule': [
         {
-          'day': 'ڕۆژی ١: سنگ، سک و کاردیۆ',
-          'focus': 'Chest & Core Burn',
+          'dayNumber': '1',
+          'dayTitle': 'Upper Body Torso Blitz',
+          'split': 'Chest, Core & Cardio',
           'exercises': [
             {
               'name': 'High-to-Low Cable Fly',
-              'kurdish': 'کەیبڵ فلای خێرا',
+              'target': 'Lower Chest Cut',
               'sets': '4 Sets × 15 Reps',
               'image': 'assets/images/workout_back.jpg',
             },
             {
               'name': 'Hanging Knee Raise',
-              'kurdish': 'هەڵواسینی ئەژنۆ بۆ خوارەوەی سک',
+              'target': 'Lower Abdominal V-Line',
               'sets': '4 Sets × 20 Reps',
               'image': 'assets/images/posture_dark_3d.jpg',
             },
           ]
         },
         {
-          'day': 'ڕۆژی ٢: بازنەیی قاچ و کەمەر',
-          'focus': 'Legs & Calorie Blitz',
+          'dayNumber': '2',
+          'dayTitle': 'Legs & Calorie Surge',
+          'split': 'Lower Body Supersets',
           'exercises': [
             {
               'name': 'Barbell Squat',
-              'kurdish': 'سکوات بە باربێڵ',
+              'target': 'Quads & High Heart Rate',
               'sets': '4 Sets × 15 Reps',
               'image': 'assets/images/female_fitness_banner.jpg',
             },
@@ -283,57 +285,65 @@ class _ExploreScreenState extends State<ExploreScreen> {
       ],
     },
     {
-      'id': 'beginner_foundations',
-      'title': 'کۆرسی سەرەتایی و فێربوونی هەنگاو بە هەنگاو',
-      'english': '30-Day Beginner Gym Blueprint',
+      'id': 'beginner_blueprint',
+      'title': '30-Day Complete Foundation',
+      'subtitle': 'Step-by-step master plan for gym newcomers & rebooters',
       'category': 'beginner',
-      'coach': 'تیمی ڕاهێنەرانی جیم بیلال',
-      'rating': '4.9 ⭐ (4.5k)',
-      'weeks': '4 هەفتە',
-      'daysPerWeek': '3 ڕۆژ لە هەفتەیەکدا',
-      'level': 'سەرەتایی تەواو',
+      'coach': 'Bilal Performance Team',
+      'coachTitle': 'Certified Master Trainers',
+      'rating': '4.9',
+      'reviews': '4.5k',
+      'duration': '4 Weeks',
+      'frequency': '3 Days / Wk',
+      'level': 'Beginner',
+      'intensity': 'Foundational',
+      'calories': '380 kcal / session',
       'image': 'assets/images/onboarding_athlete.jpg',
-      'description':
-          'باشترین کۆرس بۆ ئەوانەی یەکەم مانگیانە دێنە هۆڵی جیم. فێربوونی تەکنیکی دروستی جوڵەکان بەبێ پێکان و دروستکردنی بنەمایەکی پتەو.',
-      'tagColor': const Color(0xFF009688),
+      'featured': false,
+      'tags': ['Form & Posture', 'No Experience Needed', 'Full Body'],
+      'overview':
+          'The ultimate starting point. Learn pristine exercise form, build tendon resilience, and establish consistent workout habits with zero intimidation.',
       'schedule': [
         {
-          'day': 'ڕۆژی ١: هەموو بەشەکانی سەرەوە (Upper Body)',
-          'focus': 'Upper Body Mechanics',
+          'dayNumber': '1',
+          'dayTitle': 'Upper Body Foundations',
+          'split': 'Chest, Back & Arms',
           'exercises': [
             {
               'name': 'Incline Dumbbell Press',
-              'kurdish': 'پرێسی سنگ بە دەمبڵ',
+              'target': 'Chest Strength',
               'sets': '3 Sets × 12 Reps',
               'image': 'assets/images/onboarding_athlete.jpg',
             },
             {
-              'name': 'Lat Pulldown',
-              'kurdish': 'لات پولداون',
+              'name': 'Seated Lat Pulldown',
+              'target': 'Back Posture',
               'sets': '3 Sets × 12 Reps',
               'image': 'assets/images/pullup_figure.jpg',
             },
           ]
         },
         {
-          'day': 'ڕۆژی ٢: پشوودان',
-          'focus': 'Rest & Recovery',
+          'dayNumber': '2',
+          'dayTitle': 'Active Recovery',
+          'split': 'Walking & Mobility',
           'exercises': []
         },
         {
-          'day': 'ڕۆژی ٣: بەشی خوارەوە و ناوەند (Lower Body & Core)',
-          'focus': 'Legs & Posture',
+          'dayNumber': '3',
+          'dayTitle': 'Lower Body & Core Health',
+          'split': 'Quads & Stability',
           'exercises': [
             {
-              'name': 'Leg Press',
-              'kurdish': 'پرێسی قاچ بە ئامێر',
+              'name': 'Leg Press Machine',
+              'target': 'Safe Quad Strength',
               'sets': '3 Sets × 12 Reps',
               'image': 'assets/images/female_fitness_banner.jpg',
             },
             {
-              'name': 'Plank',
-              'kurdish': 'پلانک بۆ ڕاگرتنی کەمەر',
-              'sets': '3 Sets × 30 Sec',
+              'name': 'Plank Hold',
+              'target': 'Spinal Brace',
+              'sets': '3 Sets × 30 Seconds',
               'image': 'assets/images/posture_dark_3d.jpg',
             },
           ]
@@ -355,7 +365,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
           _selectedCategory == 'all' || p['category'] == _selectedCategory;
       final matchesSearch = _searchQuery.isEmpty ||
           p['title'].toString().toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          p['english'].toString().toLowerCase().contains(_searchQuery.toLowerCase());
+          p['subtitle'].toString().toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          p['coach'].toString().toLowerCase().contains(_searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     }).toList();
   }
@@ -370,26 +381,26 @@ class _ExploreScreenState extends State<ExploreScreen> {
         program: program,
         onActivateProgram: () {
           Navigator.pop(context);
-          // Navigate to central Workout tab (index 2)
-          widget.onNavigateTab?.call(2);
+          widget.onNavigateTab?.call(2); // Jump to central Workout tab
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: AppColors.primaryDark,
+              backgroundColor: const Color(0xFF15171B),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
+                side: const BorderSide(color: AppColors.primary, width: 1.2),
               ),
               content: Row(
                 children: [
-                  const Icon(Icons.rocket_launch_rounded, color: Colors.white),
+                  const Icon(Icons.check_circle_rounded, color: AppColors.primary),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      '🔥 کۆرسی "${program['title']}" بوو بە کۆرسی چالاکت!',
+                      'Routine "${program['title']}" is now active in Workout Hub!',
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 13,
+                        fontSize: 12.5,
                       ),
                     ),
                   ),
@@ -405,7 +416,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lightBackground,
+      backgroundColor: const Color(0xFFF8F9FB),
       body: SafeArea(
         bottom: false,
         child: ListView(
@@ -413,223 +424,43 @@ class _ExploreScreenState extends State<ExploreScreen> {
           children: [
             const SizedBox(height: 12),
 
-            // 1. Header (Title + Subtitle + Workout tab shortcut)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'کۆرس و بەرنامەکان (Programs)',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.lightTextPrimary,
-                          letterSpacing: -0.4,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'پلانی زانستی ئامادەکراو بۆ گەیشتن بە ئامانجەکەت',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      widget.onNavigateTab?.call(2); // Go to Workout Hub
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 7),
-                      decoration: BoxDecoration(
-                        gradient: AppColors.buttonGradient,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.35),
-                            blurRadius: 10,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.fitness_center_rounded,
-                            color: Colors.white,
-                            size: 15,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            'ڕاهێنانم',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // 1. Ultra-clean Header
+            _buildHeader(),
 
             const SizedBox(height: 14),
 
-            // 2. Search Bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 12,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: (val) => setState(() => _searchQuery = val),
-                  decoration: InputDecoration(
-                    hintText: 'گەڕان بەناو ناوی کۆرسەکان (زەخامەت، کچان، سووتاندن)...',
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                      fontSize: 12.5,
-                    ),
-                    prefixIcon: const Icon(
-                      Icons.search_rounded,
-                      color: AppColors.primary,
-                      size: 20,
-                    ),
-                    suffixIcon: _searchQuery.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear, size: 16),
-                            onPressed: () {
-                              _searchController.clear();
-                              setState(() => _searchQuery = '');
-                            },
-                          )
-                        : null,
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 13),
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // 3. Featured Hero Card: Captain Bilal Masterclass
-            _buildFeaturedProgramHero(),
+            // 2. Search & Filter Bar
+            _buildSearchBar(),
 
             const SizedBox(height: 18),
 
-            // 4. Category Filter Chips
-            SizedBox(
-              height: 42,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: _categories.length,
-                itemBuilder: (context, index) {
-                  final cat = _categories[index];
-                  final isSelected = _selectedCategory == cat['id'];
+            // 3. Featured Masterclass Hero (Cinematic Glassmorphism)
+            _buildCinematicHero(),
 
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedCategory = cat['id'];
-                      });
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 8),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppColors.primary
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: isSelected
-                              ? AppColors.primary
-                              : Colors.grey.shade200,
-                        ),
-                        boxShadow: isSelected
-                            ? [
-                                BoxShadow(
-                                  color: AppColors.primary.withValues(alpha: 0.3),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ]
-                            : [],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            cat['icon'],
-                            size: 15,
-                            color: isSelected
-                                ? Colors.white
-                                : AppColors.lightTextSecondary,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            cat['name'],
-                            style: TextStyle(
-                              color: isSelected
-                                  ? Colors.white
-                                  : AppColors.lightTextPrimary,
-                              fontSize: 12,
-                              fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            const SizedBox(height: 22),
 
-            const SizedBox(height: 18),
+            // 4. Horizontal Category Filter Pills
+            _buildCategorySelector(),
+
+            const SizedBox(height: 20),
 
             // 5. Section Header
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'کۆرسە فەرمییەکان',
+                    'Training Blueprints',
                     style: TextStyle(
-                      fontSize: 16.5,
+                      fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.lightTextPrimary,
+                      color: Color(0xFF131519),
+                      letterSpacing: -0.3,
                     ),
                   ),
-                  const Spacer(),
                   Text(
-                    '${_filteredPrograms.length} بەرنامە',
+                    '${_filteredPrograms.length} Routines',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -639,131 +470,280 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ],
               ),
             ),
+
             const SizedBox(height: 12),
 
-            // 6. Programs List Cards
-            ..._filteredPrograms.map((prog) => _buildProgramCard(prog)),
+            // 6. Programs Cards Feed
+            ..._filteredPrograms.map((prog) => _buildModernProgramCard(prog)),
           ],
         ),
       ),
     );
   }
 
-  // --- Featured Hero Card ---
-  Widget _buildFeaturedProgramHero() {
-    final featured = _programs[0];
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      height: 185,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        image: DecorationImage(
-          image: AssetImage(featured['image']),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withValues(alpha: 0.55),
-            BlendMode.darken,
+  // --- 1. Clean Top Header ---
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Training Programs',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFF131519),
+                  letterSpacing: -0.6,
+                ),
+              ),
+              SizedBox(height: 2),
+              Text(
+                'Curated routines for every physique goal',
+                style: TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF757A86),
+                ),
+              ),
+            ],
           ),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
+          // Quick shortcut to Active Session
+          GestureDetector(
+            onTap: () => widget.onNavigateTab?.call(2),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF131519),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.bolt_rounded,
+                    color: AppColors.primary,
+                    size: 16,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    'Workout',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(24),
-          onTap: () => _openProgramDetails(featured),
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Text(
-                        'کۆرسی هەڵبژێردراو 🔥',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
+    );
+  }
+
+  // --- 2. Minimal Search Bar ---
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE9ECF0)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: TextField(
+          controller: _searchController,
+          onChanged: (val) => setState(() => _searchQuery = val),
+          style: const TextStyle(fontSize: 13.5, color: Color(0xFF131519)),
+          decoration: InputDecoration(
+            hintText: 'Search programs, goals, or coaches...',
+            hintStyle: const TextStyle(
+              color: Color(0xFF9EA3AE),
+              fontSize: 13,
+            ),
+            prefixIcon: const Icon(
+              Icons.search_rounded,
+              color: Color(0xFF9EA3AE),
+              size: 20,
+            ),
+            suffixIcon: _searchQuery.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.close_rounded, size: 16),
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() => _searchQuery = '');
+                    },
+                  )
+                : null,
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(vertical: 13),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // --- 3. Cinematic Hero Banner ---
+  Widget _buildCinematicHero() {
+    final hero = _programs[0];
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      height: 200,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(26),
+        image: DecorationImage(
+          image: AssetImage(hero['image']),
+          fit: BoxFit.cover,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.16),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(26),
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Colors.black.withValues(alpha: 0.2),
+              Colors.black.withValues(alpha: 0.85),
+            ],
+          ),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(26),
+            onTap: () => _openProgramDetails(hero),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.star_rounded,
+                                color: Colors.white, size: 13),
+                            SizedBox(width: 4),
+                            Text(
+                              'FEATURED BLUEPRINT',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.5),
-                        borderRadius: BorderRadius.circular(12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 9, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.star_rounded,
+                                color: AppColors.accentGold, size: 13),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${hero['rating']} (${hero['reviews']})',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Text(
-                        featured['rating'],
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        hero['title'],
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -0.4,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      featured['title'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.5,
-                        fontWeight: FontWeight.w800,
+                      const SizedBox(height: 4),
+                      Text(
+                        '${hero['duration']} • ${hero['frequency']} • By ${hero['coach']}',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${featured['weeks']} • ${featured['daysPerWeek']} • ${featured['coach']}',
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Text(
-                          'بینینی خشتە و یارییەکان',
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          const Text(
+                            'View Full Split & Schedule',
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 4),
-                        const Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: AppColors.primary,
-                          size: 11,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.arrow_forward_rounded,
+                            color: AppColors.primary,
+                            size: 14,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -771,150 +751,241 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  // --- Program Card Item ---
-  Widget _buildProgramCard(Map<String, dynamic> program) {
+  // --- 4. Category Filter Pills ---
+  Widget _buildCategorySelector() {
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: _categories.length,
+        itemBuilder: (context, index) {
+          final cat = _categories[index];
+          final isSelected = _selectedCategory == cat['id'];
+
+          return GestureDetector(
+            onTap: () => setState(() => _selectedCategory = cat['id']),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: isSelected ? const Color(0xFF131519) : Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: isSelected
+                      ? const Color(0xFF131519)
+                      : const Color(0xFFE9ECF0),
+                ),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.08),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ]
+                    : [],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    cat['icon'],
+                    size: 14,
+                    color: isSelected ? AppColors.primary : const Color(0xFF757A86),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    cat['title'],
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : const Color(0xFF33373F),
+                      fontSize: 12,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // --- 5. Modern Editorial Program Card ---
+  Widget _buildModernProgramCard(Map<String, dynamic> program) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 14),
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFFE9ECF0)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            blurRadius: 14,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(24),
           onTap: () => _openProgramDetails(program),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Banner Image with Badges
+              // Image with gradient and badges
               Stack(
                 children: [
                   ClipRRect(
                     borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(22)),
+                        const BorderRadius.vertical(top: Radius.circular(24)),
                     child: Image.asset(
                       program['image'],
-                      height: 140,
+                      height: 160,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
                   ),
-                  Positioned(
-                    top: 10,
-                    right: 10,
+                  Positioned.fill(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 9, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.65),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        program['level'],
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.bold,
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(24)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withValues(alpha: 0.1),
+                            Colors.black.withValues(alpha: 0.6),
+                          ],
                         ),
                       ),
                     ),
                   ),
                   Positioned(
-                    bottom: 10,
-                    left: 10,
+                    top: 12,
+                    left: 12,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.primary,
+                        color: Colors.black.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        program['rating'],
+                        program['level'].toString().toUpperCase(),
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.4,
                         ),
                       ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.6),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.star_rounded,
+                              color: AppColors.accentGold, size: 12),
+                          const SizedBox(width: 3),
+                          Text(
+                            program['rating'],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 12,
+                    left: 14,
+                    right: 14,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          program['title'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Coach ${program['coach']}',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.8),
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
 
-              // Info & Details
+              // Bottom Info & Spec Badges
               Padding(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      program['title'],
+                      program['subtitle'],
                       style: const TextStyle(
-                        fontSize: 15.5,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.lightTextPrimary,
+                        fontSize: 12.5,
+                        color: Color(0xFF676E7D),
+                        height: 1.35,
                       ),
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      program['english'],
-                      style: TextStyle(
-                        fontSize: 11.5,
-                        color: Colors.grey.shade600,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 14),
 
-                    // Badges row: duration, days, coach
+                    // Quick Specs
                     Row(
                       children: [
-                        _buildInfoChip(
+                        _buildSpecPill(
                           Icons.date_range_rounded,
-                          program['weeks'],
+                          program['duration'],
                         ),
                         const SizedBox(width: 8),
-                        _buildInfoChip(
+                        _buildSpecPill(
                           Icons.repeat_rounded,
-                          program['daysPerWeek'],
+                          program['frequency'],
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Action buttons
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () => _openProgramDetails(program),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                            ),
-                            icon: const Icon(Icons.play_circle_outline, size: 16),
-                            label: const Text(
-                              'دەستپێکردن و خشتە',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.arrow_forward_rounded,
+                            color: AppColors.primary,
+                            size: 16,
                           ),
                         ),
                       ],
@@ -929,24 +1000,24 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  Widget _buildInfoChip(IconData icon, String label) {
+  Widget _buildSpecPill(IconData icon, String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(8),
+        color: const Color(0xFFF4F6F8),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: Colors.grey.shade600),
-          const SizedBox(width: 4),
+          Icon(icon, size: 13, color: const Color(0xFF676E7D)),
+          const SizedBox(width: 5),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 10.5,
-              color: Colors.grey.shade700,
+            style: const TextStyle(
+              fontSize: 11,
               fontWeight: FontWeight.w600,
+              color: Color(0xFF33373F),
             ),
           ),
         ],
@@ -956,7 +1027,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 }
 
 // ============================================================================
-// MODAL: Program Details & Day Schedule
+// MODAL: Modern Program Details & Day Schedule (100% English)
 // ============================================================================
 class _ProgramDetailModal extends StatefulWidget {
   final Map<String, dynamic> program;
@@ -981,10 +1052,10 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
     final exercises = (currentDay?['exercises'] as List? ?? []);
 
     return Container(
-      height: MediaQuery.of(context).size.height * 0.90,
+      height: MediaQuery.of(context).size.height * 0.92,
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
       child: Column(
         children: [
@@ -992,10 +1063,10 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
           Center(
             child: Container(
               margin: const EdgeInsets.only(top: 12, bottom: 8),
-              width: 40,
+              width: 44,
               height: 5,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: const Color(0xFFE2E5EA),
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -1005,19 +1076,39 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
               children: [
-                // Banner Image
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(22),
-                  child: Image.asset(
-                    widget.program['image'],
-                    height: 180,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+                // Top Hero
+                Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: Image.asset(
+                        widget.program['image'],
+                        height: 200,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.6),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.close_rounded,
+                              color: Colors.white, size: 18),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
 
-                // Title & Coach
+                // Title & Subtitle
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1028,57 +1119,81 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                           Text(
                             widget.program['title'],
                             style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xFF131519),
+                              letterSpacing: -0.4,
                             ),
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 4),
                           Text(
-                            'ڕاهێنەر: ${widget.program['coach']} • ${widget.program['rating']}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey.shade600,
+                            'Guided by ${widget.program['coach']} (${widget.program['coachTitle']})',
+                            style: const TextStyle(
+                              fontSize: 12.5,
+                              color: Color(0xFF676E7D),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.close_rounded),
-                      onPressed: () => Navigator.pop(context),
-                    ),
                   ],
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
 
-                // Description
+                // Overview
                 Text(
-                  widget.program['description'],
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    color: Colors.grey.shade700,
-                    height: 1.4,
+                  widget.program['overview'],
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF525763),
+                    height: 1.45,
                   ),
                 ),
 
                 const SizedBox(height: 18),
-                const Divider(height: 1),
-                const SizedBox(height: 14),
 
-                // Day Selector Tabs
+                // Stat Cards Row
+                Row(
+                  children: [
+                    _buildStatCard(
+                      Icons.timer_outlined,
+                      'Duration',
+                      widget.program['duration'],
+                    ),
+                    const SizedBox(width: 8),
+                    _buildStatCard(
+                      Icons.calendar_today_rounded,
+                      'Split',
+                      widget.program['frequency'],
+                    ),
+                    const SizedBox(width: 8),
+                    _buildStatCard(
+                      Icons.fitness_center_rounded,
+                      'Level',
+                      widget.program['level'],
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 22),
+                const Divider(height: 1, color: Color(0xFFEDF0F4)),
+                const SizedBox(height: 18),
+
+                // Weekly Split Day Tabs
                 const Text(
-                  'خشتەی هەفتانەی کۆرسەکە:',
+                  'Weekly Schedule & Exercises',
                   style: TextStyle(
-                    fontSize: 14.5,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF131519),
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
 
                 SizedBox(
-                  height: 40,
+                  height: 44,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: schedule.length,
@@ -1086,23 +1201,24 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                       final isSelected = _selectedDayIndex == idx;
                       return GestureDetector(
                         onTap: () => setState(() => _selectedDayIndex = idx),
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
                           margin: const EdgeInsets.only(right: 8),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 8),
+                              horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? AppColors.primary
-                                : Colors.grey.shade100,
+                                ? const Color(0xFF131519)
+                                : const Color(0xFFF4F6F8),
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Center(
                             child: Text(
-                              'ڕۆژی ${idx + 1}',
+                              'Day ${idx + 1}',
                               style: TextStyle(
                                 color: isSelected
                                     ? Colors.white
-                                    : AppColors.lightTextPrimary,
+                                    : const Color(0xFF33373F),
                                 fontSize: 12,
                                 fontWeight: isSelected
                                     ? FontWeight.bold
@@ -1116,29 +1232,37 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                   ),
                 ),
 
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
 
-                // Day Focus Details
+                // Active Day Focus Box
                 if (currentDay != null) ...[
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: AppColors.tagCardio,
-                      borderRadius: BorderRadius.circular(14),
+                      color: AppColors.primary.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                      ),
                     ),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.flash_on_rounded,
-                            color: AppColors.primary, size: 18),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            currentDay['focus'] ?? '',
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        Text(
+                          currentDay['dayTitle'] ?? '',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.primaryDark,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          currentDay['split'] ?? '',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF676E7D),
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
@@ -1148,71 +1272,85 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
 
                   if (exercises.isEmpty)
                     Container(
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(28),
                       alignment: Alignment.center,
-                      child: Column(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF9FAFC),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Column(
                         children: [
                           Icon(Icons.bedtime_rounded,
-                              size: 40, color: Colors.blue.shade300),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'ئەمڕۆ پشووی ماسولکەکانە (Rest Day)',
+                              size: 40, color: Color(0xFF90A4AE)),
+                          SizedBox(height: 10),
+                          Text(
+                            'Active Rest & Muscle Recovery',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4),
                           Text(
-                            'خۆراکی پڕ پڕۆتین بخۆ و ئاوی پێویست بنۆشە بۆ نوێبوونەوەی خانەکان.',
+                            'Hydrate, rest, and hit your protein target for protein synthesis.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontSize: 11.5,
+                              color: Color(0xFF676E7D),
+                              fontSize: 12,
                             ),
                           ),
                         ],
                       ),
                     ),
 
-                  // Exercises list for this day
+                  // Exercises List
                   ...exercises.map((ex) {
                     return Container(
                       margin: const EdgeInsets.only(bottom: 10),
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey.shade200),
+                        color: const Color(0xFFF8F9FA),
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: const Color(0xFFE9ECF0)),
                       ),
                       child: Row(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(14),
                             child: Image.asset(
                               ex['image'],
-                              width: 58,
-                              height: 58,
+                              width: 62,
+                              height: 62,
                               fit: BoxFit.cover,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 14),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  ex['kurdish'] ?? ex['name'],
+                                  ex['name'],
                                   style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w800,
                                     fontSize: 13.5,
+                                    color: Color(0xFF131519),
                                   ),
                                 ),
-                                const SizedBox(height: 2),
+                                const SizedBox(height: 3),
                                 Text(
-                                  ex['sets'] ?? '4 Sets × 12 Reps',
-                                  style: TextStyle(
-                                    color: Colors.grey.shade600,
+                                  ex['target'],
+                                  style: const TextStyle(
+                                    color: AppColors.primary,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 3),
+                                Text(
+                                  ex['sets'],
+                                  style: const TextStyle(
+                                    color: Color(0xFF676E7D),
                                     fontSize: 11.5,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -1220,33 +1358,33 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
                               ],
                             ),
                           ),
-                          const Icon(Icons.check_circle_outline,
-                              color: AppColors.primary, size: 20),
                         ],
                       ),
                     );
                   }),
                 ],
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
 
-                // Activate Program Action Button
+                // Primary CTA: Activate Routine
                 ElevatedButton.icon(
                   onPressed: widget.onActivateProgram,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                     ),
                   ),
-                  icon: const Icon(Icons.bolt_rounded, size: 20),
+                  icon: const Icon(Icons.flash_on_rounded, size: 20),
                   label: const Text(
-                    'چالاککردنی ئەم کۆرسە و دەستپێکردنی ڕاهێنان 🚀',
+                    'Activate Routine & Start Workout',
                     style: TextStyle(
-                      fontSize: 13.5,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
+                      letterSpacing: -0.2,
                     ),
                   ),
                 ),
@@ -1254,6 +1392,43 @@ class _ProgramDetailModalState extends State<_ProgramDetailModal> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard(IconData icon, String label, String value) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF8F9FA),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: const Color(0xFFE9ECF0)),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 16, color: AppColors.primary),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 10,
+                color: Color(0xFF757A86),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              value,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF131519),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
