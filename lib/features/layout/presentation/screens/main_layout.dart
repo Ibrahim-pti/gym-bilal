@@ -120,11 +120,11 @@ class _MainLayoutState extends State<MainLayout> {
                         label: 'Calorie',
                       ),
 
-                      // 6. Profile
+                      // 6. More
                       _buildNavItem(
                         index: 5,
-                        icon: Icons.person_outline_rounded,
-                        label: 'Profile',
+                        icon: Icons.grid_view_rounded,
+                        label: 'More',
                       ),
                     ],
                   ),
