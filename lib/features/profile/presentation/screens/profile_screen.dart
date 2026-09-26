@@ -5,6 +5,12 @@ import 'package:gym_base/features/calorie/presentation/screens/supplement_tracke
 import 'package:gym_base/features/profile/presentation/widgets/fitness_calculators_sheet.dart';
 import 'package:gym_base/features/profile/presentation/widgets/gym_pass_sheet.dart';
 import 'package:gym_base/features/profile/presentation/widgets/pr_tracker_sheet.dart';
+import 'package:gym_base/features/workout/presentation/screens/muscle_recovery_screen.dart';
+import 'package:gym_base/features/profile/presentation/screens/ai_gym_coach_screen.dart';
+import 'package:gym_base/features/workout/presentation/screens/live_workout_session_screen.dart';
+import 'package:gym_base/features/calorie/presentation/screens/ai_food_scanner_screen.dart';
+import 'package:gym_base/features/community/presentation/screens/gym_leaderboard_screen.dart';
+import 'package:gym_base/features/calorie/presentation/widgets/water_wave_tracker_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -55,6 +61,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         initialPrs: _prs,
         onSave: (updated) => setState(() => _prs = updated),
       ),
+    );
+  }
+
+  void _openWaterTracker() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const WaterWaveTrackerSheet(),
     );
   }
 
@@ -326,9 +341,218 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
 
-          // 2. NEW: FITNESS TOOLS & CALCULATORS HUB 🧮
+          // === NEXT-GEN AI & ADVANCED INNOVATIONS 🚀 ===
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Next-Gen AI & Innovations 🚀',
+                style: TextStyle(
+                  fontSize: 16.5,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.lightTextPrimary,
+                  letterSpacing: -0.3,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.primary, Color(0xFFEC4899)],
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'SMART AI ✨',
+                  style: TextStyle(color: Colors.white, fontSize: 9.5, fontWeight: FontWeight.w900),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // 1. Featured Coach Bilal AI Banner
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const AiGymCoachScreen()));
+            },
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1A1C29), Color(0xFF0E1017)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(color: AppColors.primary.withValues(alpha: 0.4), width: 1.2),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.15),
+                    blurRadius: 14,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: const LinearGradient(
+                        colors: [AppColors.primary, Color(0xFFEC4899)],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.4),
+                          blurRadius: 12,
+                        ),
+                      ],
+                    ),
+                    child: const Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 26),
+                  ),
+                  const SizedBox(width: 14),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Coach Bilal AI 🤖',
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 15.5),
+                            ),
+                            SizedBox(width: 6),
+                            Text(
+                              'ONLINE',
+                              style: TextStyle(color: Color(0xFF10B981), fontSize: 9.5, fontWeight: FontWeight.w900),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 3),
+                        Text(
+                          'Ask anything about workouts, diet, form & custom splits.',
+                          style: TextStyle(color: Colors.white70, fontSize: 11.5, height: 1.3),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white70, size: 14),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // 2 Grid Tiles for Advanced Features: Muscle Heatmap & Live Session
+          Row(
+            children: [
+              _buildFeatureTile(
+                title: 'Muscle Heatmap',
+                subtitle: 'Anatomical Recovery',
+                tag: '78% Ready',
+                icon: Icons.accessibility_new_rounded,
+                color: const Color(0xFF10B981),
+                bgGradient: const [Color(0xFF111E1A), Color(0xFF0C1412)],
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const MuscleRecoveryScreen()));
+                },
+              ),
+              const SizedBox(width: 10),
+              _buildFeatureTile(
+                title: 'Live Gym Mode',
+                subtitle: 'Timer & Rest Countdown',
+                tag: 'LIVE 🔴',
+                icon: Icons.timer_outlined,
+                color: const Color(0xFFEF4444),
+                bgGradient: const [Color(0xFF221316), Color(0xFF140D0E)],
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const LiveWorkoutSessionScreen()));
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+
+          // 2 Grid Tiles: AI Food Vision & Leaderboard Podium
+          Row(
+            children: [
+              _buildFeatureTile(
+                title: 'AI Food Vision',
+                subtitle: 'Camera Calorie Scan',
+                tag: 'AI SCAN 📸',
+                icon: Icons.camera_alt_outlined,
+                color: const Color(0xFF06B6D4),
+                bgGradient: const [Color(0xFF0F1E24), Color(0xFF0A1317)],
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const AiFoodScannerScreen()));
+                },
+              ),
+              const SizedBox(width: 10),
+              _buildFeatureTile(
+                title: 'Gym Leaderboard',
+                subtitle: 'Ranks & Top 3 Podium',
+                tag: 'RANK #4 👑',
+                icon: Icons.emoji_events_rounded,
+                color: const Color(0xFFF59E0B),
+                bgGradient: const [Color(0xFF241C10), Color(0xFF151009)],
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const GymLeaderboardScreen()));
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+
+          // Hydration Wave Quick Card
+          InkWell(
+            onTap: _openWaterTracker,
+            borderRadius: BorderRadius.circular(18),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: const Color(0xFFBAE6FD)),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE0F2FE),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(Icons.water_drop_rounded, color: Color(0xFF0284C7), size: 22),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hydration Wave Tracker 💧',
+                          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5),
+                        ),
+                        Text(
+                          '1.8L of 2.5L logged today (72%) • Tap to log water',
+                          style: TextStyle(color: Color(0xFF0369A1), fontSize: 11),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: Color(0xFF0284C7)),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+
+          // 2. FITNESS TOOLS & CALCULATORS HUB 🧮
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -379,7 +603,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 18),
 
-          // 3. NEW: PERSONAL RECORDS (PRs) SHOWCASE 🏆
+          // 3. PERSONAL RECORDS (PRs) SHOWCASE 🏆
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -622,7 +846,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 16),
 
-          // 6. NEW: GYM WORKOUT PLAYLISTS 🎧
+          // 6. GYM WORKOUT PLAYLISTS 🎧
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -714,7 +938,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 20),
 
-          // 9. NEW: APP PREFERENCES & QUICK SETTINGS ⚙️
+          // 9. APP PREFERENCES & QUICK SETTINGS ⚙️
           const Text(
             'Settings & Preferences ⚙️',
             style: TextStyle(
@@ -850,6 +1074,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // --- Helper Widgets ---
+
+  Widget _buildFeatureTile({
+    required String title,
+    required String subtitle,
+    required String tag,
+    required IconData icon,
+    required Color color,
+    required List<Color> bgGradient,
+    required VoidCallback onTap,
+  }) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 116,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: bgGradient, begin: Alignment.topLeft, end: Alignment.bottomRight),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: color.withValues(alpha: 0.25), width: 1.2),
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: 0.08),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(icon, color: color, size: 17),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      tag,
+                      style: TextStyle(color: color, fontSize: 8.5, fontWeight: FontWeight.w900),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 13),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(color: Colors.white60, fontSize: 10),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildToolCard({
     required String title,

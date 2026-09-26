@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 import 'package:gym_base/features/profile/presentation/screens/body_transformation_screen.dart';
 import 'package:gym_base/features/calorie/presentation/screens/supplement_tracker_screen.dart';
+import 'package:gym_base/features/calorie/presentation/widgets/water_wave_tracker_sheet.dart';
+import 'package:gym_base/features/workout/presentation/screens/live_workout_session_screen.dart';
+import 'package:gym_base/features/profile/presentation/screens/ai_gym_coach_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(int)? onNavigateTab;
@@ -131,6 +134,47 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
+
+                    // AI Coach Quick Button
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AiGymCoachScreen()),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5.5),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [AppColors.primary, Color(0xFFEC4899)],
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Row(
+                          children: [
+                            Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 13),
+                            SizedBox(width: 4),
+                            Text(
+                              'AI Coach',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
 
                     // Pro Badge
                     Container(
