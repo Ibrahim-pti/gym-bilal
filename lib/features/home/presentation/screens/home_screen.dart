@@ -75,8 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  // Coaches & Gym Branches State
-  String _selectedCoachBranchTab = 'coaches';
+  // Coaches & Gym Branches Data
 
   final List<CoachData> _coaches = const [
     CoachData(
@@ -646,7 +645,21 @@ class _HomeScreenState extends State<HomeScreen> {
               // ==========================================
               _buildDailyActivitySection(),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
+
+              // ==========================================
+              // 1. Gym Branches (قاعەکانی جیم بیلال) 🏢📍
+              // ==========================================
+              _buildGymBranchesSection(),
+
+              const SizedBox(height: 18),
+
+              // ==========================================
+              // 2. Certified Coaches (کاپتنەکان و ڕاهێنەران) 🏋️‍♂️👑
+              // ==========================================
+              _buildCoachesSection(),
+
+              const SizedBox(height: 18),
 
               // 3 Quick Action Cards: Gym Workouts, Nutrition & Calories, Progress & Analytics
               Padding(
@@ -711,14 +724,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // ==========================================
               _buildTodayRoutineSection(),
 
-              const SizedBox(height: 18),
-
-              // ==========================================
-              // 2.5. Coaches & Gym Branches (کاپتنەکان و قاعەکان) 🏢🏋️
-              // ==========================================
-              _buildCoachesAndBranchesSection(),
-
-              const SizedBox(height: 18),
+              const SizedBox(height: 16),
 
               // ==========================================
               // 3. Daily Fuel & Macros Breakdown 🥗
@@ -2036,13 +2042,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // ----------------------------------------------------
-  // SECTION: Coaches & Gym Branches (کاپتنەکان و قاعەکان) 🏢🏋️
+  // SECTION 1: Gym Branches (قاعەکانی جیم) 🏢📍
   // ----------------------------------------------------
-  Widget _buildCoachesAndBranchesSection() {
+  Widget _buildGymBranchesSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Title & Switcher Row
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
@@ -2052,7 +2057,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Coaches & Gym Branches',
+                    'Gym Branches 🏢',
                     style: TextStyle(
                       fontSize: 16.5,
                       fontWeight: FontWeight.w900,
@@ -2061,7 +2066,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Text(
-                    'کاپتنەکان و لقی قاعەکان',
+                    'لقی قاعەکانی جیم بیلال لە هەولێر',
                     style: TextStyle(
                       fontSize: 11,
                       color: AppColors.lightTextSecondary,
@@ -2070,96 +2075,100 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              // Segmented Tab Toggle
               Container(
-                padding: const EdgeInsets.all(3),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(12),
+                  color: const Color(0xFF10B981).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => setState(() => _selectedCoachBranchTab = 'coaches'),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: _selectedCoachBranchTab == 'coaches'
-                              ? AppColors.primary
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        child: Text(
-                          'Coaches 🏋️',
-                          style: TextStyle(
-                            color: _selectedCoachBranchTab == 'coaches'
-                                ? Colors.white
-                                : Colors.black87,
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => setState(() => _selectedCoachBranchTab = 'branches'),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: _selectedCoachBranchTab == 'branches'
-                              ? AppColors.primary
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        child: Text(
-                          'Branches 🏢',
-                          style: TextStyle(
-                            color: _selectedCoachBranchTab == 'branches'
-                                ? Colors.white
-                                : Colors.black87,
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                child: const Text(
+                  '3 Branches 🟢',
+                  style: TextStyle(color: Color(0xFF059669), fontSize: 10.5, fontWeight: FontWeight.w900),
                 ),
               ),
             ],
           ),
         ),
         const SizedBox(height: 12),
-
-        // Content
-        if (_selectedCoachBranchTab == 'coaches')
-          SizedBox(
-            height: 200,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              scrollDirection: Axis.horizontal,
-              itemCount: _coaches.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 12),
-              itemBuilder: (context, index) {
-                final coach = _coaches[index];
-                return _buildCoachCard(coach);
-              },
-            ),
-          )
-        else
-          SizedBox(
-            height: 220,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              scrollDirection: Axis.horizontal,
-              itemCount: _gymBranches.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 14),
-              itemBuilder: (context, index) {
-                final branch = _gymBranches[index];
-                return _buildBranchCard(branch);
-              },
-            ),
+        SizedBox(
+          height: 220,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            scrollDirection: Axis.horizontal,
+            itemCount: _gymBranches.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 14),
+            itemBuilder: (context, index) {
+              final branch = _gymBranches[index];
+              return _buildBranchCard(branch);
+            },
           ),
+        ),
+      ],
+    );
+  }
+
+  // ----------------------------------------------------
+  // SECTION 2: Certified Coaches (کاپتنەکان و ڕاهێنەران) 🏋️‍♂️👑
+  // ----------------------------------------------------
+  Widget _buildCoachesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Certified Coaches 🏋️‍♂️',
+                    style: TextStyle(
+                      fontSize: 16.5,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.lightTextPrimary,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                  Text(
+                    'کاپتنە نێودەوڵەتی و باوەڕپێکراوەکان',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppColors.lightTextSecondary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'Elite Team 👑',
+                  style: TextStyle(color: AppColors.primary, fontSize: 10.5, fontWeight: FontWeight.w900),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 200,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            scrollDirection: Axis.horizontal,
+            itemCount: _coaches.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              final coach = _coaches[index];
+              return _buildCoachCard(coach);
+            },
+          ),
+        ),
       ],
     );
   }
