@@ -240,7 +240,7 @@ class _AiGymCoachScreenState extends State<AiGymCoachScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 14),
               scrollDirection: Axis.horizontal,
               itemCount: _suggestedPrompts.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              separatorBuilder: (context, index) => const SizedBox(width: 8),
               itemBuilder: (context, i) {
                 final prompt = _suggestedPrompts[i];
                 return GestureDetector(

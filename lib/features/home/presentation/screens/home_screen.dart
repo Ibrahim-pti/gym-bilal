@@ -448,7 +448,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(width: 10),
                                 ElevatedButton.icon(
                                   onPressed: () {
-                                    widget.onNavigateTab?.call(2);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => const LiveWorkoutSessionScreen(),
+                                      ),
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.primary,
@@ -682,6 +687,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   targetText: '$_waterTarget L',
                   percent: waterPercent,
                   showAddButton: true,
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (_) => WaterWaveTrackerSheet(
+                        currentLiters: _waterLiters,
+                        goalLiters: _waterTarget,
+                        onWaterUpdated: (val) => setState(() => _waterLiters = val),
+                      ),
+                    );
+                  },
                   onAdd: () {
                     _addWater(0.25);
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
