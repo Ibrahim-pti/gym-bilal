@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 import 'package:gym_base/features/calorie/presentation/screens/camera_food_scanner_screen.dart';
 import 'package:gym_base/features/calorie/presentation/screens/supplement_tracker_screen.dart';
+import 'package:gym_base/features/calorie/presentation/screens/weekly_meal_planner_screen.dart';
 
 class CalorieScreen extends StatefulWidget {
   const CalorieScreen({super.key});
@@ -180,6 +181,11 @@ class _CalorieScreenState extends State<CalorieScreen> {
 
           // 3.5. DAILY SUPPLEMENT STACK TRACKER
           _buildSupplementsTrackerCard(),
+
+          const SizedBox(height: 12),
+
+          // 3.6. WEEKLY MEAL PREP & GROCERY CHECKLIST CARD
+          _buildWeeklyMealPrepCard(),
 
           const SizedBox(height: 20),
 
@@ -641,6 +647,79 @@ class _CalorieScreenState extends State<CalorieScreen> {
             child: const Text('Stack 💊', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800)),
           ),
         ],
+      ),
+    );
+  }
+
+  // --- 3.6. WEEKLY MEAL PREP & GROCERY CARD ---
+  Widget _buildWeeklyMealPrepCard() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const WeeklyMealPlannerScreen()),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF0F261E), Color(0xFF091612)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.3)),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF10B981).withValues(alpha: 0.12),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF10B981).withValues(alpha: 0.2),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.restaurant_menu_rounded, color: Color(0xFF10B981), size: 20),
+            ),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Weekly Meal Prep & Groceries',
+                        style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w900, color: Colors.white),
+                      ),
+                      SizedBox(width: 5),
+                      Text('🛒', style: TextStyle(fontSize: 12)),
+                    ],
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    'Bulking & Cutting Plans • Market Checklist',
+                    style: TextStyle(fontSize: 11.5, color: Color(0xFF6EE7B7), fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFF10B981),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text('View Plan', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w900)),
+            ),
+          ],
+        ),
       ),
     );
   }
