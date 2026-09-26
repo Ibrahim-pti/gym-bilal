@@ -5,6 +5,8 @@ import 'package:gym_base/features/calorie/presentation/screens/supplement_tracke
 import 'package:gym_base/features/calorie/presentation/widgets/water_wave_tracker_sheet.dart';
 import 'package:gym_base/features/workout/presentation/screens/live_workout_session_screen.dart';
 import 'package:gym_base/features/profile/presentation/screens/ai_gym_coach_screen.dart';
+import 'package:gym_base/features/home/presentation/widgets/coach_profile_sheet.dart';
+import 'package:gym_base/features/home/presentation/widgets/gym_branch_sheet.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(int)? onNavigateTab;
@@ -71,6 +73,119 @@ class _HomeScreenState extends State<HomeScreen> {
       'weight': '22 kg',
       'done': false,
     },
+  ];
+
+  // Coaches & Gym Branches State
+  String _selectedCoachBranchTab = 'coaches';
+
+  final List<CoachData> _coaches = const [
+    CoachData(
+      id: 'bilal',
+      name: 'کاپتن بیلال (Coach Bilal)',
+      title: 'سەرپەرشتیاری گشتی • Master Trainer 👑',
+      branchName: 'لقی سەرەکی - بەختیاری',
+      experience: '12+ Years',
+      rating: '5.0',
+      athletesCount: 240,
+      image: 'assets/images/user_avatar.jpg',
+      bio: 'پاڵەوانی لەشجوانی و ڕاهێنەری باوەڕپێکراوی نێودەوڵەتی. پسپۆڕ لە دروستکردنی پلانی ماسولکە و بەرزکردنەوەی هێز.',
+      specialties: ['Hypertrophy & Mass', 'Contest Prep', 'Strength Coaching'],
+      phone: '+964 750 111 2233',
+    ),
+    CoachData(
+      id: 'rawand',
+      name: 'کاپتن ڕەوەند (Coach Rawand)',
+      title: 'پسپۆڕی کرۆسفیت و کێشی قورس 🏋️',
+      branchName: 'لقی سەروەران',
+      experience: '8+ Years',
+      rating: '4.9',
+      athletesCount: 180,
+      image: 'assets/images/onboarding_athlete.jpg',
+      bio: 'پسپۆڕی جووڵە قورسەکانی Big 3 (Squat, Bench, Deadlift) و بەرزکردنەوەی ئەوپەڕی هێزی جەستەیی.',
+      specialties: ['Powerlifting', 'CrossFit & Conditioning', 'Form Correction'],
+      phone: '+964 750 444 5566',
+    ),
+    CoachData(
+      id: 'sara',
+      name: 'کاپتن سارا (Coach Sara)',
+      title: 'ڕاهێنەری خانمان و پیلاتس 🌸',
+      branchName: 'لقی خانمان - VIP Ladies',
+      experience: '6+ Years',
+      rating: '4.9',
+      athletesCount: 160,
+      image: 'assets/images/female_fitness_banner.jpg',
+      bio: 'پسپۆڕ لە دابەزاندنی کێشی خانمان، ڕێکخستنی کەمەر، پیلاتس و ڕێجیمی تەندروست بۆ لەشێکی نموونەیی.',
+      specialties: ['Female Fitness', 'Pilates & Mobility', 'Fat Loss & Tone'],
+      phone: '+964 750 777 8899',
+    ),
+    CoachData(
+      id: 'aram',
+      name: 'کاپتن ئارام (Coach Aram)',
+      title: 'ڕاوێژکاری خۆراک و دیستینس 🥗',
+      branchName: 'لقی سەرەکی و سەروەران',
+      experience: '7+ Years',
+      rating: '4.8',
+      athletesCount: 120,
+      image: 'assets/images/male_fitness_banner.jpg',
+      bio: 'پسپۆڕ لە شیکاری خوێن، کێش دابەزاندن، گۆڕینی چەوری بۆ ماسولکە و بەکارهێنانی زانستییانەی سەپلیمێنت.',
+      specialties: ['Diet & Nutrition', 'Rehab & Recovery', 'Lean Bulking'],
+      phone: '+964 750 222 3344',
+    ),
+  ];
+
+  final List<GymBranchData> _gymBranches = const [
+    GymBranchData(
+      id: 'bakhtiyari',
+      name: 'Bilal Gym - Main Branch',
+      kurdishName: 'لقی سەرەکی - بەختیاری',
+      address: 'هەولێر، شەقامی بەختیاری، بەرامبەر پارکی بەختیاری',
+      openHours: '06:00 AM - 12:00 AM',
+      isOpenNow: true,
+      headCoach: 'کاپتن بیلال',
+      phone: '+964 750 111 2233',
+      image: 'assets/images/workout_back.jpg',
+      amenities: [
+        'Hammer Strength Machines',
+        'Sauna & Steam Bath',
+        'Jacuzzi Pool',
+        'Free Private Parking',
+        'Protein & Shake Bar',
+      ],
+    ),
+    GymBranchData(
+      id: 'sarwaran',
+      name: 'Bilal Gym - Sarwaran Branch',
+      kurdishName: 'لقی دووەم - سەروەران',
+      address: 'هەولێر، شەقامی ٦٠ مەتری، نزیک فلکەی سەروەران',
+      openHours: '07:00 AM - 11:30 PM',
+      isOpenNow: true,
+      headCoach: 'کاپتن ڕەوەند',
+      phone: '+964 750 444 5566',
+      image: 'assets/images/onboarding_athlete.jpg',
+      amenities: [
+        'CrossFit & Functional Arena',
+        'Advanced Cardio Deck',
+        'Personal Training Suites',
+        'Clinical Nutritionist Desk',
+      ],
+    ),
+    GymBranchData(
+      id: 'ladies',
+      name: 'Bilal Gym - VIP Ladies Branch',
+      kurdishName: 'لقی خانمان - VIP Ladies',
+      address: 'هەولێر، وەزیران، شەقامی پزیشکان',
+      openHours: '08:30 AM - 09:30 PM',
+      isOpenNow: true,
+      headCoach: 'کاپتن سارا',
+      phone: '+964 750 777 8899',
+      image: 'assets/images/female_fitness_banner.jpg',
+      amenities: [
+        '100% Private Female Facility',
+        'Pilates & Yoga Studio',
+        'Indoor Swimming Pool',
+        'Organic Smoothie & Detox Bar',
+      ],
+    ),
   ];
 
   @override
@@ -596,7 +711,14 @@ class _HomeScreenState extends State<HomeScreen> {
               // ==========================================
               _buildTodayRoutineSection(),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
+
+              // ==========================================
+              // 2.5. Coaches & Gym Branches (کاپتنەکان و قاعەکان) 🏢🏋️
+              // ==========================================
+              _buildCoachesAndBranchesSection(),
+
+              const SizedBox(height: 18),
 
               // ==========================================
               // 3. Daily Fuel & Macros Breakdown 🥗
@@ -1912,4 +2034,398 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  // ----------------------------------------------------
+  // SECTION: Coaches & Gym Branches (کاپتنەکان و قاعەکان) 🏢🏋️
+  // ----------------------------------------------------
+  Widget _buildCoachesAndBranchesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Title & Switcher Row
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Coaches & Gym Branches',
+                    style: TextStyle(
+                      fontSize: 16.5,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.lightTextPrimary,
+                      letterSpacing: -0.3,
+                    ),
+                  ),
+                  Text(
+                    'کاپتنەکان و لقی قاعەکان',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppColors.lightTextSecondary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              // Segmented Tab Toggle
+              Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => setState(() => _selectedCoachBranchTab = 'coaches'),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: _selectedCoachBranchTab == 'coaches'
+                              ? AppColors.primary
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        child: Text(
+                          'Coaches 🏋️',
+                          style: TextStyle(
+                            color: _selectedCoachBranchTab == 'coaches'
+                                ? Colors.white
+                                : Colors.black87,
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => setState(() => _selectedCoachBranchTab = 'branches'),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: _selectedCoachBranchTab == 'branches'
+                              ? AppColors.primary
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        child: Text(
+                          'Branches 🏢',
+                          style: TextStyle(
+                            color: _selectedCoachBranchTab == 'branches'
+                                ? Colors.white
+                                : Colors.black87,
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // Content
+        if (_selectedCoachBranchTab == 'coaches')
+          SizedBox(
+            height: 200,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              scrollDirection: Axis.horizontal,
+              itemCount: _coaches.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                final coach = _coaches[index];
+                return _buildCoachCard(coach);
+              },
+            ),
+          )
+        else
+          SizedBox(
+            height: 220,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              scrollDirection: Axis.horizontal,
+              itemCount: _gymBranches.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 14),
+              itemBuilder: (context, index) {
+                final branch = _gymBranches[index];
+                return _buildBranchCard(branch);
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildCoachCard(CoachData coach) {
+    return Container(
+      width: 220,
+      padding: const EdgeInsets.all(13),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundImage: AssetImage(coach.image),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF10B981),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.check, size: 9, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      coach.name.split(' (').first,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
+                    ),
+                    Text(
+                      coach.experience,
+                      style: const TextStyle(color: AppColors.primary, fontSize: 10.5, fontWeight: FontWeight.w700),
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.star_rounded, size: 13, color: Color(0xFFFBBF24)),
+                        const SizedBox(width: 2),
+                        Text(
+                          coach.rating,
+                          style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800),
+                        ),
+                        Text(
+                          ' (${coach.athletesCount}+)',
+                          style: TextStyle(fontSize: 9.5, color: Colors.grey.shade500),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+
+          // Branch Badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8FAFC),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.grey.shade200),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.location_on_outlined, size: 12, color: AppColors.primary),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    coach.branchName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 10, color: Colors.grey.shade700, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Spacer(),
+
+          // Buttons: View Profile & WhatsApp
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 7),
+                    minimumSize: Size.zero,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (_) => CoachProfileSheet(coach: coach),
+                    );
+                  },
+                  child: const Text('Profile 👤', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800)),
+                ),
+              ),
+              const SizedBox(width: 6),
+              IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: const Color(0xFF25D366).withValues(alpha: 0.15),
+                  padding: const EdgeInsets.all(7),
+                  minimumSize: Size.zero,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Opening WhatsApp with ${coach.name}... 💬')),
+                  );
+                },
+                icon: const Icon(Icons.chat_bubble_rounded, size: 14, color: Color(0xFF25D366)),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBranchCard(GymBranchData branch) {
+    return Container(
+      width: 270,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Branch Cover
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                child: Image.asset(
+                  branch.image,
+                  height: 95,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF10B981),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    'OPEN NOW 🟢',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 9),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(11),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        branch.kurdishName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
+                      ),
+                    ),
+                    Text(
+                      branch.openHours.split(' - ').first,
+                      style: TextStyle(fontSize: 10, color: Colors.grey.shade600, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Row(
+                  children: [
+                    const Icon(Icons.location_on_outlined, size: 12, color: Colors.grey),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        branch.address,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 10.5, color: Colors.grey.shade500),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 9),
+
+                // Button: Explore Branch
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF181B22),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 7),
+                      minimumSize: Size.zero,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (_) => GymBranchSheet(branch: branch),
+                      );
+                    },
+                    child: const Text('Explore Branch (زانیاری قاعە) 🏢', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
+
