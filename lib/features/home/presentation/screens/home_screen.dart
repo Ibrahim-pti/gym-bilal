@@ -5,7 +5,7 @@ import 'package:gym_base/features/calorie/presentation/screens/supplement_tracke
 import 'package:gym_base/features/calorie/presentation/widgets/water_wave_tracker_sheet.dart';
 import 'package:gym_base/features/workout/presentation/screens/live_workout_session_screen.dart';
 import 'package:gym_base/features/profile/presentation/screens/ai_gym_coach_screen.dart';
-
+import 'package:gym_base/features/profile/presentation/screens/subscription_plans_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(int)? onNavigateTab;
@@ -177,33 +177,50 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(width: 8),
 
-                    // Pro Badge
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF7EB),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: const Color(0xFFFFD494),
-                          width: 1.2,
-                        ),
-                      ),
-                      child: const Row(
-                        children: [
-                          Text(
-                            'Pro',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xFFC76B00),
-                            ),
+                    // Subscription (ئیشتراک) Badge
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const SubscriptionPlansScreen(),
                           ),
-                          SizedBox(width: 4),
-                          Text('👑', style: TextStyle(fontSize: 12)),
-                        ],
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 5.5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF7EB),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: const Color(0xFFFFD494),
+                            width: 1.2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFFC76B00).withValues(alpha: 0.1),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Row(
+                          children: [
+                            Text(
+                              'PRO',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFFC76B00),
+                              ),
+                            ),
+                            SizedBox(width: 4),
+                            Text('👑', style: TextStyle(fontSize: 12)),
+                          ],
+                        ),
                       ),
                     ),
                   ],

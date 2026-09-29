@@ -11,6 +11,8 @@ import 'package:gym_base/features/workout/presentation/screens/live_workout_sess
 import 'package:gym_base/features/calorie/presentation/screens/ai_food_scanner_screen.dart';
 import 'package:gym_base/features/community/presentation/screens/gym_leaderboard_screen.dart';
 import 'package:gym_base/features/calorie/presentation/widgets/water_wave_tracker_sheet.dart';
+import 'package:gym_base/features/profile/presentation/screens/subscription_plans_screen.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -248,19 +250,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               const SizedBox(width: 6),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFF7EB),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: const Color(0xFFFFD494)),
-                                ),
-                                child: const Text(
-                                  'PRO 👑',
-                                  style: TextStyle(
-                                    fontSize: 9.5,
-                                    fontWeight: FontWeight.w900,
-                                    color: Color(0xFFC76B00),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => const SubscriptionPlansScreen()),
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFF7EB),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: const Color(0xFFFFD494)),
+                                  ),
+                                  child: const Text(
+                                    'PRO 👑',
+                                    style: TextStyle(
+                                      fontSize: 9.5,
+                                      fontWeight: FontWeight.w900,
+                                      color: Color(0xFFC76B00),
+                                    ),
                                   ),
                                 ),
                               ),

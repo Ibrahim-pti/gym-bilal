@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
+import 'package:gym_base/features/profile/presentation/screens/subscription_plans_screen.dart';
+
 
 class GymPassSheet extends StatelessWidget {
   const GymPassSheet({super.key});
@@ -35,7 +37,7 @@ class GymPassSheet extends StatelessWidget {
                   color: const Color(0xFFFEF3C7),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(Icons.qr_code_2_rounded, color: Color(0xFFD97706), size: 22),
+                child: const Icon(Icons.workspace_premium_rounded, color: Color(0xFFD97706), size: 22),
               ),
               const SizedBox(width: 12),
               const Column(
@@ -44,7 +46,7 @@ class GymPassSheet extends StatelessWidget {
                   Text(
                     'Digital Gym Pass 🎟️',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 17,
                       fontWeight: FontWeight.w900,
                       color: AppColors.lightTextPrimary,
                     ),
@@ -52,7 +54,7 @@ class GymPassSheet extends StatelessWidget {
                   Text(
                     'Scan at reception or entrance gate',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 11.5,
                       color: AppColors.lightTextSecondary,
                     ),
                   ),
@@ -101,14 +103,27 @@ class GymPassSheet extends StatelessWidget {
                           child: const Icon(Icons.fitness_center_rounded, color: Colors.white, size: 16),
                         ),
                         const SizedBox(width: 8),
-                        const Text(
-                          'BILAL GYM PRO',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.2,
-                          ),
+                        const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'BILAL GYM PRO VIP',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1.1,
+                              ),
+                            ),
+                            Text(
+                              'Annual VIP Membership',
+                              style: TextStyle(
+                                color: Colors.white60,
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -121,13 +136,13 @@ class GymPassSheet extends StatelessWidget {
                       ),
                       child: const Row(
                         children: [
-                          Icon(Icons.circle, color: Color(0xFF10B981), size: 8),
+                          Icon(Icons.circle, color: Color(0xFF10B981), size: 7),
                           SizedBox(width: 5),
                           Text(
                             'ACTIVE',
                             style: TextStyle(
                               color: Color(0xFF10B981),
-                              fontSize: 10.5,
+                              fontSize: 10,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -136,7 +151,7 @@ class GymPassSheet extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 18),
 
                 // QR Code Display
                 Container(
@@ -149,8 +164,8 @@ class GymPassSheet extends StatelessWidget {
                     children: [
                       // Simulated QR Matrix
                       SizedBox(
-                        width: 140,
-                        height: 140,
+                        width: 130,
+                        height: 130,
                         child: CustomPaint(
                           painter: _QrPainter(),
                         ),
@@ -177,7 +192,7 @@ class GymPassSheet extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                        Text('MEMBER', style: TextStyle(color: Colors.white54, fontSize: 10, fontWeight: FontWeight.w700)),
+                        Text('MEMBER', style: TextStyle(color: Colors.white54, fontSize: 9.5, fontWeight: FontWeight.w700)),
                         SizedBox(height: 2),
                         Text('Aryan Rathore', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900)),
                       ],
@@ -185,7 +200,7 @@ class GymPassSheet extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: const [
-                        Text('EXPIRES IN', style: TextStyle(color: Colors.white54, fontSize: 10, fontWeight: FontWeight.w700)),
+                        Text('EXPIRES IN', style: TextStyle(color: Colors.white54, fontSize: 9.5, fontWeight: FontWeight.w700)),
                         SizedBox(height: 2),
                         Text('24 Days Left', style: TextStyle(color: Color(0xFFFBBF24), fontSize: 14, fontWeight: FontWeight.w900)),
                       ],
@@ -202,9 +217,41 @@ class GymPassSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildPerk('Locker #42', Icons.lock_outline),
-              _buildPerk('Sauna Access', Icons.hot_tub_rounded),
+              _buildPerk('Sauna & Jacuzzi', Icons.hot_tub_rounded),
               _buildPerk('Towel Service', Icons.check_circle_outline_rounded),
             ],
+          ),
+          const SizedBox(height: 18),
+
+          // Renew & Change Plan Button
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.pop(context); // Close sheet
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SubscriptionPlansScreen()),
+                );
+              },
+              icon: const Icon(Icons.bolt_rounded, color: Colors.white),
+              label: const Text(
+                'Change or Renew Plan ⚡',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+            ),
           ),
         ],
       ),
