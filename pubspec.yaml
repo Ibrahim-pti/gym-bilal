@@ -40,6 +40,9 @@ dependencies:
   timezone: ^0.11.1
   rasedi_flutter_sdk: 1.0.3
   url_launcher: ^6.3.2
+  webview_flutter: ^4.14.1
+  webview_flutter_android: ^4.14.1
+  webview_flutter_wkwebview: ^3.26.2
 
 dev_dependencies:
   flutter_test:

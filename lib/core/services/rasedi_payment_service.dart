@@ -45,9 +45,9 @@ class RasediPaymentService {
     try {
       final uri = Uri.parse(url);
       if (await canLaunchUrl(uri)) {
-        return await launchUrl(uri, mode: LaunchMode.externalApplication);
+        return await launchUrl(uri, mode: LaunchMode.inAppWebView);
       }
-      return await launchUrl(uri);
+      return await launchUrl(uri, mode: LaunchMode.inAppWebView);
     } catch (e) {
       return false;
     }

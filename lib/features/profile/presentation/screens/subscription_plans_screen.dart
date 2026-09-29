@@ -5,6 +5,7 @@ import 'package:gym_base/core/theme/app_colors.dart';
 import 'package:gym_base/features/profile/presentation/widgets/gym_pass_sheet.dart';
 import 'package:rasedi_flutter_sdk/rasedi_flutter_sdk.dart';
 import 'package:gym_base/core/services/rasedi_payment_service.dart';
+import 'package:gym_base/core/widgets/rasedi_webview_screen.dart'; // RasediNativePaymentProcessor
 
 
 
@@ -733,15 +734,30 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
 
       setState(() => _isProcessing = false);
 
-      // Launch Rasedi Checkout URL safely
-      await RasediPaymentService().openPaymentUrl(response.body.redirectUrl);
-
       if (!mounted) return;
-      _showPaymentVerificationSheet(
-        plan: plan,
-        method: method,
-        referenceCode: response.body.referenceCode,
-        redirectUrl: response.body.redirectUrl,
+
+      // Open native payment processor — hidden WebView + opens banking app directly
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          fullscreenDialog: true,
+          builder: (_) => RasediNativePaymentProcessor(
+            checkoutUrl: response.body.redirectUrl,
+            referenceCode: response.body.referenceCode,
+            planTitle: plan['title'],
+            amount: plan['price'],
+            gatewayName: method['title'].toString().split(' (').first,
+            onPaymentClosed: () {
+              Navigator.of(context).pop();
+              // Show verification sheet so user can check payment status
+              _showPaymentVerificationSheet(
+                plan: plan,
+                method: method,
+                referenceCode: response.body.referenceCode,
+                redirectUrl: response.body.redirectUrl,
+              );
+            },
+          ),
+        ),
       );
     } catch (e) {
       setState(() => _isProcessing = false);
@@ -754,6 +770,7 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
       );
     }
   }
+
 
   void _showPaymentVerificationSheet({
     required Map<String, dynamic> plan,
@@ -838,14 +855,7 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          Text(
-                            'Ref: #$referenceCode',
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.5),
-                              fontSize: 11.5,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+
                         ],
                       ),
                     ),
