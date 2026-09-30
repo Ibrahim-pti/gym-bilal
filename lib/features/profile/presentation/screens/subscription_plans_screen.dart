@@ -20,73 +20,37 @@ class SubscriptionPlansScreen extends StatefulWidget {
 
 class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
   late String _selectedPlanId;
-  String _selectedPayment = 'fib'; // 'fib', 'fastpay', 'card', 'cash'
+  String _selectedPayment = 'fastpay'; // 'balance', 'fib', 'fastpay', 'card'
   bool _isProcessing = false;
 
   final List<Map<String, dynamic>> _paymentMethods = [
     {
+      'id': 'balance',
+      'title': 'باڵانسی هەژمار',
+      'icon': 'balance',
+      'color': const Color(0xFF8B5CF6),
+      'gateways': <Gateway>[],
+    },
+    {
       'id': 'fib',
-      'title': 'FIB Bank (First Iraqi Bank)',
-      'subtitle': 'Pay instantly with FIB app or QR scan',
-      'badge': 'RECOMMENDED ⚡',
-      'icon': Icons.account_balance_rounded,
+      'title': 'FIB',
+      'icon': 'fib',
       'color': const Color(0xFF00A59B),
-      'instructions': 'You will be redirected to the secure FIB checkout. Scan the QR code or approve the transfer in your FIB mobile banking app.',
       'gateways': [Gateway.FIB],
-      'steps': [
-        'Tap proceed to generate a secure FIB payment session.',
-        'Open your FIB mobile banking app and scan the QR code or tap approve.',
-        'Authorize the transfer of {amount} IQD in your FIB app.',
-        'Return to the app — your Bilal Gym pass activates instantly.',
-      ],
     },
     {
       'id': 'fastpay',
-      'title': 'FastPay Wallet',
-      'subtitle': 'Direct payment from FastPay mobile balance',
-      'badge': 'INSTANT 📱',
-      'icon': Icons.phone_android_rounded,
+      'title': 'Fastpay',
+      'icon': 'fastpay',
       'color': const Color(0xFFE50046),
-      'instructions': 'You will be redirected to FastPay. Enter your FastPay mobile number and PIN to authorize the payment.',
       'gateways': [Gateway.FAST_PAY],
-      'steps': [
-        'Tap proceed to launch the FastPay secure payment gateway.',
-        'Enter your registered FastPay mobile number & 6-digit PIN.',
-        'Enter the one-time verification OTP sent via SMS to your phone.',
-        'Your membership pass activates right away upon successful charge.',
-      ],
     },
     {
       'id': 'card',
-      'title': 'Credit / Debit Card',
-      'subtitle': 'Visa, MasterCard & local electronic cards',
-      'badge': '3D SECURE 💳',
-      'icon': Icons.credit_card_rounded,
+      'title': 'فیزا کارت / ماستەرکارد',
+      'icon': 'card',
       'color': const Color(0xFF6366F1),
-      'instructions': 'You will be redirected to Rasedi PCI-DSS secure checkout. Enter your card number, expiration date, and CVV.',
       'gateways': [Gateway.CREDIT_CARD],
-      'steps': [
-        'Proceed to Rasedi PCI-DSS certified secure payment screen.',
-        'Enter your 16-digit card number, expiration date, and CVV.',
-        'Complete the 3D-Secure SMS verification with your issuing bank.',
-        'Receive instant digital receipt and access pass in the app.',
-      ],
-    },
-    {
-      'id': 'cash',
-      'title': 'Pay Cash at Reception',
-      'subtitle': 'Reserve your plan & pay cash at Bilal Gym',
-      'badge': 'IN-PERSON 💵',
-      'icon': Icons.storefront_rounded,
-      'color': const Color(0xFF10B981),
-      'instructions': 'Reserve your pass now. Present your booking reference to the receptionist at Bilal Gym to complete payment.',
-      'gateways': <Gateway>[],
-      'steps': [
-        'Tap the reserve button to lock in this membership plan and price.',
-        'A reservation code will be generated and saved to your profile.',
-        'Visit Bilal Gym reception desk in Erbil within 48 hours.',
-        'Pay {amount} IQD in cash to receive your official physical RFID keycard.',
-      ],
     },
   ];
 
@@ -333,6 +297,59 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
     }
   }
 
+  Widget _buildPaymentMethodIcon(String methodId) {
+    switch (methodId) {
+      case 'balance':
+        return Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: const Color(0xFF8B5CF6).withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Icon(Icons.account_balance_wallet_rounded, color: Color(0xFF8B5CF6), size: 22),
+        );
+      case 'fib':
+        return Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xFF00A59B).withValues(alpha: 0.3)),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(9),
+            child: Image.asset('assets/images/fib_logo.png', fit: BoxFit.cover),
+          ),
+        );
+      case 'fastpay':
+        return Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xFFE50046).withValues(alpha: 0.3)),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(9),
+            child: Image.asset('assets/images/fastpay_logo.png', fit: BoxFit.cover),
+          ),
+        );
+      case 'card':
+      default:
+        return Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: const Color(0xFF1E1B4B),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xFF6366F1).withValues(alpha: 0.3)),
+          ),
+          child: const Icon(Icons.credit_card_rounded, color: Color(0xFF6366F1), size: 22),
+        );
+    }
+  }
+
   void _showPaymentMethodPicker(Map<String, dynamic> plan) {
     showModalBottomSheet(
       context: context,
@@ -342,202 +359,189 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
         builder: (context, setModalState) {
           final selectedMethod = _paymentMethods.firstWhere(
             (m) => m['id'] == _selectedPayment,
-            orElse: () => _paymentMethods[0],
+            orElse: () => _paymentMethods[2],
           );
-          final List<String> steps = List<String>.from(selectedMethod['steps'] ?? []);
 
           return Container(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.88,
+              maxHeight: MediaQuery.of(context).size.height * 0.75,
             ),
             decoration: const BoxDecoration(
-              color: Color(0xFF111319),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+              color: Color(0xFFF2F2F7),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const SizedBox(height: 12),
+                // Drag handle
+                const SizedBox(height: 10),
                 Center(
                   child: Container(
-                    width: 44,
-                    height: 4.5,
+                    width: 40,
+                    height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.white24,
+                      color: Colors.black26,
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 12),
 
-                // Modal Header
+                // Header bar
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Choose Payment Method',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
-                          const SizedBox(height: 3),
-                          Row(
-                            children: [
-                              Text(
-                                '${plan['title']} • ',
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.6),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                '${plan['price']} IQD',
-                                style: const TextStyle(
-                                  color: AppColors.primary,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                      GestureDetector(
+                        onTap: () => Navigator.pop(sheetCtx),
+                        child: const Icon(Icons.close, color: Colors.black54, size: 22),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.close_rounded, color: Colors.white60),
-                        onPressed: () => Navigator.pop(sheetCtx),
+                      const Text(
+                        'Fastpay',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
+                      const SizedBox(width: 22),
                     ],
                   ),
                 ),
 
-                const SizedBox(height: 10),
-                Divider(color: Colors.white.withValues(alpha: 0.06), height: 1),
+                const SizedBox(height: 16),
+                Divider(color: Colors.black.withValues(alpha: 0.08), height: 1),
 
-                // Scrollable Payment Methods + Instructions
+                // Payment method list — وردەکاری پاکێج style
                 Flexible(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                     physics: const BouncingScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'SELECT PAYMENT METHOD',
-                          style: TextStyle(
-                            color: Colors.white38,
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.8,
+                        // Plan info row at top
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1A6B3A),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    plan['title'],
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${plan['price']} د.ع',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                '${plan['duration']}',
+                                style: const TextStyle(
+                                  color: Colors.white60,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 12),
 
+                        // شێوازی پارەدان label
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
+                          child: Text(
+                            'شێوازی پارەدان',
+                            style: TextStyle(
+                              color: Colors.black.withValues(alpha: 0.85),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+
+                        // Payment methods
                         ..._paymentMethods.map((method) {
                           final isSelected = _selectedPayment == method['id'];
-                          final Color methodColor = method['color'];
 
                           return GestureDetector(
                             onTap: () {
                               setModalState(() => _selectedPayment = method['id']);
                               setState(() => _selectedPayment = method['id']);
                             },
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.all(14),
+                            child: Container(
+                              margin: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                               decoration: BoxDecoration(
-                                color: isSelected
-                                    ? const Color(0xFF1B1E28)
-                                    : const Color(0xFF151720),
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
                                   color: isSelected
-                                      ? AppColors.primary
-                                      : Colors.white.withValues(alpha: 0.08),
-                                  width: isSelected ? 1.8 : 1,
+                                      ? const Color(0xFFE50046)
+                                      : Colors.transparent,
+                                  width: 2,
                                 ),
-                                boxShadow: isSelected
-                                    ? [
-                                        BoxShadow(
-                                          color: AppColors.primary.withValues(alpha: 0.12),
-                                          blurRadius: 16,
-                                          offset: const Offset(0, 4),
-                                        ),
-                                      ]
-                                    : null,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.06),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
                               ),
                               child: Row(
                                 children: [
-                                  _buildOfficialPaymentLogo(method['id']),
+                                  _buildPaymentMethodIcon(method['id']),
                                   const SizedBox(width: 14),
                                   Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                method['title'],
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 13.5,
-                                                  fontWeight: FontWeight.w800,
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
-                                              decoration: BoxDecoration(
-                                                color: methodColor.withValues(alpha: 0.16),
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                              child: Text(
-                                                method['badge'],
-                                                style: TextStyle(
-                                                  color: methodColor,
-                                                  fontSize: 8.5,
-                                                  fontWeight: FontWeight.w900,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 3),
-                                        Text(
-                                          method['subtitle'],
-                                          style: TextStyle(
-                                            color: Colors.white.withValues(alpha: 0.55),
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                      ],
+                                    child: Text(
+                                      method['title'],
+                                      style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    '${plan['price']} د.ع',
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                   const SizedBox(width: 10),
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 180),
+                                  Container(
                                     width: 22,
                                     height: 22,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: isSelected ? AppColors.primary : Colors.transparent,
+                                      color: isSelected ? const Color(0xFFE50046) : Colors.transparent,
                                       border: Border.all(
-                                        color: isSelected ? AppColors.primary : Colors.white38,
+                                        color: isSelected ? const Color(0xFFE50046) : Colors.black26,
                                         width: 2,
                                       ),
                                     ),
                                     child: isSelected
-                                        ? const Icon(Icons.check, size: 14, color: Colors.white)
+                                        ? const Icon(Icons.check, size: 13, color: Colors.white)
                                         : null,
                                   ),
                                 ],
@@ -546,164 +550,36 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
                           );
                         }),
 
-                        const SizedBox(height: 6),
-
-                        // How to pay container
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF171A24),
-                            borderRadius: BorderRadius.circular(18),
-                            border: Border.all(
-                              color: AppColors.primary.withValues(alpha: 0.25),
-                              width: 1,
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primary.withValues(alpha: 0.15),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: const Icon(
-                                      Icons.format_list_numbered_rounded,
-                                      size: 15,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      'How to pay with ${selectedMethod['title'].toString().split(" (").first}:',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12.5,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              ...steps.asMap().entries.map((entry) {
-                                final int index = entry.key;
-                                final String stepText = entry.value;
-
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 9),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 18,
-                                        height: 18,
-                                        margin: const EdgeInsets.only(top: 1),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColors.primary.withValues(alpha: 0.18),
-                                          border: Border.all(
-                                            color: AppColors.primary.withValues(alpha: 0.4),
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            '${index + 1}',
-                                            style: const TextStyle(
-                                              color: AppColors.primary,
-                                              fontSize: 9.5,
-                                              fontWeight: FontWeight.w900,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Text(
-                                          stepText.replaceAll('{amount}', plan['price']),
-                                          style: TextStyle(
-                                            color: Colors.white.withValues(alpha: 0.8),
-                                            fontSize: 11.5,
-                                            height: 1.35,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
-                            ],
-                          ),
-                        ),
+                        const SizedBox(height: 8),
                       ],
                     ),
                   ),
                 ),
 
-                // Modal Bottom CTA
+                // Bottom CTA
                 Container(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF0F1116),
-                    border: Border(
-                      top: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 30),
+                  color: const Color(0xFFF2F2F7),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFE50046),
+                        foregroundColor: Colors.white,
+                        elevation: 4,
+                        shadowColor: const Color(0xFFE50046).withValues(alpha: 0.4),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(sheetCtx);
+                        _processPayment(plan, selectedMethod);
+                      },
+                      child: Text(
+                        'بڕۆ بۆ ${selectedMethod['title']} ➔',
+                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900),
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        height: 52,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            elevation: 5,
-                            shadowColor: AppColors.primary.withValues(alpha: 0.4),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(sheetCtx);
-                            _processPayment(plan, selectedMethod);
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                selectedMethod['id'] == 'cash'
-                                    ? 'Reserve Pass & Pay at Gym ➔'
-                                    : 'Pay ${plan['price']} IQD with ${selectedMethod['title'].toString().split(" (").first} ➔',
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            selectedMethod['id'] == 'cash' ? Icons.storefront_outlined : Icons.lock_outline_rounded,
-                            size: 11,
-                            color: Colors.white38,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            selectedMethod['id'] == 'cash'
-                                ? 'No upfront charge • Pay in cash at gym reception'
-                                : 'Secured 256-bit encryption by Rasedi Payment Gateway',
-                            style: const TextStyle(color: Colors.white38, fontSize: 10.5),
-                          ),
-                        ],
-                      ),
-                    ],
                   ),
                 ),
               ],
@@ -715,7 +591,7 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
   }
 
   Future<void> _processPayment(Map<String, dynamic> plan, Map<String, dynamic> method) async {
-    if (method['id'] == 'cash') {
+    if (method['id'] == 'balance') {
       _showSuccessDialog(plan, isCashPayment: true);
       return;
     }
@@ -736,7 +612,8 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
 
       if (!mounted) return;
 
-      // Open native payment processor — hidden WebView + opens banking app directly
+      final isFastpay = method['id'] == 'fastpay';
+
       await Navigator.of(context).push(
         MaterialPageRoute(
           fullscreenDialog: true,
@@ -745,10 +622,10 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
             referenceCode: response.body.referenceCode,
             planTitle: plan['title'],
             amount: plan['price'],
-            gatewayName: method['title'].toString().split(' (').first,
+            gatewayName: method['title'],
+            isFastpay: isFastpay,
             onPaymentClosed: () {
               Navigator.of(context).pop();
-              // Show verification sheet so user can check payment status
               _showPaymentVerificationSheet(
                 plan: plan,
                 method: method,
@@ -764,7 +641,7 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Payment initiation failed: ${e.toString().replaceAll("Exception: ", "")}'),
+          content: Text('پارەدان سەرنەکەوت: ${e.toString().replaceAll("Exception: ", "")}'),
           backgroundColor: Colors.redAccent,
         ),
       );

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 /// Background processor — no UI WebView shown.
 /// Silently loads Rasedi checkout, intercepts the gateway deep link,
@@ -14,6 +15,7 @@ class RasediNativePaymentProcessor extends StatefulWidget {
   final String planTitle;
   final String amount;
   final String gatewayName; // e.g. 'FIB Bank', 'FastPay'
+  final bool isFastpay;     // show QR + countdown UI for Fastpay
   final VoidCallback? onPaymentSuccess;
   final VoidCallback onPaymentClosed; // called when user taps close/back
 
@@ -25,6 +27,7 @@ class RasediNativePaymentProcessor extends StatefulWidget {
     required this.amount,
     required this.gatewayName,
     required this.onPaymentClosed,
+    this.isFastpay = false,
     this.onPaymentSuccess,
   });
 
@@ -45,6 +48,10 @@ class _RasediNativePaymentProcessorState
   bool _showFallback = false;
   Timer? _fallbackTimer;
 
+  // Fastpay countdown (5 minutes = 300 seconds)
+  int _countdownSeconds = 300;
+  Timer? _countdownTimer;
+
   @override
   void initState() {
     super.initState();
@@ -60,15 +67,29 @@ class _RasediNativePaymentProcessorState
       if (mounted) _initBackgroundWebView();
     });
 
-    // Fallback: if app link not detected in 8s, show manual button
-    _fallbackTimer = Timer(const Duration(seconds: 8), () {
-      if (mounted && !_appLinkOpened) {
+    // Fastpay: start 5-minute countdown
+    if (widget.isFastpay) {
+      _countdownTimer = Timer.periodic(const Duration(seconds: 1), (t) {
+        if (!mounted) { t.cancel(); return; }
         setState(() {
-          _showFallback = true;
-          _statusText = 'Tap below to open payment page';
+          if (_countdownSeconds > 0) {
+            _countdownSeconds--;
+          } else {
+            t.cancel();
+          }
         });
-      }
-    });
+      });
+    } else {
+      // Fallback: if app link not detected in 8s, show manual button
+      _fallbackTimer = Timer(const Duration(seconds: 8), () {
+        if (mounted && !_appLinkOpened) {
+          setState(() {
+            _showFallback = true;
+            _statusText = 'Tap below to open payment page';
+          });
+        }
+      });
+    }
   }
 
   void _initBackgroundWebView() {
@@ -229,8 +250,15 @@ class _RasediNativePaymentProcessorState
   @override
   void dispose() {
     _fallbackTimer?.cancel();
+    _countdownTimer?.cancel();
     _pulseController.dispose();
     super.dispose();
+  }
+
+  String get _countdownFormatted {
+    final m = _countdownSeconds ~/ 60;
+    final s = _countdownSeconds % 60;
+    return '${m.toString().padLeft(2, '0')}m ${s.toString().padLeft(2, '0')}s';
   }
 
   @override
@@ -238,7 +266,7 @@ class _RasediNativePaymentProcessorState
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        backgroundColor: const Color(0xFF0F1116),
+        backgroundColor: widget.isFastpay ? Colors.white : const Color(0xFF0F1116),
         body: Stack(
           children: [
             // Hidden background WebView (size 1x1, invisible)
@@ -251,179 +279,334 @@ class _RasediNativePaymentProcessorState
                 child: WebViewWidget(controller: _controller!),
               ),
 
-            // Native UI — all the user sees
-            SafeArea(
-              child: Column(
-                children: [
-                  // Top bar
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.close_rounded, color: Colors.white60),
-                          onPressed: widget.onPaymentClosed,
-                        ),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+            // ─────────────────────────────────────────────
+            // FASTPAY UI — matches image 1 (white, QR, timer)
+            // ─────────────────────────────────────────────
+            if (widget.isFastpay)
+              SafeArea(
+                child: Column(
+                  children: [
+                    // Top bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: widget.onPaymentClosed,
+                            child: const Icon(Icons.close, color: Colors.black54, size: 22),
                           ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.lock_outline_rounded, size: 11, color: AppColors.primary),
-                              SizedBox(width: 5),
-                              Text('Secured by Rasedi',
-                                  style: TextStyle(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.w700)),
-                            ],
+                          const Text(
+                            'Fastpay',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 22),
+                        ],
+                      ),
                     ),
-                  ),
 
-                  const Spacer(),
+                    Divider(color: Colors.black.withValues(alpha: 0.08), height: 1),
+                    const SizedBox(height: 24),
 
-                  // Animated gateway icon
-                  AnimatedBuilder(
-                    animation: _pulseAnimation,
-                    builder: (context, child) => Opacity(
-                      opacity: _pulseAnimation.value,
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.3), width: 2),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.2 * _pulseAnimation.value),
-                              blurRadius: 30,
-                              spreadRadius: 8,
-                            )
+                    // QR Card
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF7F7F7),
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.07),
+                                    blurRadius: 16,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  // Instructions text
+                                  Text(
+                                    'کۆدی QR یان دوگمەی خوارەوە بەکاریھێنە بۆ پارەدانی ${widget.amount} د.ع تەواوکردنی پڕۆسەی پارەدان.',
+                                    textAlign: TextAlign.center,
+                                    textDirection: TextDirection.rtl,
+                                    style: TextStyle(
+                                      color: Colors.black.withValues(alpha: 0.7),
+                                      fontSize: 13,
+                                      height: 1.5,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // Countdown timer
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'ماوەی کۆدی QR بەسەردەچێت لە: ',
+                                        textDirection: TextDirection.rtl,
+                                        style: TextStyle(
+                                          color: Colors.black.withValues(alpha: 0.55),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Text(
+                                        _countdownFormatted,
+                                        style: TextStyle(
+                                          color: _countdownSeconds > 30
+                                              ? const Color(0xFFE50046)
+                                              : Colors.redAccent,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+
+                                  // QR Code
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: QrImageView(
+                                      data: widget.checkoutUrl,
+                                      version: QrVersions.auto,
+                                      size: 220,
+                                      backgroundColor: Colors.white,
+                                      eyeStyle: const QrEyeStyle(
+                                        eyeShape: QrEyeShape.square,
+                                        color: Colors.black,
+                                      ),
+                                      dataModuleStyle: const QrDataModuleStyle(
+                                        dataModuleShape: QrDataModuleShape.square,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
-                        ),
-                        child: const Center(
-                          child: Icon(Icons.payment_rounded, color: AppColors.primary, size: 42),
                         ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 32),
-
-                  // Gateway name
-                  Text(
-                    widget.gatewayName,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -0.3,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '${widget.amount} IQD',
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-
-                  const SizedBox(height: 28),
-
-                  // Status text
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 40),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.04),
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: 14,
-                          height: 14,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppColors.primary.withValues(alpha: 0.8),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Flexible(
-                          child: Text(
-                            _statusText,
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.7),
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Fallback button (shown after 8s if auto-detect fails)
-                  if (_showFallback) ...[
-                    const SizedBox(height: 16),
+                    // Bottom button — بڕۆ بۆ Fastpay
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
                       child: SizedBox(
                         width: double.infinity,
                         height: 52,
-                        child: ElevatedButton.icon(
+                        child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
+                            backgroundColor: const Color(0xFFE50046),
                             foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
                             elevation: 4,
-                            shadowColor: AppColors.primary.withValues(alpha: 0.4),
-                          ),
-                          icon: const Icon(Icons.open_in_new_rounded, size: 18),
-                          label: Text(
-                            'Open ${widget.gatewayName} Payment',
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+                            shadowColor: const Color(0xFFE50046).withValues(alpha: 0.4),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
                           ),
                           onPressed: () async {
                             final uri = Uri.parse(widget.checkoutUrl);
-                            await launchUrl(uri, mode: LaunchMode.inAppWebView);
+                            await launchUrl(uri, mode: LaunchMode.externalApplication);
                           },
+                          child: const Text(
+                            'بڕۆ بۆ Fastpay',
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900),
+                          ),
                         ),
                       ),
                     ),
                   ],
+                ),
+              ),
 
-                  const Spacer(),
-
-                  // Info text
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
-                    child: Text(
-                      'After completing payment in ${widget.gatewayName}, return here to confirm your membership.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.35),
-                        fontSize: 12,
-                        height: 1.5,
+            // ─────────────────────────────────────────────
+            // DEFAULT UI — FIB / Card (dark loading screen)
+            // ─────────────────────────────────────────────
+            if (!widget.isFastpay)
+              SafeArea(
+                child: Column(
+                  children: [
+                    // Top bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.close_rounded, color: Colors.white60),
+                            onPressed: widget.onPaymentClosed,
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.lock_outline_rounded, size: 11, color: AppColors.primary),
+                                SizedBox(width: 5),
+                                Text('Secured by Rasedi',
+                                    style: TextStyle(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.w700)),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+
+                    const Spacer(),
+
+                    // Animated gateway icon
+                    AnimatedBuilder(
+                      animation: _pulseAnimation,
+                      builder: (context, child) => Opacity(
+                        opacity: _pulseAnimation.value,
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.3), width: 2),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.2 * _pulseAnimation.value),
+                                blurRadius: 30,
+                                spreadRadius: 8,
+                              )
+                            ],
+                          ),
+                          child: const Center(
+                            child: Icon(Icons.payment_rounded, color: AppColors.primary, size: 42),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    // Gateway name
+                    Text(
+                      widget.gatewayName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${widget.amount} IQD',
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+
+                    const SizedBox(height: 28),
+
+                    // Status text
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.04),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 14,
+                            height: 14,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColors.primary.withValues(alpha: 0.8),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Flexible(
+                            child: Text(
+                              _statusText,
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.7),
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Fallback button (shown after 8s if auto-detect fails)
+                    if (_showFallback) ...[
+                      const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 52,
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              elevation: 4,
+                              shadowColor: AppColors.primary.withValues(alpha: 0.4),
+                            ),
+                            icon: const Icon(Icons.open_in_new_rounded, size: 18),
+                            label: Text(
+                              'Open ${widget.gatewayName} Payment',
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+                            ),
+                            onPressed: () async {
+                              final uri = Uri.parse(widget.checkoutUrl);
+                              await launchUrl(uri, mode: LaunchMode.inAppWebView);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+
+                    const Spacer(),
+
+                    // Info text
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 0, 30, 30),
+                      child: Text(
+                        'After completing payment in ${widget.gatewayName}, return here to confirm your membership.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.35),
+                          fontSize: 12,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
