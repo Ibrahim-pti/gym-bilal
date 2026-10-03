@@ -17,14 +17,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Daily Activity Tracker State
-  double _waterLiters = 1.8;
+  // Daily Activity Tracker State (Initial Clean State)
+  double _waterLiters = 0.0;
   final double _waterTarget = 2.5;
 
-  final int _caloriesBurned = 580;
+  final int _caloriesBurned = 0;
   final int _caloriesTarget = 800;
 
-  final int _stepsCount = 7240;
+  final int _stepsCount = 0;
   final int _stepsTarget = 10000;
 
   void _addWater(double amount) {
@@ -34,45 +34,20 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // Weekly Streak State
+  // Weekly Streak State (Clean State)
   int _selectedStreakDay = 4; // Friday is selected (today)
   final List<Map<String, dynamic>> _weekDays = [
-    {'day': 'M', 'date': '21', 'status': 'done'},
-    {'day': 'T', 'date': '22', 'status': 'done'},
-    {'day': 'W', 'date': '23', 'status': 'done'},
-    {'day': 'T', 'date': '24', 'status': 'done'},
+    {'day': 'M', 'date': '21', 'status': 'upcoming'},
+    {'day': 'T', 'date': '22', 'status': 'upcoming'},
+    {'day': 'W', 'date': '23', 'status': 'upcoming'},
+    {'day': 'T', 'date': '24', 'status': 'upcoming'},
     {'day': 'F', 'date': '25', 'status': 'today'},
     {'day': 'S', 'date': '26', 'status': 'upcoming'},
     {'day': 'S', 'date': '27', 'status': 'rest'},
   ];
 
-  // Today's Routine Checklist State
-  final List<Map<String, dynamic>> _todayExercises = [
-    {
-      'title': 'Incline Dumbbell Press',
-      'setsReps': '4 Sets × 10 Reps',
-      'weight': '28 kg',
-      'done': true,
-    },
-    {
-      'title': 'Barbell Flat Bench Press',
-      'setsReps': '4 Sets × 8 Reps',
-      'weight': '85 kg',
-      'done': true,
-    },
-    {
-      'title': 'Cable Pec Flyes (Low-to-High)',
-      'setsReps': '3 Sets × 12 Reps',
-      'weight': '15 kg',
-      'done': false,
-    },
-    {
-      'title': 'Triceps Overhead Rope Push',
-      'setsReps': '3 Sets × 15 Reps',
-      'weight': '22 kg',
-      'done': false,
-    },
-  ];
+  // Today's Routine Checklist State (Empty State)
+  final List<Map<String, dynamic>> _todayExercises = [];
 
   @override
   Widget build(BuildContext context) {
@@ -1409,6 +1384,58 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 14),
 
+                if (_todayExercises.isEmpty)
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.06),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.fitness_center_rounded,
+                            color: AppColors.primary,
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'No Routine Scheduled Today',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Select your workout split from the workout library.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.6),
+                            fontSize: 11.5,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        ElevatedButton.icon(
+                          onPressed: () => widget.onNavigateTab?.call(2),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.5),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          icon: const Icon(Icons.play_arrow_rounded, size: 16),
+                          label: const Text('Browse Workouts', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                        ),
+                      ],
+                    ),
+                  )
+                else ...[
                 // Interactive Exercise Checklist
                 Column(
                   children: List.generate(_todayExercises.length, (idx) {
@@ -1600,6 +1627,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
+                ],
               ],
             ),
           ),
