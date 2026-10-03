@@ -152,6 +152,40 @@ class _ReelsViewerScreenState extends State<ReelsViewerScreen>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.reels.isEmpty) {
+      return Scaffold(
+        backgroundColor: const Color(0xFF0F1115),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: const Text('Reels', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18)),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.video_collection_outlined, size: 54, color: Colors.white.withValues(alpha: 0.2)),
+              const SizedBox(height: 14),
+              const Text(
+                'No Reels Published Yet',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Community reels and workout videos will appear here.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(

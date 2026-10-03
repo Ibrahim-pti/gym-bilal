@@ -85,127 +85,8 @@ class _WeeklyMealPlannerScreenState extends State<WeeklyMealPlannerScreen>
     super.dispose();
   }
 
-  // --- Meal Plans Data ---
-  List<MealPlanItem> get _currentMealPlan {
-    if (_selectedGoal == 'bulking') {
-      return const [
-        MealPlanItem(
-          title: 'Power Breakfast',
-          kurdishTitle: 'ژەمی بەیانی: هێزی ماسولکە',
-          food: '4 Whole Eggs + 2 Whites + 100g Rolled Oats with Honey & Blueberries',
-          calories: 720,
-          protein: '46g',
-          carbs: '82g',
-          fat: '24g',
-          prepTime: '15 min',
-          icon: Icons.wb_sunny_rounded,
-        ),
-        MealPlanItem(
-          title: 'Mid-Morning Mass Shake',
-          kurdishTitle: 'ژەمی نێوان: شەیكی وزەبەخش',
-          food: '1 Scoop Whey Protein + 1 Banana + 40g Oats + 2 tbsp Peanut Butter with Milk',
-          calories: 580,
-          protein: '42g',
-          carbs: '65g',
-          fat: '18g',
-          prepTime: '5 min',
-          icon: Icons.blender_rounded,
-        ),
-        MealPlanItem(
-          title: 'Heavy Anabolic Lunch',
-          kurdishTitle: 'ژەمی نیوەڕۆ: سنگی مریشک و برنج',
-          food: '250g Grilled Chicken Breast + 220g Jasmine Rice + Steamed Broccoli with Olive Oil',
-          calories: 820,
-          protein: '68g',
-          carbs: '95g',
-          fat: '16g',
-          prepTime: '25 min',
-          icon: Icons.restaurant_rounded,
-        ),
-        MealPlanItem(
-          title: 'Pre-Workout Energy Boost',
-          kurdishTitle: 'ژەمی پێش وەرزش: کاربۆهیدراتی خێرا',
-          food: '4 Rice Cakes + Peanut Butter + Sliced Banana + Black Espresso Coffee',
-          calories: 340,
-          protein: '11g',
-          carbs: '54g',
-          fat: '10g',
-          prepTime: '5 min',
-          icon: Icons.bolt_rounded,
-        ),
-        MealPlanItem(
-          title: 'Night Recovery Dinner',
-          kurdishTitle: 'ژەمی ئێوارە: سەلەمون و پەتاتەی شیرین',
-          food: '220g Grilled Salmon + 250g Baked Sweet Potato + Mixed Green Salad',
-          calories: 740,
-          protein: '54g',
-          carbs: '62g',
-          fat: '28g',
-          prepTime: '30 min',
-          icon: Icons.nightlight_round,
-        ),
-      ];
-    } else {
-      // Cutting / Shred Diet
-      return const [
-        MealPlanItem(
-          title: 'Lean High-Protein Breakfast',
-          kurdishTitle: 'ژەمی بەیانی: پرۆتینی بەرز و کەم چەوری',
-          food: '5 Egg Whites + 1 Whole Egg + 50g Oats + Spinach Omelette',
-          calories: 410,
-          protein: '38g',
-          carbs: '34g',
-          fat: '12g',
-          prepTime: '12 min',
-          icon: Icons.wb_sunny_rounded,
-        ),
-        MealPlanItem(
-          title: 'Mid-Morning Protein Fuel',
-          kurdishTitle: 'ژەمی نێوان: وی پرۆتین و بادام',
-          food: '1 Scoop Whey Isolate in Water + 15 Raw Almonds + 1 Green Apple',
-          calories: 260,
-          protein: '30g',
-          carbs: '18g',
-          fat: '8g',
-          prepTime: '3 min',
-          icon: Icons.blender_rounded,
-        ),
-        MealPlanItem(
-          title: 'Clean Shred Lunch',
-          kurdishTitle: 'ژەمی نیوەڕۆ: مریشک و برنجی قاوەیی',
-          food: '220g Skinless Chicken Breast + 120g Brown Rice + Huge Cucumber & Greens Bowl',
-          calories: 520,
-          protein: '58g',
-          carbs: '48g',
-          fat: '9g',
-          prepTime: '20 min',
-          icon: Icons.restaurant_rounded,
-        ),
-        MealPlanItem(
-          title: 'Pre-Workout Pump Snack',
-          kurdishTitle: 'ژەمی پێش ڕاهێنان',
-          food: '1 Medium Banana + Double Shot Espresso + 5g Creatine',
-          calories: 110,
-          protein: '2g',
-          carbs: '27g',
-          fat: '0g',
-          prepTime: '2 min',
-          icon: Icons.bolt_rounded,
-        ),
-        MealPlanItem(
-          title: 'Metabolic Fat-Loss Dinner',
-          kurdishTitle: 'ژەمی ئێوارە: گۆشتی بێ چەوری و سەوزە',
-          food: '200g Lean Beef Mince 95/5 + Sautéed Zucchini, Peppers & Asparagus',
-          calories: 460,
-          protein: '52g',
-          carbs: '14g',
-          fat: '16g',
-          prepTime: '20 min',
-          icon: Icons.nightlight_round,
-        ),
-      ];
-    }
-  }
+  // --- Meal Plans Data (Clean Initial State) ---
+  List<MealPlanItem> get _currentMealPlan => const [];
 
   void _showAddGroceryDialog() {
     final nameCtrl = TextEditingController();
@@ -477,9 +358,9 @@ class _WeeklyMealPlannerScreenState extends State<WeeklyMealPlannerScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildMacroCircle('Protein', _selectedGoal == 'bulking' ? '220g' : '205g', const Color(0xFF38BDF8)),
-                  _buildMacroCircle('Carbs', _selectedGoal == 'bulking' ? '380g' : '170g', const Color(0xFFFBBF24)),
-                  _buildMacroCircle('Healthy Fats', _selectedGoal == 'bulking' ? '85g' : '45g', const Color(0xFFF43F5E)),
+                  _buildMacroCircle('Protein', '0g', const Color(0xFF38BDF8)),
+                  _buildMacroCircle('Carbs', '0g', const Color(0xFFFBBF24)),
+                  _buildMacroCircle('Healthy Fats', '0g', const Color(0xFFF43F5E)),
                 ],
               ),
             ],
@@ -553,6 +434,32 @@ class _WeeklyMealPlannerScreenState extends State<WeeklyMealPlannerScreen>
         ),
         const SizedBox(height: 10),
 
+        if (meals.isEmpty)
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 20),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.grey.shade200),
+            ),
+            child: Column(
+              children: [
+                Icon(Icons.restaurant_rounded, size: 40, color: Colors.grey.shade300),
+                const SizedBox(height: 12),
+                const Text(
+                  'No Meals Scheduled',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.lightTextPrimary),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Your daily nutrition schedule is empty. Add meals to track your plan.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
+                ),
+              ],
+            ),
+          ),
         ...meals.map((meal) {
           return Container(
             margin: const EdgeInsets.only(bottom: 12),

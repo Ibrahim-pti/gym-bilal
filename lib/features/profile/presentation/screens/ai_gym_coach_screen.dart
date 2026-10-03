@@ -28,7 +28,7 @@ class _AiGymCoachScreenState extends State<AiGymCoachScreen> {
   final List<ChatMessage> _messages = [
     const ChatMessage(
       text:
-          'سڵاو کاک ئاریان! من Coach Bilal AIـم، ڕاهێنەری زیرەکی دەستکردی هۆڵەکەت 🤖💪.\nدەتوانیت هەر پرسیارێکت لەسەر خشتەی ڕاهێنان، تەکنیکی یارییەکان، یان ڕێجیم و پرۆتین هەیە لێم بپرسیت.',
+          'سڵاو! من Coach Bilal AIـم، ڕاهێنەری زیرەکی دەستکردی هۆڵەکەت 🤖💪.\nدەتوانیت هەر پرسیارێکت لەسەر خشتەی ڕاهێنان، تەکنیکی یارییەکان، یان ڕێجیم و پرۆتین هەیە لێم بپرسیت.',
       isUser: false,
       time: '10:00 AM',
     ),

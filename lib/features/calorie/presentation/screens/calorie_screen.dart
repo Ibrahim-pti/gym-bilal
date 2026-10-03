@@ -613,7 +613,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
                 ),
                 SizedBox(height: 2),
                 Text(
-                  'Creatine, Whey Isolate, Omega-3 • 4/6 Taken',
+                  'Daily vitamins & supplement stack',
                   style: TextStyle(fontSize: 11.5, color: Color(0xFF7E22CE), fontWeight: FontWeight.w500),
                 ),
               ],

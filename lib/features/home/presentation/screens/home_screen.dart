@@ -999,7 +999,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          '5-Day Streak Active 🔥',
+                          '0-Day Streak 🔥',
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
@@ -1020,7 +1020,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Text(
-                    'Sep 21 - 27',
+                    'This Week',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -1771,10 +1771,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Expanded(
                       child: _buildMacroItem(
                         name: 'Protein',
-                        current: 124,
+                        current: 0,
                         target: 160,
                         unit: 'g',
-                        percent: 0.78,
+                        percent: 0.0,
                         color: const Color(0xFF10B981),
                         icon: Icons.fitness_center_rounded,
                         subtext: 'Repair',
@@ -1790,10 +1790,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Expanded(
                       child: _buildMacroItem(
                         name: 'Carbs',
-                        current: 185,
+                        current: 0,
                         target: 240,
                         unit: 'g',
-                        percent: 0.77,
+                        percent: 0.0,
                         color: const Color(0xFFF59E0B),
                         icon: Icons.bolt_rounded,
                         subtext: 'Energy',
@@ -1809,10 +1809,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Expanded(
                       child: _buildMacroItem(
                         name: 'Fats',
-                        current: 48,
+                        current: 0,
                         target: 65,
                         unit: 'g',
-                        percent: 0.74,
+                        percent: 0.0,
                         color: const Color(0xFFEC4899),
                         icon: Icons.opacity_rounded,
                         subtext: 'Hormones',
@@ -1840,7 +1840,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           text: const TextSpan(
                             children: [
                               TextSpan(
-                                text: '480 kcal ',
+                                text: '0 kcal ',
                                 style: TextStyle(
                                   color: AppColors.lightTextPrimary,
                                   fontSize: 12,
@@ -1848,7 +1848,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               TextSpan(
-                                text: 'remaining today',
+                                text: 'logged today',
                                 style: TextStyle(
                                   color: AppColors.lightTextSecondary,
                                   fontSize: 11,

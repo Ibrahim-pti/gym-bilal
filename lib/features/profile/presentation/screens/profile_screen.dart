@@ -836,7 +836,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Creatine, Whey, Omega-3 • 4/6 Taken Today',
+                          'Daily supplement stack & schedule',
                           style: TextStyle(
                             fontSize: 11.5,
                             color: AppColors.lightTextSecondary,
@@ -902,17 +902,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // 7. Monthly Performance Metric Tiles
           Row(
             children: [
-              _buildStatBox('Current Weight', '76.0 kg', 'Goal: 75.0 kg', Icons.monitor_weight_outlined),
+              _buildStatBox('Current Weight', '-- kg', 'No entries yet', Icons.monitor_weight_outlined),
               const SizedBox(width: 10),
-              _buildStatBox('Workouts Done', '28 Sessions', 'Past 30 Days', Icons.fitness_center_rounded),
+              _buildStatBox('Workouts Done', '0 Sessions', 'This Month', Icons.fitness_center_rounded),
             ],
           ),
           const SizedBox(height: 10),
           Row(
             children: [
-              _buildStatBox('Calories Burned', '14,250 kcal', 'Monthly Burn', Icons.whatshot_rounded),
+              _buildStatBox('Calories Burned', '0 kcal', 'This Month', Icons.whatshot_rounded),
               const SizedBox(width: 10),
-              _buildStatBox('Active Hours', '34.5 hrs', 'Total Gym Time', Icons.timer_outlined),
+              _buildStatBox('Active Hours', '0.0 hrs', 'Gym Time', Icons.timer_outlined),
             ],
           ),
           const SizedBox(height: 20),

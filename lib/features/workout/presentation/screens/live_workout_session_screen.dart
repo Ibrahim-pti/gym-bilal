@@ -53,44 +53,7 @@ class _LiveWorkoutSessionScreenState extends State<LiveWorkoutSessionScreen> {
     super.initState();
     _startSessionTimer();
 
-    _exercises = [
-      WorkoutExerciseItem(
-        name: 'Incline Barbell Bench Press',
-        muscle: 'Upper Chest',
-        sets: [
-          WorkoutSet(setNumber: 1, weight: 70.0, reps: 10, isCompleted: false),
-          WorkoutSet(setNumber: 2, weight: 80.0, reps: 8, isCompleted: false),
-          WorkoutSet(setNumber: 3, weight: 85.0, reps: 6, isCompleted: false),
-          WorkoutSet(setNumber: 4, weight: 90.0, reps: 4, isCompleted: false),
-        ],
-      ),
-      WorkoutExerciseItem(
-        name: 'Dumbbell Shoulder Press',
-        muscle: 'Deltoids',
-        sets: [
-          WorkoutSet(setNumber: 1, weight: 24.0, reps: 10, isCompleted: false),
-          WorkoutSet(setNumber: 2, weight: 26.0, reps: 8, isCompleted: false),
-          WorkoutSet(setNumber: 3, weight: 28.0, reps: 8, isCompleted: false),
-        ],
-      ),
-      WorkoutExerciseItem(
-        name: 'Cable Lateral Raises',
-        muscle: 'Side Delts',
-        sets: [
-          WorkoutSet(setNumber: 1, weight: 12.5, reps: 15, isCompleted: false),
-          WorkoutSet(setNumber: 2, weight: 12.5, reps: 12, isCompleted: false),
-          WorkoutSet(setNumber: 3, weight: 15.0, reps: 10, isCompleted: false),
-        ],
-      ),
-      WorkoutExerciseItem(
-        name: 'Tricep Rope Pushdowns',
-        muscle: 'Triceps',
-        sets: [
-          WorkoutSet(setNumber: 1, weight: 25.0, reps: 12, isCompleted: false),
-          WorkoutSet(setNumber: 2, weight: 30.0, reps: 10, isCompleted: false),
-        ],
-      ),
-    ];
+    _exercises = [];
   }
 
   @override
@@ -190,9 +153,9 @@ class _LiveWorkoutSessionScreenState extends State<LiveWorkoutSessionScreen> {
                   const Divider(color: Colors.white12, height: 16),
                   _buildSummaryStat('Completed Sets', '$_completedSetsCount Sets', Icons.check_circle_outline_rounded),
                   const Divider(color: Colors.white12, height: 16),
-                  _buildSummaryStat('Estimated Calories', '385 kcal', Icons.local_fire_department_rounded),
+                  _buildSummaryStat('Estimated Calories', '0 kcal', Icons.local_fire_department_rounded),
                   const Divider(color: Colors.white12, height: 16),
-                  _buildSummaryStat('XP Earned', '+250 XP ⚡', Icons.bolt_rounded),
+                  _buildSummaryStat('XP Earned', '+0 XP ⚡', Icons.bolt_rounded),
                 ],
               ),
             ),
@@ -282,16 +245,43 @@ class _LiveWorkoutSessionScreenState extends State<LiveWorkoutSessionScreen> {
                 children: [
                   _buildHudBox('TIME', _formatTime(_secondsElapsed), Icons.timer_outlined, Colors.white),
                   const SizedBox(width: 8),
-                  _buildHudBox('HEART RATE', '138 bpm', Icons.favorite_rounded, const Color(0xFFEF4444)),
+                  _buildHudBox('HEART RATE', '-- bpm', Icons.favorite_rounded, const Color(0xFFEF4444)),
                   const SizedBox(width: 8),
-                  _buildHudBox('CALORIES', '340 kcal', Icons.local_fire_department_rounded, const Color(0xFFF97316)),
+                  _buildHudBox('CALORIES', '0 kcal', Icons.local_fire_department_rounded, const Color(0xFFF97316)),
                   const SizedBox(width: 8),
                   _buildHudBox('VOLUME', '${_totalVolumeLifted.toStringAsFixed(0)} kg', Icons.fitness_center_rounded, const Color(0xFF38BDF8)),
                 ],
               ),
               const SizedBox(height: 18),
 
-              // Exercises List
+              // Exercises List or Empty State
+              if (_exercises.isEmpty)
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF181B22),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.07)),
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(Icons.fitness_center_rounded, size: 44, color: Colors.white.withValues(alpha: 0.2)),
+                      const SizedBox(height: 14),
+                      const Text(
+                        'No Exercises in Current Session',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Start logging sets by selecting a routine or adding drills.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
               ..._exercises.map((exercise) {
                 return Container(
                   margin: const EdgeInsets.only(bottom: 16),
