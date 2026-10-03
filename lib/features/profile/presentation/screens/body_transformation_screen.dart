@@ -19,57 +19,8 @@ class _BodyTransformationScreenState extends State<BodyTransformationScreen> {
   String _selectedMetric = 'weight';
 
   // Logged weight entries for graph
-  final List<Map<String, dynamic>> _weightHistory = [
-    {'date': 'Wk 1 (Jan)', 'weight': 84.5, 'bodyFat': 22.0},
-    {'date': 'Wk 4 (Feb)', 'weight': 82.0, 'bodyFat': 19.5},
-    {'date': 'Wk 8 (Mar)', 'weight': 79.5, 'bodyFat': 16.0},
-    {'date': 'Wk 12 (Apr)', 'weight': 77.2, 'bodyFat': 13.8},
-    {'date': 'Current', 'weight': 76.0, 'bodyFat': 12.2},
-  ];
-
-  // Circumference measurements
-  final List<Map<String, dynamic>> _measurements = [
-    {
-      'part': 'Chest',
-      'before': '102 cm',
-      'current': '110 cm',
-      'diff': '+8 cm',
-      'isGain': true,
-      'icon': Icons.accessibility_new_rounded,
-    },
-    {
-      'part': 'Arms (Biceps)',
-      'before': '34.0 cm',
-      'current': '39.5 cm',
-      'diff': '+5.5 cm',
-      'isGain': true,
-      'icon': Icons.fitness_center_rounded,
-    },
-    {
-      'part': 'Waist',
-      'before': '89 cm',
-      'current': '78 cm',
-      'diff': '-11 cm',
-      'isGain': false,
-      'icon': Icons.straighten_rounded,
-    },
-    {
-      'part': 'Thighs',
-      'before': '54 cm',
-      'current': '60 cm',
-      'diff': '+6 cm',
-      'isGain': true,
-      'icon': Icons.directions_walk_rounded,
-    },
-    {
-      'part': 'Shoulders',
-      'before': '114 cm',
-      'current': '122 cm',
-      'diff': '+8 cm',
-      'isGain': true,
-      'icon': Icons.shield_rounded,
-    },
-  ];
+  final List<Map<String, dynamic>> _weightHistory = [];
+  final List<Map<String, dynamic>> _measurements = [];
 
   String get _beforeImage {
     switch (_selectedAngle) {
@@ -559,10 +510,32 @@ class _BodyTransformationScreenState extends State<BodyTransformationScreen> {
                 ),
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: _weightHistory.map((item) {
+                    if (_weightHistory.isEmpty)
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            Icon(Icons.show_chart_rounded, size: 36, color: Colors.grey.shade400),
+                            const SizedBox(height: 10),
+                            const Text(
+                              'No Weight Records Yet',
+                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.lightTextPrimary),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Tap "+ Log Weight" above to record your body weight history.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: _weightHistory.map((item) {
                         final isWeight = _selectedMetric == 'weight';
                         final double val = isWeight
                             ? (item['weight'] as double)
@@ -656,10 +629,31 @@ class _BodyTransformationScreenState extends State<BodyTransformationScreen> {
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: Colors.grey.shade200),
                 ),
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _measurements.length,
+                child: _measurements.isEmpty
+                    ? Container(
+                        padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 16),
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            Icon(Icons.straighten_rounded, size: 36, color: Colors.grey.shade400),
+                            const SizedBox(height: 10),
+                            const Text(
+                              'No Measurements Logged',
+                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.lightTextPrimary),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Tap "+ Measure" to track circumference of chest, arms, and waist.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _measurements.length,
                   separatorBuilder: (_, _) => Divider(height: 1, color: Colors.grey.shade100),
                   itemBuilder: (context, index) {
                     final m = _measurements[index];

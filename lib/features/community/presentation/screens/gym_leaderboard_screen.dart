@@ -30,23 +30,8 @@ class _GymLeaderboardScreenState extends State<GymLeaderboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  final List<LeaderboardUser> _streakLeaders = const [
-    LeaderboardUser(rank: 1, name: 'Soran Farhad', avatarUrl: 'assets/images/user_avatar.jpg', stat: '42 Days Streak 🔥', tier: 'Elite Beast 👑'),
-    LeaderboardUser(rank: 2, name: 'Karwan Hama', avatarUrl: 'assets/images/onboarding_athlete.jpg', stat: '38 Days Streak 🔥', tier: 'Diamond 💎'),
-    LeaderboardUser(rank: 3, name: 'Darya Ahmed', avatarUrl: 'assets/images/user_avatar.jpg', stat: '31 Days Streak 🔥', tier: 'Diamond 💎'),
-    LeaderboardUser(rank: 4, name: 'Aryan Rathore (You)', avatarUrl: 'assets/images/user_avatar.jpg', stat: '14 Days Streak 🔥', tier: 'Gold 🥇', isCurrentUser: true),
-    LeaderboardUser(rank: 5, name: 'Bawer Ali', avatarUrl: 'assets/images/onboarding_athlete.jpg', stat: '12 Days Streak 🔥', tier: 'Gold 🥇'),
-    LeaderboardUser(rank: 6, name: 'Rawand Othman', avatarUrl: 'assets/images/user_avatar.jpg', stat: '11 Days Streak 🔥', tier: 'Silver 🥈'),
-    LeaderboardUser(rank: 7, name: 'Hevar Sleman', avatarUrl: 'assets/images/onboarding_athlete.jpg', stat: '9 Days Streak 🔥', tier: 'Silver 🥈'),
-  ];
-
-  final List<LeaderboardUser> _lifterLeaders = const [
-    LeaderboardUser(rank: 1, name: 'Karwan Hama', avatarUrl: 'assets/images/onboarding_athlete.jpg', stat: '585 kg Big 3', tier: 'Elite Beast 👑'),
-    LeaderboardUser(rank: 2, name: 'Aryan Rathore (You)', avatarUrl: 'assets/images/user_avatar.jpg', stat: '445 kg Big 3', tier: 'Diamond 💎', isCurrentUser: true),
-    LeaderboardUser(rank: 3, name: 'Soran Farhad', avatarUrl: 'assets/images/user_avatar.jpg', stat: '430 kg Big 3', tier: 'Gold 🥇'),
-    LeaderboardUser(rank: 4, name: 'Zana Qadir', avatarUrl: 'assets/images/onboarding_athlete.jpg', stat: '390 kg Big 3', tier: 'Gold 🥇'),
-    LeaderboardUser(rank: 5, name: 'Alan Sherwan', avatarUrl: 'assets/images/user_avatar.jpg', stat: '375 kg Big 3', tier: 'Silver 🥈'),
-  ];
+  final List<LeaderboardUser> _streakLeaders = const [];
+  final List<LeaderboardUser> _lifterLeaders = const [];
 
   @override
   void initState() {
@@ -99,6 +84,50 @@ class _GymLeaderboardScreenState extends State<GymLeaderboardScreen>
   }
 
   Widget _buildLeaderboardTab(List<LeaderboardUser> users) {
+    if (users.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(22),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.emoji_events_outlined,
+                  size: 52,
+                  color: AppColors.primary,
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'No Leaderboard Rankings Yet',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Log workouts and maintain your weekly streaks to climb the Gym Bilal leaderboard!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.6),
+                  fontSize: 13,
+                  height: 1.45,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     final topThree = users.take(3).toList();
     final remaining = users.skip(3).toList();
 

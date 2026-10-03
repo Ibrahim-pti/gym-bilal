@@ -21,7 +21,7 @@ class _PrTrackerSheetState extends State<PrTrackerSheet> {
   }
 
   void _showEditPrDialog(String exercise, double currentWeight) {
-    final controller = TextEditingController(text: currentWeight.toStringAsFixed(1));
+    final controller = TextEditingController(text: currentWeight > 0 ? currentWeight.toStringAsFixed(1) : '');
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -195,11 +195,11 @@ class _PrTrackerSheetState extends State<PrTrackerSheet> {
                     ),
                   ),
                   Text(
-                    '${entry.value.toStringAsFixed(1)} kg',
-                    style: const TextStyle(
+                    entry.value > 0 ? '${entry.value.toStringAsFixed(1)} kg' : 'Not Set',
+                    style: TextStyle(
                       fontWeight: FontWeight.w900,
-                      fontSize: 16,
-                      color: AppColors.lightTextPrimary,
+                      fontSize: entry.value > 0 ? 16 : 13,
+                      color: entry.value > 0 ? AppColors.lightTextPrimary : Colors.grey.shade400,
                     ),
                   ),
                   const SizedBox(width: 8),

@@ -22,12 +22,12 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // PRs state
+  // PRs state (Clean State)
   Map<String, double> _prs = {
-    'Bench Press': 110.0,
-    'Back Squat': 150.0,
-    'Deadlift': 185.0,
-    'Overhead Press': 72.5,
+    'Bench Press': 0.0,
+    'Back Squat': 0.0,
+    'Deadlift': 0.0,
+    'Overhead Press': 0.0,
   };
 
   // Preferences state
@@ -291,7 +291,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Icon(Icons.local_fire_department_rounded, color: Colors.orange, size: 15),
                               SizedBox(width: 4),
                               Text(
-                                '14-Day Streak 🔥',
+                                '0-Day Streak 🔥',
                                 style: TextStyle(
                                   fontSize: 11.5,
                                   fontWeight: FontWeight.w800,
@@ -666,10 +666,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 14),
                 Row(
                   children: [
-                    _buildPrItem('Bench', '${_prs['Bench Press']?.toStringAsFixed(0)} kg'),
-                    _buildPrItem('Squat', '${_prs['Back Squat']?.toStringAsFixed(0)} kg'),
-                    _buildPrItem('Deadlift', '${_prs['Deadlift']?.toStringAsFixed(0)} kg'),
-                    _buildPrItem('OHP', '${_prs['Overhead Press']?.toStringAsFixed(0)} kg'),
+                    _buildPrItem('Bench', (_prs['Bench Press'] ?? 0) > 0 ? '${_prs['Bench Press']?.toStringAsFixed(0)} kg' : '--'),
+                    _buildPrItem('Squat', (_prs['Back Squat'] ?? 0) > 0 ? '${_prs['Back Squat']?.toStringAsFixed(0)} kg' : '--'),
+                    _buildPrItem('Deadlift', (_prs['Deadlift'] ?? 0) > 0 ? '${_prs['Deadlift']?.toStringAsFixed(0)} kg' : '--'),
+                    _buildPrItem('OHP', (_prs['Overhead Press'] ?? 0) > 0 ? '${_prs['Overhead Press']?.toStringAsFixed(0)} kg' : '--'),
                   ],
                 ),
               ],

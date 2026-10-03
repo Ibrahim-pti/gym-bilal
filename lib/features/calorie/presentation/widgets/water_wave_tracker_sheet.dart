@@ -9,7 +9,7 @@ class WaterWaveTrackerSheet extends StatefulWidget {
 
   const WaterWaveTrackerSheet({
     super.key,
-    this.currentLiters = 1.8,
+    this.currentLiters = 0.0,
     this.goalLiters = 2.5,
     this.onWaterUpdated,
   });

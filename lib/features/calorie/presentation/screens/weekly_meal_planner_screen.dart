@@ -76,31 +76,7 @@ class _WeeklyMealPlannerScreenState extends State<WeeklyMealPlannerScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
 
-    _groceries = [
-      // Proteins
-      GroceryItem(id: '1', name: 'Eggs (Carton of 30)', kurdishName: 'هێلکەی تازە', quantity: '30 Eggs', category: 'Proteins 🥩', isChecked: true),
-      GroceryItem(id: '2', name: 'Boneless Chicken Breast', kurdishName: 'سنگی مریشکی بێ ئێسک', quantity: '2.5 kg', category: 'Proteins 🥩', isChecked: true),
-      GroceryItem(id: '3', name: 'Lean Ground Beef (90/10)', kurdishName: 'گۆشتی قیمەی بێ چەوری', quantity: '1.2 kg', category: 'Proteins 🥩'),
-      GroceryItem(id: '4', name: 'Fresh Salmon Fillet', kurdishName: 'ماسی سەلەمونی تازە', quantity: '600 g', category: 'Proteins 🥩'),
-      GroceryItem(id: '5', name: 'Greek Yogurt 0% Fat', kurdishName: 'ماستی یۆنانی کەم چەوری', quantity: '1 kg', category: 'Proteins 🥩', isChecked: true),
-
-      // Carbs
-      GroceryItem(id: '6', name: 'Rolled Oats', kurdishName: 'شۆفانی تەواو', quantity: '1.5 kg', category: 'Carbohydrates 🍚', isChecked: true),
-      GroceryItem(id: '7', name: 'Basmati / Jasmine Rice', kurdishName: 'برنجی بۆندار', quantity: '2 kg', category: 'Carbohydrates 🍚', isChecked: true),
-      GroceryItem(id: '8', name: 'Sweet Potatoes', kurdishName: 'پەتاتەی شیرین', quantity: '2 kg', category: 'Carbohydrates 🍚'),
-      GroceryItem(id: '9', name: 'Whole Wheat Toast', kurdishName: 'نانی جۆ یان تۆست', quantity: '2 Packs', category: 'Carbohydrates 🍚', isChecked: true),
-
-      // Fats & Superfoods
-      GroceryItem(id: '10', name: 'Natural Peanut Butter', kurdishName: 'کەرەی فستقی بێ شەکر', quantity: '1 Jar', category: 'Fats & Superfoods 🥑', isChecked: true),
-      GroceryItem(id: '11', name: 'Raw Almonds & Walnuts', kurdishName: 'بادام و گوێزی کاڵ', quantity: '400 g', category: 'Fats & Superfoods 🥑'),
-      GroceryItem(id: '12', name: 'Extra Virgin Olive Oil', kurdishName: 'زەیتی زەیتوونی ئەسڵی', quantity: '750 ml', category: 'Fats & Superfoods 🥑', isChecked: true),
-      GroceryItem(id: '13', name: 'Fresh Hass Avocados', kurdishName: 'ئەڤۆکادۆ', quantity: '4 Pieces', category: 'Fats & Superfoods 🥑'),
-
-      // Greens & Fruits
-      GroceryItem(id: '14', name: 'Fresh Bananas', kurdishName: 'مۆزی تازە', quantity: '2 kg', category: 'Greens & Fruits 🍌', isChecked: true),
-      GroceryItem(id: '15', name: 'Baby Spinach & Broccoli', kurdishName: 'سپێناغ و برۆکلی', quantity: '1.5 kg', category: 'Greens & Fruits 🍌'),
-      GroceryItem(id: '16', name: 'Fresh Blueberries', kurdishName: 'تووتڕک و بلوبێری', quantity: '300 g', category: 'Greens & Fruits 🍌'),
-    ];
+    _groceries = [];
   }
 
   @override
@@ -786,7 +762,64 @@ class _WeeklyMealPlannerScreenState extends State<WeeklyMealPlannerScreen>
         const SizedBox(height: 12),
 
         // Categorized list
-        ...categories.map((cat) {
+        if (_groceries.isEmpty)
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.grey.shade200),
+            ),
+            child: Center(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.shopping_cart_outlined,
+                      size: 32,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Grocery List is Empty',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.lightTextPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Add your meal prep ingredients and grocery checklist items here.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.lightTextSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    onPressed: _showAddGroceryDialog,
+                    icon: const Icon(Icons.add_rounded, size: 16),
+                    label: const Text('Add First Item', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          ...categories.map((cat) {
           final items = _groceries.where((item) => item.category == cat).toList();
           if (items.isEmpty) return const SizedBox.shrink();
 

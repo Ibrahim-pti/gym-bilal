@@ -91,8 +91,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
-  // Bookmarks
-  final Set<String> _bookmarkedIds = {'bench_press', 'pull_ups', 'barbell_squat'};
+  // Bookmarks (Clean Initial State)
+  final Set<String> _bookmarkedIds = <String>{};
 
   // Featured Workout Courses for Top Interactive Showcase Banner
   int _activeCourseIndex = 0;

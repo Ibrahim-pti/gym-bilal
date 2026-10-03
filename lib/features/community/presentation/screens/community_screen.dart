@@ -20,184 +20,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
   bool _isSearchOpen = false;
 
   // Complete Content Feed (Reels, Photos, Articles)
-  final List<Map<String, dynamic>> _feedItems = [
-    // 1. REEL: Deadlift PR
-    {
-      'id': 'reel_1',
-      'type': 'reel',
-      'title': 'Heavy Barbell Deadlift PR 240kg Form Check',
-      'author': 'Coach Bilal',
-      'role': 'Master Trainer • Pro Athlete',
-      'avatar': 'assets/images/user_avatar.jpg',
-      'time': '1 hour ago',
-      'videoThumbnail': 'assets/images/workout_back.jpg',
-      'duration': '0:34',
-      'views': '48.2k',
-      'audioTrack': 'Gym Phonk High Voltage • 160 BPM',
-      'exerciseTag': 'Barbell Deadlift',
-      'caption':
-          'Clean lockout, tight core, lats packed tight before pulling. Always focus on driving feet through the platform! 💪🔥 #DeadliftPR #BackDay',
-      'likes': 3840,
-      'isLiked': true,
-      'comments': 248,
-      'isBookmarked': false,
-    },
+  final List<Map<String, dynamic>> _feedItems = [];
 
-    // 2. ARTICLE: Hypertrophy Science
-    {
-      'id': 'art_1',
-      'type': 'article',
-      'title': 'The Science of Hypertrophy: Rest Periods vs Volume',
-      'author': 'Dr. Karwan Fitness',
-      'role': 'Sports Science & Nutrition Ph.D.',
-      'avatar': 'assets/images/male_fitness_banner.jpg',
-      'time': '3 hours ago',
-      'readTime': '4 min read',
-      'tags': ['Hypertrophy', 'Science', 'Rest Periods'],
-      'caption':
-          'Why resting 2-3 minutes on heavy compound lifts produces significantly greater muscle mass than rushing through 45-second intervals.',
-      'takeaways': [
-        'Full 2.5-3 min rest allows 95%+ ATP-CP system replenishment.',
-        'Higher mechanical tension per set drives faster myofibrillar growth.',
-        'Short rest leads to premature cardiovascular fatigue rather than muscular failure.',
-      ],
-      'fullArticle':
-          'Many gym-goers believe that shorter rest intervals burn more calories and accelerate muscle hypertrophy due to the severe pump and burning sensation. However, multiple recent peer-reviewed meta-analyses have overturned this misconception.\n\nWhen training for hypertrophy on multi-joint compound exercises (such as squats, flat bench presses, and barbell rows), resting at least 2 to 3 minutes between working sets enables complete central nervous system recovery and replenishes intra-muscular ATP and creatine phosphate stores.\n\nThis allows you to maintain optimal load intensity and bar velocity across all working sets. Ultimately, volume load multiplied by mechanical tension is the primary stimulus for muscular development.',
-      'likes': 1120,
-      'isLiked': false,
-      'comments': 84,
-      'isBookmarked': true,
-    },
-
-    // 3. PHOTO POST: Transformation
-    {
-      'id': 'photo_1',
-      'type': 'photo',
-      'title': '6 Months Natural Body Transformation',
-      'author': 'Renas Hawrami',
-      'role': 'Athlete • Sulaymaniyah',
-      'avatar': 'assets/images/splash_athlete.jpg',
-      'time': '5 hours ago',
-      'image': 'assets/images/onboarding_athlete.jpg',
-      'category': 'Transformation',
-      'caption':
-          'Strict 2.2g protein per kg of bodyweight, 8 hours of uninterrupted sleep, and progressive overload on compound lifts. No shortcuts, just pure dedication! 🏋️‍♂️💯',
-      'likes': 2140,
-      'isLiked': false,
-      'comments': 156,
-      'isBookmarked': false,
-    },
-
-    // 4. REEL: Incline Dumbbell Press Form
-    {
-      'id': 'reel_2',
-      'type': 'reel',
-      'title': 'Upper Pec Clavicular Squeeze • Incline Dumbbell Press',
-      'author': 'Alex Hunter',
-      'role': 'Chest & Shoulder Specialist',
-      'avatar': 'assets/images/male_fitness_banner.jpg',
-      'time': '8 hours ago',
-      'videoThumbnail': 'assets/images/card_gym_full.png',
-      'duration': '0:42',
-      'views': '31.5k',
-      'audioTrack': 'Heavy Bass Workout Mix • DJ Hype',
-      'exerciseTag': 'Incline Dumbbell Press',
-      'caption':
-          'Set your bench to 30 degrees (not 45). Keep elbows tucked at 45-60 degrees to preserve shoulder health while maximizing upper chest activation! 🔥',
-      'likes': 2890,
-      'isLiked': false,
-      'comments': 112,
-      'isBookmarked': true,
-    },
-
-    // 5. PHOTO POST: Post-Workout Meal Prep
-    {
-      'id': 'photo_2',
-      'type': 'photo',
-      'title': '680 kcal High-Protein Muscle Fuel',
-      'author': 'Sara Nutrition',
-      'role': 'Certified Sports Dietitian',
-      'avatar': 'assets/images/female_fitness_banner.jpg',
-      'time': '10 hours ago',
-      'image': 'assets/images/card_nutrition_full.png',
-      'category': 'Nutrition',
-      'caption':
-          'Grilled chicken breast with basmati rice, avocado slices, and steamed broccoli. Packed with 52g protein and essential micronutrients for peak muscle repair! 🥗🍗',
-      'likes': 1430,
-      'isLiked': true,
-      'comments': 93,
-      'isBookmarked': false,
-    },
-
-    // 6. ARTICLE: Shoulder Health & Rotator Cuff
-    {
-      'id': 'art_2',
-      'type': 'article',
-      'title': '5 Critical Fixes For Shoulder Pain During Bench Press',
-      'author': 'Coach Bilal',
-      'role': 'Master Trainer • Pro Athlete',
-      'avatar': 'assets/images/user_avatar.jpg',
-      'time': '14 hours ago',
-      'readTime': '5 min read',
-      'tags': ['Injury Prevention', 'Bench Press', 'Shoulder Care'],
-      'caption':
-          'Eliminate anterior shoulder impingement with these five biomechanical adjustments before your next push workout.',
-      'takeaways': [
-        'Retract and depress your scapulae into the bench pad before un-racking.',
-        'Avoid excessive 90-degree elbow flares; tuck them to approximately 75 degrees.',
-        'Incorporate external rotation warm-ups with light resistance cables.',
-      ],
-      'fullArticle':
-          'Shoulder pain during flat bench pressing is one of the most common complaints among weightlifters. Almost universally, this stems from pressing with a flat upper back and allowing the elbows to flare perpendicular to the torso (90 degrees).\n\nWhen your shoulders internally rotate under heavy load, the subacromial space narrows, pinching the supraspinatus tendon. To safeguard your joints, pull your shoulder blades together and tuck them downward as if putting them in your back pockets. Lower the barbell to the lower sternum rather than your collarbones.',
-      'likes': 980,
-      'isLiked': false,
-      'comments': 62,
-      'isBookmarked': false,
-    },
-
-    // 7. REEL: Pull-Up Progression
-    {
-      'id': 'reel_3',
-      'type': 'reel',
-      'title': 'Wide-Grip Pull-Up V-Taper Mastery',
-      'author': 'Maya Stone',
-      'role': 'Calisthenics Coach',
-      'avatar': 'assets/images/female_fitness_banner.jpg',
-      'time': '1 day ago',
-      'videoThumbnail': 'assets/images/pullup_figure.jpg',
-      'duration': '0:28',
-      'views': '54.1k',
-      'audioTrack': 'Deep Focus Instrumental • Beats',
-      'exerciseTag': 'Wide-Grip Pull Up',
-      'caption':
-          'Stop kicking your legs! Engage your hollow body position, pull your chest towards the bar, and pause for a 1-second peak contraction at the top! ⚡🧗‍♀️',
-      'likes': 4210,
-      'isLiked': true,
-      'comments': 310,
-      'isBookmarked': true,
-    },
-
-    // 8. PHOTO POST: Leg Day Intensity
-    {
-      'id': 'photo_3',
-      'type': 'photo',
-      'title': 'Quad Pump After 5 Sets of Heavy Barbell Squats',
-      'author': 'Zana Hawleri',
-      'role': 'Powerlifter',
-      'avatar': 'assets/images/onboarding_athlete.jpg',
-      'time': '1 day ago',
-      'image': 'assets/images/card_progress_full.png',
-      'category': 'Leg Day',
-      'caption':
-          'Squat depth to parallel or below every single repetition. Building tree trunk legs requires patience and heavy iron! 🦵💥',
-      'likes': 1870,
-      'isLiked': false,
-      'comments': 104,
-      'isBookmarked': false,
-    },
-  ];
-
-  // Helper list of all Reels for the viewer
   List<Map<String, dynamic>> get _allReels =>
       _feedItems.where((item) => item['type'] == 'reel').toList();
 
@@ -387,36 +211,6 @@ class _CommunityScreenState extends State<CommunityScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
                 _buildAddStoryItem(),
-                _buildStoryItem(
-                  'Coach Bilal',
-                  'assets/images/user_avatar.jpg',
-                  isLive: true,
-                  onTap: () => _openReelsViewer(0),
-                ),
-                _buildStoryItem(
-                  'Maya',
-                  'assets/images/female_fitness_banner.jpg',
-                  isLive: false,
-                  onTap: () => _openReelsViewer(2),
-                ),
-                _buildStoryItem(
-                  'Alex',
-                  'assets/images/male_fitness_banner.jpg',
-                  isLive: false,
-                  onTap: () => _openReelsViewer(1),
-                ),
-                _buildStoryItem(
-                  'Renas',
-                  'assets/images/splash_athlete.jpg',
-                  isLive: false,
-                  onTap: () {},
-                ),
-                _buildStoryItem(
-                  'Zana',
-                  'assets/images/onboarding_athlete.jpg',
-                  isLive: false,
-                  onTap: () {},
-                ),
               ],
             ),
           ),
@@ -427,7 +221,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
           _buildFilterTabs(),
 
           // 3. Featured Reels Carousel (Shown when filter is 'all' or 'reels')
-          if ((_selectedFilter == 'all' || _selectedFilter == 'reels') && _searchQuery.isEmpty) ...[
+          if ((_selectedFilter == 'all' || _selectedFilter == 'reels') && _searchQuery.isEmpty && reelsList.isNotEmpty) ...[
             const SizedBox(height: 14),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -509,18 +303,21 @@ class _CommunityScreenState extends State<CommunityScreen> {
                 children: [
                   Icon(Icons.search_off_rounded, size: 48, color: Colors.grey.shade400),
                   const SizedBox(height: 12),
-                  const Text(
-                    'No posts found',
-                    style: TextStyle(
+                  Text(
+                    _searchQuery.isNotEmpty ? 'No posts found' : 'No Community Posts Yet',
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
                       color: AppColors.lightTextPrimary,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'Try changing your filter or search keywords.',
-                    style: TextStyle(fontSize: 12, color: AppColors.lightTextSecondary),
+                  Text(
+                    _searchQuery.isNotEmpty
+                        ? 'Try changing your filter or search keywords.'
+                        : 'Tap "+ Create Post" below to share your workout or nutrition!',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 12, color: AppColors.lightTextSecondary),
                   ),
                 ],
               ),
@@ -609,6 +406,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
     );
   }
 
+  // ignore: unused_element
   Widget _buildStoryItem(
     String name,
     String imagePath, {

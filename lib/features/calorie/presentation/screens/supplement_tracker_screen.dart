@@ -15,116 +15,7 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
   String _selectedCategory = 'all';
 
   // Daily Supplements List with reminder times
-  final List<Map<String, dynamic>> _supplements = [
-    {
-      'id': 1,
-      'name': 'Creatine Monohydrate',
-      'brand': 'Creapure Micronized',
-      'dosage': '5g',
-      'timing': 'Pre / Post Workout',
-      'timeWindow': '45m before workout',
-      'category': 'pre',
-      'taken': true,
-      'color': const Color(0xFF3B82F6),
-      'icon': Icons.bolt_rounded,
-      'instructions': 'Dissolve in 300ml of water or fruit juice. Increases intramuscular phosphocreatine for raw strength output.',
-      'streak': 18,
-      'reminderEnabled': true,
-      'reminderHour': 16,
-      'reminderMinute': 30,
-      'reminderTime': '04:30 PM',
-    },
-    {
-      'id': 2,
-      'name': 'Whey Isolate Protein',
-      'brand': '100% Hydrolyzed Whey',
-      'dosage': '30g Protein (1 Scoop)',
-      'timing': 'Post-Workout Anabolic Window',
-      'timeWindow': 'Within 30m after training',
-      'category': 'post',
-      'taken': true,
-      'color': AppColors.primary,
-      'icon': Icons.fitness_center_rounded,
-      'instructions': 'Mix with cold water or almond milk. Rapid leucine spike to maximize Muscle Protein Synthesis (MPS).',
-      'streak': 24,
-      'reminderEnabled': true,
-      'reminderHour': 18,
-      'reminderMinute': 0,
-      'reminderTime': '06:00 PM',
-    },
-    {
-      'id': 3,
-      'name': 'Pre-Workout Ignition',
-      'brand': 'High Voltage Pump & Focus',
-      'dosage': '1 Scoop (200mg Caffeine + 3g Citrulline)',
-      'timing': 'Pre-Workout Energy',
-      'timeWindow': '30m prior to heavy lifts',
-      'category': 'pre',
-      'taken': false,
-      'color': const Color(0xFFFF5252),
-      'icon': Icons.local_fire_department_rounded,
-      'instructions': 'Enhances nitric oxide blood flow, muscular endurance, and neurological drive.',
-      'streak': 9,
-      'reminderEnabled': true,
-      'reminderHour': 16,
-      'reminderMinute': 0,
-      'reminderTime': '04:00 PM',
-    },
-    {
-      'id': 4,
-      'name': 'Omega-3 Fish Oil (EPA / DHA)',
-      'brand': 'Triple Strength Molecular Distilled',
-      'dosage': '2 Capsules (1200mg EPA + 900mg DHA)',
-      'timing': 'Morning Breakfast',
-      'timeWindow': 'With first fatty meal',
-      'category': 'daily',
-      'taken': true,
-      'color': const Color(0xFFF59E0B),
-      'icon': Icons.favorite_rounded,
-      'instructions': 'Supports joint cartilage integrity, reduces systemic inflammation, and accelerates muscle recovery.',
-      'streak': 30,
-      'reminderEnabled': true,
-      'reminderHour': 8,
-      'reminderMinute': 30,
-      'reminderTime': '08:30 AM',
-    },
-    {
-      'id': 5,
-      'name': 'Multivitamin + Vitamin D3 & K2',
-      'brand': 'Elite Athletic Spectrum',
-      'dosage': '1 Tablet + 5000 IU D3',
-      'timing': 'Morning Health',
-      'timeWindow': 'With breakfast',
-      'category': 'daily',
-      'taken': true,
-      'color': const Color(0xFF10B981),
-      'icon': Icons.eco_rounded,
-      'instructions': 'Replenishes essential micronutrients lost during heavy sweat sessions.',
-      'streak': 28,
-      'reminderEnabled': true,
-      'reminderHour': 8,
-      'reminderMinute': 30,
-      'reminderTime': '08:30 AM',
-    },
-    {
-      'id': 6,
-      'name': 'ZMA (Zinc, Magnesium & B6)',
-      'brand': 'Nighttime Deep Sleep Formula',
-      'dosage': '3 Capsules (30mg Zn + 450mg Mg)',
-      'timing': 'Night Recovery',
-      'timeWindow': '30-45m before sleep on empty stomach',
-      'category': 'post',
-      'taken': false,
-      'color': const Color(0xFF8B5CF6),
-      'icon': Icons.bedtime_rounded,
-      'instructions': 'Promotes deep stage 4 REM sleep, nervous system relaxation, and natural testosterone synthesis.',
-      'streak': 14,
-      'reminderEnabled': true,
-      'reminderHour': 22,
-      'reminderMinute': 30,
-      'reminderTime': '10:30 PM',
-    },
-  ];
+  final List<Map<String, dynamic>> _supplements = [];
 
   int get _takenCount => _supplements.where((s) => s['taken'] == true).length;
   double get _completionPercent => _supplements.isEmpty ? 0.0 : _takenCount / _supplements.length;
@@ -527,7 +418,7 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
                                   Text('🔥', style: TextStyle(fontSize: 11)),
                                   SizedBox(width: 3),
                                   Text(
-                                    '14 Day Streak',
+                                    '0 Day Streak',
                                     style: TextStyle(
                                       color: Color(0xFFFF8585),
                                       fontSize: 10.5,
@@ -541,9 +432,11 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          percent >= 1.0
-                              ? '🏆 All supplements completed today!'
-                              : 'Keep your anabolic recovery primed on time.',
+                          total == 0
+                              ? 'Tap "+" above to add your daily stack.'
+                              : (percent >= 1.0
+                                  ? '🏆 All supplements completed today!'
+                                  : 'Keep your anabolic recovery primed on time.'),
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.75),
                             fontSize: 12,
@@ -579,7 +472,56 @@ class _SupplementTrackerScreenState extends State<SupplementTrackerScreen> {
           const SizedBox(height: 14),
 
           // 3. Supplement Items List
-          ...list.map((supp) => _buildSupplementCard(supp)),
+          if (list.isEmpty)
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+              ),
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.medication_rounded,
+                        size: 32,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'No Supplements in Stack',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF131519),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _selectedCategory == 'all'
+                          ? 'Tap "+" in the top bar to add your daily vitamins and supplements.'
+                          : 'No supplements found for this category.',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF757A86),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else
+            ...list.map((supp) => _buildSupplementCard(supp)),
         ],
       ),
     );

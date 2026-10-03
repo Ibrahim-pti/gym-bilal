@@ -12,55 +12,41 @@ class CalorieScreen extends StatefulWidget {
 }
 
 class _CalorieScreenState extends State<CalorieScreen> {
-  int _consumedCalories = 1680;
+  int _consumedCalories = 0;
   final int _targetCalories = 2400;
-  final int _burnedCalories = 420;
-  int _waterGlasses = 7; // out of 10
+  final int _burnedCalories = 0;
+  int _waterGlasses = 0; // out of 10
   final int _targetGlasses = 10;
 
-  // Master Logged Meals (100% English)
-  final List<Map<String, dynamic>> _meals = [
-    {
-      'title': 'Breakfast',
-      'food': '3 Boiled Eggs + Sourdough Toast + Black Coffee',
-      'cal': 360,
-      'protein': '26g',
-      'carbs': '32g',
-      'fat': '14g',
-      'time': '08:30 AM',
-      'icon': Icons.wb_sunny_rounded,
-    },
-    {
-      'title': 'Lunch',
-      'food': 'Grilled Chicken Breast with Brown Rice & Green Salad',
-      'cal': 680,
-      'protein': '52g',
-      'carbs': '70g',
-      'fat': '18g',
-      'time': '01:45 PM',
-      'icon': Icons.restaurant_rounded,
-    },
-    {
-      'title': 'Pre-Workout Snack',
-      'food': 'Banana + Natural Peanut Butter + Double Espresso',
-      'cal': 240,
-      'protein': '7g',
-      'carbs': '35g',
-      'fat': '9g',
-      'time': '04:30 PM',
-      'icon': Icons.bolt_rounded,
-    },
-    {
-      'title': 'Dinner',
-      'food': 'Seared Sirloin Steak with Sweet Potato & Greek Yogurt',
-      'cal': 400,
-      'protein': '38g',
-      'carbs': '22g',
-      'fat': '15g',
-      'time': '08:00 PM',
-      'icon': Icons.nightlight_round,
-    },
-  ];
+  // Master Logged Meals (Clean State)
+  final List<Map<String, dynamic>> _meals = [];
+
+  int get _totalProtein {
+    int total = 0;
+    for (final meal in _meals) {
+      final pStr = (meal['protein'] as String? ?? '0').replaceAll(RegExp(r'[^0-9]'), '');
+      total += int.tryParse(pStr) ?? 0;
+    }
+    return total;
+  }
+
+  int get _totalCarbs {
+    int total = 0;
+    for (final meal in _meals) {
+      final cStr = (meal['carbs'] as String? ?? '0').replaceAll(RegExp(r'[^0-9]'), '');
+      total += int.tryParse(cStr) ?? 0;
+    }
+    return total;
+  }
+
+  int get _totalFat {
+    int total = 0;
+    for (final meal in _meals) {
+      final fStr = (meal['fat'] as String? ?? '0').replaceAll(RegExp(r'[^0-9]'), '');
+      total += int.tryParse(fStr) ?? 0;
+    }
+    return total;
+  }
 
   // Open the AI Camera Food Scanner Page
   Future<void> _openCameraScanner() async {
@@ -195,7 +181,10 @@ class _CalorieScreenState extends State<CalorieScreen> {
           const SizedBox(height: 10),
 
           // 5. LIST OF LOGGED MEALS
-          ..._meals.map((meal) => _buildMealCard(meal)),
+          if (_meals.isEmpty)
+            _buildEmptyMealsState()
+          else
+            ..._meals.map((meal) => _buildMealCard(meal)),
         ],
       ),
     );
@@ -469,11 +458,11 @@ class _CalorieScreenState extends State<CalorieScreen> {
           // Macro Breakdown Progress Bars
           Row(
             children: [
-              _buildMacroBar('Protein', '103g / 150g', 103 / 150, const Color(0xFFFF5252)),
+              _buildMacroBar('Protein', '${_totalProtein}g / 150g', _totalProtein / 150, const Color(0xFFFF5252)),
               const SizedBox(width: 12),
-              _buildMacroBar('Carbs', '179g / 220g', 179 / 220, const Color(0xFF0284C7)),
+              _buildMacroBar('Carbs', '${_totalCarbs}g / 220g', _totalCarbs / 220, const Color(0xFF0284C7)),
               const SizedBox(width: 12),
-              _buildMacroBar('Healthy Fats', '56g / 70g', 56 / 70, const Color(0xFF8B5CF6)),
+              _buildMacroBar('Healthy Fats', '${_totalFat}g / 70g', _totalFat / 70, const Color(0xFF8B5CF6)),
             ],
           ),
         ],
@@ -873,6 +862,51 @@ class _CalorieScreenState extends State<CalorieScreen> {
       child: Text(
         text,
         style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: color),
+      ),
+    );
+  }
+  Widget _buildEmptyMealsState() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.restaurant_menu_rounded,
+              size: 28,
+              color: AppColors.primary,
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Text(
+            'No Meals Logged Today',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF131519),
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Scan your food with AI Camera or log items to track calories & macros.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              color: Color(0xFF757A86),
+            ),
+          ),
+        ],
       ),
     );
   }
