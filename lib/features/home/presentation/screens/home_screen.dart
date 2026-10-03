@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Aryan Rathore',
+                            'Gym Member',
                             style: TextStyle(
                               fontSize: 16.5,
                               fontWeight: FontWeight.w800,
@@ -1315,25 +1315,29 @@ class _HomeScreenState extends State<HomeScreen> {
                         vertical: 3.5,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.2),
+                        color: _todayExercises.isNotEmpty
+                            ? AppColors.primary.withValues(alpha: 0.2)
+                            : Colors.white.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: AppColors.primary.withValues(alpha: 0.4),
+                          color: _todayExercises.isNotEmpty
+                              ? AppColors.primary.withValues(alpha: 0.4)
+                              : Colors.transparent,
                           width: 1,
                         ),
                       ),
-                      child: const Row(
+                      child: Row(
                         children: [
                           Icon(
-                            Icons.fitness_center_rounded,
+                            _todayExercises.isNotEmpty ? Icons.local_fire_department_rounded : Icons.fitness_center_rounded,
                             size: 11,
-                            color: AppColors.primary,
+                            color: _todayExercises.isNotEmpty ? AppColors.primary : Colors.white70,
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
-                            'CHEST & TRICEPS FOCUS',
+                            _todayExercises.isNotEmpty ? 'CHEST & TRICEPS FOCUS' : 'TODAY\'S WORKOUT',
                             style: TextStyle(
-                              color: Color(0xFFFFB038),
+                              color: _todayExercises.isNotEmpty ? const Color(0xFFFFB038) : Colors.white70,
                               fontSize: 9.5,
                               fontWeight: FontWeight.w800,
                               letterSpacing: 0.3,
@@ -1342,32 +1346,33 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 3.5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Text(
-                        '⏱️ 45 Min • 340 kcal',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
+                    if (_todayExercises.isNotEmpty)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3.5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Text(
+                          '⏱️ 45 Min • 340 kcal',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
 
                 // Routine Title
-                const Text(
-                  'Push Power & Hypertrophy',
-                  style: TextStyle(
+                Text(
+                  _todayExercises.isNotEmpty ? 'Push Power & Hypertrophy' : 'Today\'s Routine',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
@@ -1376,7 +1381,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Build strength with high tension & strict form.',
+                  _todayExercises.isNotEmpty
+                      ? 'Build strength with high tension & strict form.'
+                      : 'Choose your workout split or start training today.',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.65),
                     fontSize: 11.5,

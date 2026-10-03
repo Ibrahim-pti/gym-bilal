@@ -107,7 +107,7 @@ class GymPassSheet extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'BILAL GYM PRO VIP',
+                              'BILAL GYM PASS',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 13,
@@ -116,7 +116,7 @@ class GymPassSheet extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Annual VIP Membership',
+                              'Digital Membership',
                               style: TextStyle(
                                 color: Colors.white60,
                                 fontSize: 9.5,
@@ -172,7 +172,7 @@ class GymPassSheet extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       const Text(
-                        '#GB-89241-PRO',
+                        '#GB-MEMBER-PASS',
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: 12,
@@ -194,15 +194,15 @@ class GymPassSheet extends StatelessWidget {
                       children: const [
                         Text('MEMBER', style: TextStyle(color: Colors.white54, fontSize: 9.5, fontWeight: FontWeight.w700)),
                         SizedBox(height: 2),
-                        Text('Aryan Rathore', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900)),
+                        Text('Gym Member', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900)),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: const [
-                        Text('EXPIRES IN', style: TextStyle(color: Colors.white54, fontSize: 9.5, fontWeight: FontWeight.w700)),
+                        Text('STATUS', style: TextStyle(color: Colors.white54, fontSize: 9.5, fontWeight: FontWeight.w700)),
                         SizedBox(height: 2),
-                        Text('24 Days Left', style: TextStyle(color: Color(0xFFFBBF24), fontSize: 14, fontWeight: FontWeight.w900)),
+                        Text('Active Pass', style: TextStyle(color: Color(0xFFFBBF24), fontSize: 14, fontWeight: FontWeight.w900)),
                       ],
                     ),
                   ],
@@ -216,7 +216,7 @@ class GymPassSheet extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildPerk('Locker #42', Icons.lock_outline),
+              _buildPerk('Locker Room', Icons.lock_outline),
               _buildPerk('Sauna & Jacuzzi', Icons.hot_tub_rounded),
               _buildPerk('Towel Service', Icons.check_circle_outline_rounded),
             ],

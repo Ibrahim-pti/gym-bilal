@@ -242,7 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Row(
                             children: [
                               const Text(
-                                'Aryan Rathore',
+                                'Gym Member',
                                 style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w800,
@@ -265,7 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     border: Border.all(color: const Color(0xFFFFD494)),
                                   ),
                                   child: const Text(
-                                    'PRO 👑',
+                                    'MEMBERSHIP 👑',
                                     style: TextStyle(
                                       fontSize: 9.5,
                                       fontWeight: FontWeight.w900,
@@ -278,7 +278,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           const SizedBox(height: 3),
                           const Text(
-                            'Level 12 • Advanced Athlete',
+                            'Member • Gym Bilal',
                             style: TextStyle(
                               fontSize: 12,
                               color: AppColors.lightTextSecondary,
@@ -334,7 +334,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: const Text(
-                            '24 Days Left',
+                            'Active Pass',
                             style: TextStyle(
                               color: Color(0xFF059669),
                               fontWeight: FontWeight.w900,
@@ -464,7 +464,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildFeatureTile(
                 title: 'Muscle Heatmap',
                 subtitle: 'Anatomical Recovery',
-                tag: '78% Ready',
+                tag: 'Heatmap 🧬',
                 icon: Icons.accessibility_new_rounded,
                 color: const Color(0xFF10B981),
                 bgGradient: const [Color(0xFF111E1A), Color(0xFF0C1412)],
@@ -506,7 +506,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildFeatureTile(
                 title: 'Gym Leaderboard',
                 subtitle: 'Ranks & Top 3 Podium',
-                tag: 'RANK #4 👑',
+                tag: 'Ranks 🏆',
                 icon: Icons.emoji_events_rounded,
                 color: const Color(0xFFF59E0B),
                 bgGradient: const [Color(0xFF241C10), Color(0xFF151009)],
@@ -549,7 +549,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5),
                         ),
                         Text(
-                          '1.8L of 2.5L logged today (72%) • Tap to log water',
+                          'Track daily hydration • Tap to log',
                           style: TextStyle(color: Color(0xFF0369A1), fontSize: 11),
                         ),
                       ],
@@ -939,10 +939,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildBadgeItem('🔥', 'Streak Master', '14 Days In a Row'),
-                _buildBadgeItem('🏋️', 'Iron Lifter', '50 Personal Bests'),
+                _buildBadgeItem('🔥', 'Streak Master', '14-Day Goal'),
+                _buildBadgeItem('🏋️', 'Iron Lifter', '50 PR Bests'),
                 _buildBadgeItem('🥗', 'Calorie Pro', '30 Meals Logged'),
-                _buildBadgeItem('👑', 'Gym Champion', 'Rank #1 This Month'),
+                _buildBadgeItem('👑', 'Gym Champion', 'Monthly Podium'),
               ],
             ),
           ),

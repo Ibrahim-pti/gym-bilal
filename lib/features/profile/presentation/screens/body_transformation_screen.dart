@@ -287,10 +287,10 @@ class _BodyTransformationScreenState extends State<BodyTransformationScreen> {
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1),
                                 ),
-                                child: const Column(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'BEFORE',
                                       style: TextStyle(
                                         color: Colors.white70,
@@ -299,8 +299,10 @@ class _BodyTransformationScreenState extends State<BodyTransformationScreen> {
                                       ),
                                     ),
                                     Text(
-                                      '84.5 kg • 22.0%',
-                                      style: TextStyle(
+                                      _weightHistory.isNotEmpty
+                                          ? '${_weightHistory.first['weight']} kg'
+                                          : 'Initial Photo',
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w900,
@@ -328,10 +330,10 @@ class _BodyTransformationScreenState extends State<BodyTransformationScreen> {
                                     ),
                                   ],
                                 ),
-                                child: const Column(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'CURRENT',
                                       style: TextStyle(
                                         color: Colors.white,
@@ -340,8 +342,10 @@ class _BodyTransformationScreenState extends State<BodyTransformationScreen> {
                                       ),
                                     ),
                                     Text(
-                                      '76.0 kg • 12.2%',
-                                      style: TextStyle(
+                                      _weightHistory.isNotEmpty
+                                          ? '${_weightHistory.last['weight']} kg'
+                                          : 'Latest Photo',
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w900,
@@ -431,24 +435,24 @@ class _BodyTransformationScreenState extends State<BodyTransformationScreen> {
                 children: [
                   _buildStatTile(
                     title: 'Weight Lost',
-                    value: '-8.5 kg',
-                    subtext: '12 Weeks Total',
+                    value: _weightHistory.isEmpty ? '0.0 kg' : '-${((_weightHistory.first['weight'] as num) - (_weightHistory.last['weight'] as num)).toStringAsFixed(1)} kg',
+                    subtext: _weightHistory.isEmpty ? 'No entries yet' : '${_weightHistory.length} logs recorded',
                     color: const Color(0xFF10B981),
                     icon: Icons.trending_down_rounded,
                   ),
                   const SizedBox(width: 10),
                   _buildStatTile(
                     title: 'Body Fat %',
-                    value: '-9.8%',
-                    subtext: '22.0% -> 12.2%',
+                    value: _weightHistory.isEmpty ? '0.0%' : '${_weightHistory.last['fat'] ?? 0}%',
+                    subtext: _weightHistory.isEmpty ? 'Track to compare' : 'Current estimate',
                     color: const Color(0xFFFF5252),
                     icon: Icons.local_fire_department_rounded,
                   ),
                   const SizedBox(width: 10),
                   _buildStatTile(
-                    title: 'Lean Muscle',
-                    value: '+3.4 kg',
-                    subtext: 'Hypertrophy Gain',
+                    title: 'Logged Logs',
+                    value: '${_weightHistory.length}',
+                    subtext: 'Entries tracked',
                     color: AppColors.primary,
                     icon: Icons.fitness_center_rounded,
                   ),

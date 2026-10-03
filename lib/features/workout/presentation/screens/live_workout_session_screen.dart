@@ -38,7 +38,7 @@ class LiveWorkoutSessionScreen extends StatefulWidget {
 
 class _LiveWorkoutSessionScreenState extends State<LiveWorkoutSessionScreen> {
   // Session Timer
-  int _secondsElapsed = 1420; // ~23 mins
+  int _secondsElapsed = 0;
   Timer? _sessionTimer;
 
   // Rest Timer
@@ -58,8 +58,8 @@ class _LiveWorkoutSessionScreenState extends State<LiveWorkoutSessionScreen> {
         name: 'Incline Barbell Bench Press',
         muscle: 'Upper Chest',
         sets: [
-          WorkoutSet(setNumber: 1, weight: 70.0, reps: 10, isCompleted: true),
-          WorkoutSet(setNumber: 2, weight: 80.0, reps: 8, isCompleted: true),
+          WorkoutSet(setNumber: 1, weight: 70.0, reps: 10, isCompleted: false),
+          WorkoutSet(setNumber: 2, weight: 80.0, reps: 8, isCompleted: false),
           WorkoutSet(setNumber: 3, weight: 85.0, reps: 6, isCompleted: false),
           WorkoutSet(setNumber: 4, weight: 90.0, reps: 4, isCompleted: false),
         ],

@@ -1309,8 +1309,8 @@ class _CreatePostSheetState extends State<_CreatePostSheet> {
       'id': 'user_${DateTime.now().millisecondsSinceEpoch}',
       'type': _postType,
       'title': title.isNotEmpty ? title : 'New Community Update',
-      'author': 'Aryan Rathore',
-      'role': 'Pro Member • Erbil',
+      'author': 'Gym Member',
+      'role': 'Member',
       'avatar': 'assets/images/user_avatar.jpg',
       'time': 'Just now',
       'caption': content,
@@ -1324,7 +1324,7 @@ class _CreatePostSheetState extends State<_CreatePostSheet> {
       newPost['videoThumbnail'] = 'assets/images/workout_back.jpg';
       newPost['duration'] = '0:30';
       newPost['views'] = '1';
-      newPost['audioTrack'] = 'Original Gym Sound • Aryan';
+      newPost['audioTrack'] = 'Original Gym Sound';
     } else if (_postType == 'photo') {
       newPost['image'] = 'assets/images/onboarding_athlete.jpg';
       newPost['category'] = 'Community';

@@ -750,40 +750,7 @@ class _CommentsBottomSheet extends StatefulWidget {
 
 class _CommentsBottomSheetState extends State<_CommentsBottomSheet> {
   final TextEditingController _commentController = TextEditingController();
-  final List<Map<String, dynamic>> _comments = [
-    {
-      'user': 'Sardar Kurdish',
-      'avatar': 'assets/images/user_avatar.jpg',
-      'time': '12m ago',
-      'text': 'Insane form! The lockout speed is phenomenal 🔥💪',
-      'likes': 42,
-      'isLiked': false,
-    },
-    {
-      'user': 'Coach Halgurd',
-      'avatar': 'assets/images/splash_athlete.jpg',
-      'time': '45m ago',
-      'text': 'Perfect hip hinge mechanics. Everyone should study this setup!',
-      'likes': 28,
-      'isLiked': true,
-    },
-    {
-      'user': 'Shano Fitness',
-      'avatar': 'assets/images/female_fitness_banner.jpg',
-      'time': '2h ago',
-      'text': 'What brand lifting belt is that? Looks sturdy 🏋️‍♀️',
-      'likes': 9,
-      'isLiked': false,
-    },
-    {
-      'user': 'Zana Hawleri',
-      'avatar': 'assets/images/onboarding_athlete.jpg',
-      'time': '4h ago',
-      'text': 'Road to 260kg brother! Keep crushing it 🚀',
-      'likes': 15,
-      'isLiked': false,
-    },
-  ];
+  final List<Map<String, dynamic>> _comments = [];
 
   void _addComment() {
     final text = _commentController.text.trim();
@@ -791,7 +758,7 @@ class _CommentsBottomSheetState extends State<_CommentsBottomSheet> {
 
     setState(() {
       _comments.insert(0, {
-        'user': 'Aryan Rathore',
+        'user': 'Gym Member',
         'avatar': 'assets/images/user_avatar.jpg',
         'time': 'Just now',
         'text': text,
@@ -862,7 +829,37 @@ class _CommentsBottomSheetState extends State<_CommentsBottomSheet> {
 
           // Comments List
           Expanded(
-            child: ListView.separated(
+            child: _comments.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.chat_bubble_outline_rounded,
+                          size: 40,
+                          color: Colors.white.withValues(alpha: 0.25),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'No comments yet',
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Be the first to share your thoughts!',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.4),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               itemCount: _comments.length,
               separatorBuilder: (_, _) => const SizedBox(height: 16),
