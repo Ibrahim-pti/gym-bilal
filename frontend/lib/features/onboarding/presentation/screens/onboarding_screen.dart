@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
-import 'package:gym_base/features/layout/presentation/screens/main_layout.dart';
+import 'package:gym_base/features/onboarding/presentation/screens/member_login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -44,7 +44,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         transitionDuration: const Duration(milliseconds: 600),
-        pageBuilder: (_, _, _) => const MainLayout(),
+        pageBuilder: (_, _, _) => const MemberLoginScreen(),
         transitionsBuilder: (_, animation, _, child) {
           return FadeTransition(opacity: animation, child: child);
         },

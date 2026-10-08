@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:gym_base/core/services/api_service.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
+import 'package:gym_base/features/layout/presentation/screens/main_layout.dart';
 import 'package:gym_base/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:gym_base/features/profile/presentation/screens/admin_dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -38,12 +41,20 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    Timer(const Duration(milliseconds: 3200), () {
+    Timer(const Duration(milliseconds: 3000), () async {
       if (mounted) {
+        final savedMember = await ApiService().getSavedMember();
+        final isAdmin = await ApiService().isAdmin();
+        Widget target = const OnboardingScreen();
+        if (savedMember != null) {
+          target = isAdmin ? const AdminDashboardScreen() : const MainLayout();
+        }
+
+        if (!mounted) return;
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 800),
-            pageBuilder: (_, _, _) => const OnboardingScreen(),
+            pageBuilder: (_, _, _) => target,
             transitionsBuilder: (_, animation, _, child) {
               return FadeTransition(opacity: animation, child: child);
             },
