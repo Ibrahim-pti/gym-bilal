@@ -7,74 +7,14 @@ use App\Models\Member;
 use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
 use App\Models\Attendance;
+use App\Models\WorkoutPlan;
+use App\Models\Trainer;
+use App\Models\Reel;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class AdminApiController extends Controller
 {
-    /**
-     * Admin QR Scanner: check in member by Barcode or Member ID
-     */
-    public function scanAttendance(Request $request)
-    {
-        $request->validate([
-            'barcode' => 'required|string',
-        ]);
-
-        $barcode = trim($request->barcode);
-
-        $member = Member::where('barcode', $barcode)
-            ->orWhere('phone', $barcode)
-            ->orWhere('id', $barcode)
-            ->first();
-
-        if (!$member) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'ئەندامەکە لە سیستەم نەدۆزرایەوە (Member not found)',
-            ], 404);
-        }
-
-        $member->load('activeSubscription.plan');
-
-        // Check if member subscription is active
-        $isSubscriptionActive = $member->activeSubscription !== null;
-
-        // Check if already checked in within the last 4 hours
-        $recentCheckIn = Attendance::where('member_id', $member->id)
-            ->where('check_in', '>=', Carbon::now()->subHours(4))
-            ->first();
-
-        $alreadyLogged = false;
-        if ($recentCheckIn) {
-            $alreadyLogged = true;
-        } else {
-            // Log new attendance
-            Attendance::create([
-                'member_id' => $member->id,
-                'check_in'  => Carbon::now(),
-            ]);
-        }
-
-        return response()->json([
-            'status'               => true,
-            'message'              => $alreadyLogged ? 'پێشتر هاتووەتە ژوورەوە' : 'بە سەرکەوتوویی تۆمارکرا',
-            'already_logged'       => $alreadyLogged,
-            'is_subscription_valid'=> $isSubscriptionActive,
-            'member' => [
-                'id'        => $member->id,
-                'name'      => $member->name,
-                'phone'     => $member->phone,
-                'barcode'   => $member->barcode,
-                'status'    => $member->status,
-                'days_left' => $member->activeSubscription ? max(0, Carbon::today()->diffInDays($member->activeSubscription->end_date, false)) : 0,
-                'plan_name' => $member->activeSubscription?->plan?->name ?? 'بێ بەشداریکردن',
-                'end_date'  => $member->activeSubscription?->end_date?->format('Y-m-d') ?? 'بەسەرچووە',
-            ],
-            'time' => Carbon::now()->format('h:i A'),
-        ]);
-    }
-
     /**
      * Admin stats summary for mobile dashboard
      */
@@ -94,13 +34,18 @@ class AdminApiController extends Controller
                 'today_checkins'  => $todayCheckIns,
                 'active_members'  => $activeMembers,
                 'expired_members' => $expiredMembers,
+                'total_workouts'  => WorkoutPlan::count(),
+                'total_reels'     => Reel::count(),
+                'total_trainers'  => Trainer::count(),
+                'total_plans'     => SubscriptionPlan::count(),
             ],
         ]);
     }
 
-    /**
-     * Search and list members for admin
-     */
+    // ==========================================
+    // 1. MEMBERS MANAGEMENT
+    // ==========================================
+
     public function getMembers(Request $request)
     {
         $query = Member::query()->with('activeSubscription.plan');
@@ -114,7 +59,7 @@ class AdminApiController extends Controller
             });
         }
 
-        $members = $query->latest()->paginate(25);
+        $members = $query->latest()->get();
 
         return response()->json([
             'status'  => true,
@@ -124,17 +69,59 @@ class AdminApiController extends Controller
                     'name'        => $m->name,
                     'phone'       => $m->phone,
                     'barcode'     => $m->barcode,
+                    'balance'     => (float)$m->balance,
+                    'age'         => $m->age,
+                    'gender'      => $m->gender,
+                    'notes'       => $m->notes,
                     'status'      => $m->status,
-                    'plan'        => $m->activeSubscription?->plan?->name ?? 'None',
+                    'plan'        => $m->activeSubscription?->plan?->name ?? 'بێ بەشداریکردن',
                     'end_date'    => $m->activeSubscription?->end_date?->format('Y-m-d') ?? 'N/A',
                 ];
             }),
         ]);
     }
 
-    /**
-     * Renew member subscription from admin phone
-     */
+    public function saveMember(Request $request)
+    {
+        $request->validate([
+            'name'  => 'required|string|max:150',
+            'phone' => 'required|string|max:50',
+        ]);
+
+        $id = $request->input('id');
+        if ($id) {
+            $member = Member::findOrFail($id);
+            $member->update($request->only(['name', 'phone', 'balance', 'age', 'gender', 'notes']));
+        } else {
+            $barcode = 'GB' . rand(100000, 999999);
+            while (Member::where('barcode', $barcode)->exists()) {
+                $barcode = 'GB' . rand(100000, 999999);
+            }
+            $member = Member::create([
+                'name'    => $request->name,
+                'phone'   => $request->phone,
+                'barcode' => $barcode,
+                'balance' => $request->input('balance', 0),
+                'age'     => $request->input('age'),
+                'gender'  => $request->input('gender', 'male'),
+                'notes'   => $request->input('notes'),
+            ]);
+        }
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'ئەندامەکە بە سەرکەوتوویی سەیڤ کرا',
+            'member'  => $member,
+        ]);
+    }
+
+    public function deleteMember($id)
+    {
+        $member = Member::findOrFail($id);
+        $member->delete();
+        return response()->json(['status' => true, 'message' => 'ئەندامەکە سڕایەوە']);
+    }
+
     public function renewSubscription(Request $request)
     {
         $request->validate([
@@ -163,5 +150,222 @@ class AdminApiController extends Controller
                 'end_date' => $subscription->end_date->format('Y-m-d'),
             ],
         ]);
+    }
+
+    // ==========================================
+    // 2. WORKOUTS MANAGEMENT
+    // ==========================================
+
+    public function getWorkouts()
+    {
+        $workouts = WorkoutPlan::with('trainer')->latest()->get();
+
+        return response()->json([
+            'status'   => true,
+            'workouts' => $workouts->map(function($w) {
+                return [
+                    'id'          => $w->id,
+                    'title'       => $w->title,
+                    'description' => $w->description,
+                    'trainer_name'=> $w->trainer?->name ?? 'Coach Bilal',
+                    'trainer_id'  => $w->trainer_id,
+                    'exercises'   => is_array($w->exercises) ? $w->exercises : json_decode($w->exercises ?: '[]', true),
+                ];
+            }),
+        ]);
+    }
+
+    public function saveWorkout(Request $request)
+    {
+        $request->validate([
+            'title'       => 'required|string',
+            'description' => 'nullable|string',
+            'exercises'   => 'nullable|array',
+            'trainer_id'  => 'nullable|exists:trainers,id',
+            'member_id'   => 'nullable|exists:members,id',
+        ]);
+
+        $id = $request->input('id');
+        $data = [
+            'title'       => $request->title,
+            'description' => $request->description,
+            'exercises'   => $request->input('exercises', []),
+            'trainer_id'  => $request->trainer_id,
+            'member_id'   => $request->input('member_id', Member::first()?->id ?? 1),
+        ];
+
+        if ($id) {
+            $workout = WorkoutPlan::findOrFail($id);
+            $workout->update($data);
+        } else {
+            $workout = WorkoutPlan::create($data);
+        }
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'ڕاهێنانەکە بە سەرکەوتوویی سەیڤ کرا',
+            'workout' => $workout,
+        ]);
+    }
+
+    public function deleteWorkout($id)
+    {
+        $workout = WorkoutPlan::findOrFail($id);
+        $workout->delete();
+        return response()->json(['status' => true, 'message' => 'ڕاهێنانەکە سڕایەوە']);
+    }
+
+    // ==========================================
+    // 3. REELS MANAGEMENT
+    // ==========================================
+
+    public function getReels()
+    {
+        $reels = Reel::latest()->get();
+        return response()->json([
+            'status' => true,
+            'reels'  => $reels,
+        ]);
+    }
+
+    public function saveReel(Request $request)
+    {
+        $request->validate([
+            'title'      => 'required|string',
+            'video_url'  => 'required|string',
+            'coach_name' => 'nullable|string',
+        ]);
+
+        $id = $request->input('id');
+        $data = [
+            'title'       => $request->title,
+            'video_url'   => $request->video_url,
+            'coach_name'  => $request->input('coach_name', 'Coach Bilal'),
+            'likes_count' => $request->input('likes_count', 0),
+        ];
+
+        if ($id) {
+            $reel = Reel::findOrFail($id);
+            $reel->update($data);
+        } else {
+            $reel = Reel::create($data);
+        }
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'ڕیڵزەکە بە سەرکەوتوویی سەیڤ کرا',
+            'reel'    => $reel,
+        ]);
+    }
+
+    public function deleteReel($id)
+    {
+        $reel = Reel::findOrFail($id);
+        $reel->delete();
+        return response()->json(['status' => true, 'message' => 'ڕیڵزەکە سڕایەوە']);
+    }
+
+    // ==========================================
+    // 4. TRAINERS MANAGEMENT
+    // ==========================================
+
+    public function getTrainers()
+    {
+        $trainers = Trainer::all();
+        return response()->json([
+            'status'   => true,
+            'trainers' => $trainers,
+        ]);
+    }
+
+    public function saveTrainer(Request $request)
+    {
+        $request->validate([
+            'name'      => 'required|string',
+            'phone'     => 'nullable|string',
+            'specialty' => 'nullable|string',
+        ]);
+
+        $id = $request->input('id');
+        $data = [
+            'name'      => $request->name,
+            'phone'     => $request->phone,
+            'specialty' => $request->input('specialty', 'Bodybuilding & Fitness Coach'),
+        ];
+
+        if ($id) {
+            $trainer = Trainer::findOrFail($id);
+            $trainer->update($data);
+        } else {
+            $trainer = Trainer::create($data);
+        }
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'ڕاهێنەرەکە بە سەرکەوتوویی سەیڤ کرا',
+            'trainer' => $trainer,
+        ]);
+    }
+
+    public function deleteTrainer($id)
+    {
+        $trainer = Trainer::findOrFail($id);
+        $trainer->delete();
+        return response()->json(['status' => true, 'message' => 'ڕاهێنەرەکە سڕایەوە']);
+    }
+
+    // ==========================================
+    // 5. SUBSCRIPTION PLANS MANAGEMENT
+    // ==========================================
+
+    public function getPlans()
+    {
+        $plans = SubscriptionPlan::all();
+        return response()->json([
+            'status' => true,
+            'plans'  => $plans,
+        ]);
+    }
+
+    public function savePlan(Request $request)
+    {
+        $request->validate([
+            'name'          => 'required|string',
+            'price'         => 'required|numeric',
+            'duration_days' => 'required|integer',
+            'type'          => 'nullable|string',
+            'description'   => 'nullable|string',
+            'is_active'     => 'nullable|boolean',
+        ]);
+
+        $id = $request->input('id');
+        $data = [
+            'name'          => $request->name,
+            'price'         => $request->price,
+            'duration_days' => $request->duration_days,
+            'type'          => $request->input('type', 'monthly'),
+            'description'   => $request->input('description'),
+            'is_active'     => $request->input('is_active', true),
+        ];
+
+        if ($id) {
+            $plan = SubscriptionPlan::findOrFail($id);
+            $plan->update($data);
+        } else {
+            $plan = SubscriptionPlan::create($data);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message'=> 'پلانەکە بە سەرکەوتوویی سەیڤ کرا',
+            'plan'   => $plan,
+        ]);
+    }
+
+    public function deletePlan($id)
+    {
+        $plan = SubscriptionPlan::findOrFail($id);
+        $plan->delete();
+        return response()->json(['status' => true, 'message' => 'پلانەکە سڕایەوە']);
     }
 }

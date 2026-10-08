@@ -9,7 +9,6 @@ class ApiService {
   factory ApiService() => _instance;
   ApiService._internal();
 
-  // Determine local API host
   static String get defaultBaseUrl {
     if (kIsWeb) return 'http://127.0.0.1:8000/api/v1';
     if (Platform.isAndroid) return 'http://10.0.2.2:8000/api/v1';
@@ -74,11 +73,6 @@ class ApiService {
     return prefs.getBool('is_admin') ?? false;
   }
 
-  Future<String?> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('member_token');
-  }
-
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('member_token');
@@ -110,17 +104,6 @@ class ApiService {
     return {'status': false, 'workouts': []};
   }
 
-  Future<Map<String, dynamic>> getDietPlans({int? memberId}) async {
-    try {
-      final query = memberId != null ? '?member_id=$memberId' : '';
-      final res = await http.get(Uri.parse('$_baseUrl/diet-plans$query'));
-      if (res.statusCode == 200) {
-        return jsonDecode(res.body);
-      }
-    } catch (_) {}
-    return {'status': false, 'diet_plans': []};
-  }
-
   Future<List<dynamic>> getLeaderboard() async {
     try {
       final res = await http.get(Uri.parse('$_baseUrl/leaderboard'));
@@ -132,20 +115,7 @@ class ApiService {
     return [];
   }
 
-  // --- Admin API ---
-
-  Future<Map<String, dynamic>> scanAttendance(String barcode) async {
-    try {
-      final res = await http.post(
-        Uri.parse('$_baseUrl/admin/scan-attendance'),
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-        body: jsonEncode({'barcode': barcode}),
-      );
-      return jsonDecode(res.body);
-    } catch (e) {
-      return {'status': false, 'message': 'هەڵە لە پەیوەندی بە سێرڤەر: $e'};
-    }
-  }
+  // --- Admin API Management ---
 
   Future<Map<String, dynamic>> getAdminStats() async {
     try {
@@ -157,6 +127,7 @@ class ApiService {
     return {'status': false};
   }
 
+  // Members
   Future<List<dynamic>> getAdminMembers({String? search}) async {
     try {
       final q = search != null && search.isNotEmpty ? '?search=$search' : '';
@@ -169,6 +140,28 @@ class ApiService {
     return [];
   }
 
+  Future<Map<String, dynamic>> saveMember(Map<String, dynamic> data) async {
+    try {
+      final res = await http.post(
+        Uri.parse('$_baseUrl/admin/members/save'),
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: jsonEncode(data),
+      );
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteMember(int id) async {
+    try {
+      final res = await http.delete(Uri.parse('$_baseUrl/admin/members/$id'));
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
   Future<Map<String, dynamic>> renewMemberSubscription(int memberId, int planId) async {
     try {
       final res = await http.post(
@@ -176,6 +169,142 @@ class ApiService {
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
         body: jsonEncode({'member_id': memberId, 'plan_id': planId}),
       );
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
+  // Workouts
+  Future<List<dynamic>> getAdminWorkouts() async {
+    try {
+      final res = await http.get(Uri.parse('$_baseUrl/admin/workouts'));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data['workouts'] ?? [];
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  Future<Map<String, dynamic>> saveWorkout(Map<String, dynamic> data) async {
+    try {
+      final res = await http.post(
+        Uri.parse('$_baseUrl/admin/workouts/save'),
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: jsonEncode(data),
+      );
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteWorkout(int id) async {
+    try {
+      final res = await http.delete(Uri.parse('$_baseUrl/admin/workouts/$id'));
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
+  // Reels
+  Future<List<dynamic>> getAdminReels() async {
+    try {
+      final res = await http.get(Uri.parse('$_baseUrl/admin/reels'));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data['reels'] ?? [];
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  Future<Map<String, dynamic>> saveReel(Map<String, dynamic> data) async {
+    try {
+      final res = await http.post(
+        Uri.parse('$_baseUrl/admin/reels/save'),
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: jsonEncode(data),
+      );
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteReel(int id) async {
+    try {
+      final res = await http.delete(Uri.parse('$_baseUrl/admin/reels/$id'));
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
+  // Trainers
+  Future<List<dynamic>> getAdminTrainers() async {
+    try {
+      final res = await http.get(Uri.parse('$_baseUrl/admin/trainers'));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data['trainers'] ?? [];
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  Future<Map<String, dynamic>> saveTrainer(Map<String, dynamic> data) async {
+    try {
+      final res = await http.post(
+        Uri.parse('$_baseUrl/admin/trainers/save'),
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: jsonEncode(data),
+      );
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteTrainer(int id) async {
+    try {
+      final res = await http.delete(Uri.parse('$_baseUrl/admin/trainers/$id'));
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
+  // Plans & Pricing
+  Future<List<dynamic>> getAdminPlans() async {
+    try {
+      final res = await http.get(Uri.parse('$_baseUrl/admin/plans'));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data['plans'] ?? [];
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  Future<Map<String, dynamic>> savePlan(Map<String, dynamic> data) async {
+    try {
+      final res = await http.post(
+        Uri.parse('$_baseUrl/admin/plans/save'),
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: jsonEncode(data),
+      );
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> deletePlan(int id) async {
+    try {
+      final res = await http.delete(Uri.parse('$_baseUrl/admin/plans/$id'));
       return jsonDecode(res.body);
     } catch (e) {
       return {'status': false, 'message': '$e'};
