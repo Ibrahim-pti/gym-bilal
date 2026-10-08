@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('members', function (Blueprint $table) {
-            //
+            $table->string('api_token', 80)->unique()->nullable()->after('phone');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('members', function (Blueprint $table) {
-            //
+            $table->dropColumn('api_token');
         });
     }
 };
