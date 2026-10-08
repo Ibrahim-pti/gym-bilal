@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_base/core/services/api_service.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 import 'package:gym_base/features/layout/presentation/screens/main_layout.dart';
-import 'package:gym_base/features/profile/presentation/screens/admin_dashboard_screen.dart';
 
 class MemberLoginScreen extends StatefulWidget {
   const MemberLoginScreen({super.key});

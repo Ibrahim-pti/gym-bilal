@@ -4,7 +4,8 @@ import 'package:gym_base/core/services/api_service.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
-  const AdminDashboardScreen({super.key});
+  final VoidCallback? onSwitchToHome;
+  const AdminDashboardScreen({super.key, this.onSwitchToHome});
 
   @override
   State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();

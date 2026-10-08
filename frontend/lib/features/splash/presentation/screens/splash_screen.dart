@@ -4,7 +4,6 @@ import 'package:gym_base/core/services/api_service.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 import 'package:gym_base/features/layout/presentation/screens/main_layout.dart';
 import 'package:gym_base/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:gym_base/features/profile/presentation/screens/admin_dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -44,7 +43,6 @@ class _SplashScreenState extends State<SplashScreen>
     Timer(const Duration(milliseconds: 3000), () async {
       if (mounted) {
         final savedMember = await ApiService().getSavedMember();
-        final isAdmin = await ApiService().isAdmin();
         Widget target = const OnboardingScreen();
         if (savedMember != null) {
           target = const MainLayout();

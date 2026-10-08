@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 
 class NutritionApiService {
   // Verified nutrition database for instant accurate calorie & macro calculation
@@ -147,53 +146,7 @@ class NutritionApiService {
       }
     }
 
-    // 2. Fetch live data from open Recipe & Nutrition API
-    try {
-      final uri = Uri.parse(
-        'https://dummyjson.com/recipes/search?q=${Uri.encodeComponent(cleanQuery)}',
-      );
-
-      final response = await http.get(uri).timeout(
-        const Duration(seconds: 4),
-        onTimeout: () => http.Response('{"recipes":[]}', 408),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final recipes = data['recipes'] as List<dynamic>?;
-
-        if (recipes != null && recipes.isNotEmpty) {
-          final first = recipes.first as Map<String, dynamic>;
-          final cal = first['caloriesPerServing'] ?? 420;
-
-          // Compute realistic macros based on calories
-          final protein = ((cal * 0.30) / 4).round();
-          final carbs = ((cal * 0.45) / 4).round();
-          final fat = ((cal * 0.25) / 9).round();
-
-          return {
-            'name': first['name'] ?? query,
-            'calories': cal,
-            'protein': '${protein}g',
-            'carbs': '${carbs}g',
-            'fat': '${fat}g',
-            'fiber': '4g',
-            'portion': '1 serving (${first['servings'] ?? 1} portions)',
-            'confidence': 96.2,
-            'networkImage': first['image'],
-            'imageUrl': 'assets/images/card_nutrition_full.png',
-            'healthScore': 'A- (Live API Verified)',
-            'ingredients': first['ingredients'] != null
-                ? List<String>.from(first['ingredients'])
-                : ['Selected fresh ingredients'],
-          };
-        }
-      }
-    } catch (_) {
-      // Network failure, continue to fallback calculation
-    }
-
-    // 3. Fallback smart heuristic calculation for uncataloged foods
+    // 2. Smart heuristic calculation for uncataloged foods (Pure Local calculation)
     final words = cleanQuery.split(' ');
     final estimatedCal = (350 + (words.length * 45)).clamp(220, 850);
     final proteinG = (estimatedCal * 0.28 / 4).round();
