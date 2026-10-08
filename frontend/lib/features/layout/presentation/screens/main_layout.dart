@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:gym_base/core/services/api_service.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 import 'package:gym_base/features/explore/presentation/screens/explore_screen.dart';
 import 'package:gym_base/features/home/presentation/screens/home_screen.dart';
@@ -8,7 +7,6 @@ import 'package:gym_base/features/workout/presentation/screens/workout_screen.da
 import 'package:gym_base/features/community/presentation/screens/community_screen.dart';
 import 'package:gym_base/features/calorie/presentation/screens/calorie_screen.dart';
 import 'package:gym_base/features/profile/presentation/screens/profile_screen.dart';
-import 'package:gym_base/features/profile/presentation/screens/admin_dashboard_screen.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -19,18 +17,6 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
-  bool _isAdmin = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkAdmin();
-  }
-
-  Future<void> _checkAdmin() async {
-    final admin = await ApiService().isAdmin();
-    if (mounted) setState(() => _isAdmin = admin);
-  }
 
   void _onTabSelected(int index) {
     setState(() {
@@ -47,8 +33,6 @@ class _MainLayoutState extends State<MainLayout> {
       const CommunityScreen(),
       const CalorieScreen(),
       ProfileScreen(onNavigateTab: _onTabSelected),
-      if (_isAdmin)
-        AdminDashboardScreen(onSwitchToHome: () => _onTabSelected(0)),
     ];
 
     final activeIndex = _currentIndex < pages.length ? _currentIndex : 0;
@@ -144,14 +128,6 @@ class _MainLayoutState extends State<MainLayout> {
                         icon: Icons.grid_view_rounded,
                         label: 'More',
                       ),
-
-                      // 7. Admin Hub
-                      if (_isAdmin)
-                        _buildNavItem(
-                          index: 6,
-                          icon: Icons.admin_panel_settings_rounded,
-                          label: 'Admin',
-                        ),
                     ],
                   ),
                 ),

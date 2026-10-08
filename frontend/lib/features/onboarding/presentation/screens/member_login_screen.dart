@@ -15,38 +15,14 @@ class _MemberLoginScreenState extends State<MemberLoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _adminPinController = TextEditingController();
 
   bool _isLoading = false;
-  bool _showAdminPin = false;
-  int _logoTapCount = 0;
 
   @override
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
-    _adminPinController.dispose();
     super.dispose();
-  }
-
-  void _onLogoTapped() {
-    _logoTapCount++;
-    if (_logoTapCount >= 3) {
-      setState(() {
-        _showAdminPin = !_showAdminPin;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _showAdminPin ? 'دۆخی ئەدمین (Admin Mode) کرایەوە' : 'دۆخی ئەدمین داخرا',
-            style: GoogleFonts.notoSansArabic(),
-          ),
-          backgroundColor: AppColors.primary,
-          duration: const Duration(seconds: 2),
-        ),
-      );
-      _logoTapCount = 0;
-    }
   }
 
   Future<void> _submit() async {
@@ -57,7 +33,6 @@ class _MemberLoginScreenState extends State<MemberLoginScreen> {
     final res = await ApiService().loginOrRegister(
       name: _nameController.text.trim(),
       phone: _phoneController.text.trim(),
-      adminPin: _showAdminPin ? _adminPinController.text.trim() : null,
     );
 
     setState(() => _isLoading = false);
@@ -65,12 +40,10 @@ class _MemberLoginScreenState extends State<MemberLoginScreen> {
     if (!mounted) return;
 
     if (res['status'] == true) {
-      final bool isAdmin = res['is_admin'] == true;
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            isAdmin ? 'بەخێربێیت بەڕێوەبەر! بە سەرکەوتوویی چوویتە ژوورەوە' : 'بەخێربێیت! بە سەرکەوتوویی چوویتە ژوورەوە',
+            'بەخێربێیت! بە سەرکەوتوویی چوویتە ژوورەوە',
             style: GoogleFonts.notoSansArabic(),
           ),
           backgroundColor: Colors.green,
@@ -133,30 +106,27 @@ class _MemberLoginScreenState extends State<MemberLoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Gym Bilal Logo (Tap 3 times to reveal Admin PIN)
-                      GestureDetector(
-                        onTap: _onLogoTapped,
-                        child: Hero(
-                          tag: 'gym_logo',
-                          child: Container(
-                            width: 88,
-                            height: 88,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: AppColors.primaryGradient,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primary.withValues(alpha: 0.45),
-                                  blurRadius: 25,
-                                  offset: const Offset(0, 8),
-                                ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.fitness_center_rounded,
-                              size: 44,
-                              color: Colors.white,
-                            ),
+                      // Gym Bilal Logo
+                      Hero(
+                        tag: 'gym_logo',
+                        child: Container(
+                          width: 88,
+                          height: 88,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: AppColors.primaryGradient,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.45),
+                                blurRadius: 25,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.fitness_center_rounded,
+                            size: 44,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -296,42 +266,7 @@ class _MemberLoginScreenState extends State<MemberLoginScreen> {
                               },
                             ),
 
-                            // Hidden / Secret Admin PIN Input
-                            if (_showAdminPin) ...[
-                              const SizedBox(height: 18),
-                              Row(
-                                children: [
-                                  const Icon(Icons.shield_outlined, color: Colors.amber, size: 18),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    'کۆدی ئەدمین (Admin PIN: 1234)',
-                                    style: GoogleFonts.notoSansArabic(
-                                      color: Colors.amber,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              TextFormField(
-                                controller: _adminPinController,
-                                obscureText: true,
-                                keyboardType: TextInputType.number,
-                                style: GoogleFonts.outfit(color: Colors.white),
-                                decoration: InputDecoration(
-                                  hintText: 'کۆدی ئەدمین بنووسە...',
-                                  hintStyle: GoogleFonts.notoSansArabic(color: Colors.white30, fontSize: 13),
-                                  prefixIcon: const Icon(Icons.vpn_key_rounded, color: Colors.amber),
-                                  filled: true,
-                                  fillColor: AppColors.darkCard,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(16),
-                                    borderSide: const BorderSide(color: Colors.amber),
-                                  ),
-                                ),
-                              ),
-                            ],
+
 
                             const SizedBox(height: 26),
 

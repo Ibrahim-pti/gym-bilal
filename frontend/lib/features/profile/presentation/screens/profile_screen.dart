@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_base/core/services/api_service.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 import 'package:gym_base/features/onboarding/presentation/screens/member_login_screen.dart';
-import 'package:gym_base/features/profile/presentation/screens/admin_dashboard_screen.dart';
 import 'package:gym_base/features/profile/presentation/screens/body_transformation_screen.dart';
 import 'package:gym_base/features/calorie/presentation/screens/supplement_tracker_screen.dart';
 import 'package:gym_base/features/profile/presentation/widgets/fitness_calculators_sheet.dart';
@@ -38,7 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Member API State
   Map<String, dynamic>? _savedMember;
-  bool _isAdmin = false;
 
   @override
   void initState() {
@@ -48,11 +46,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadMemberData() async {
     final m = await ApiService().getSavedMember();
-    final admin = await ApiService().isAdmin();
     if (mounted) {
       setState(() {
         _savedMember = m;
-        _isAdmin = admin;
       });
     }
   }
@@ -277,67 +273,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               const SizedBox(width: 6),
-                              if (_isAdmin)
-                                GestureDetector(
-                                  onTap: () {
-                                    if (widget.onNavigateTab != null) {
-                                      widget.onNavigateTab!(6);
-                                    } else {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
-                                      );
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primary.withValues(alpha: 0.15),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
-                                    ),
-                                    child: const Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(Icons.admin_panel_settings_rounded, size: 13, color: AppColors.primary),
-                                        SizedBox(width: 4),
-                                        Text(
-                                          'ADMIN HUB 🛡️',
-                                          style: TextStyle(
-                                            fontSize: 9.5,
-                                            fontWeight: FontWeight.w900,
-                                            color: AppColors.primary,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => const SubscriptionPlansScreen()),
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFF7EB),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: const Color(0xFFFFD494)),
                                   ),
-                                )
-                              else
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (_) => const SubscriptionPlansScreen()),
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFFF7EB),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: const Color(0xFFFFD494)),
-                                    ),
-                                    child: const Text(
-                                      'MEMBERSHIP 👑',
-                                      style: TextStyle(
-                                        fontSize: 9.5,
-                                        fontWeight: FontWeight.w900,
-                                        color: Color(0xFFC76B00),
-                                      ),
+                                  child: const Text(
+                                    'MEMBERSHIP 👑',
+                                    style: TextStyle(
+                                      fontSize: 9.5,
+                                      fontWeight: FontWeight.w900,
+                                      color: Color(0xFFC76B00),
                                     ),
                                   ),
                                 ),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 3),
