@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class Member extends Model
 {
     protected $fillable = [
-        'name', 'phone', 'balance', 'age', 'gender', 'notes', 'photo', 'barcode'
+        'name', 'phone', 'api_token', 'balance', 'age', 'gender', 'notes', 'photo', 'barcode'
     ];
 
     public function subscriptions()
