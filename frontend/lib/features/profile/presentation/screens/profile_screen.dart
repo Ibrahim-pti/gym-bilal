@@ -19,7 +19,9 @@ import 'package:gym_base/features/profile/presentation/screens/subscription_plan
 
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final Function(int)? onNavigateTab;
+
+  const ProfileScreen({super.key, this.onNavigateTab});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -278,25 +280,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               if (_isAdmin)
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
-                                    );
+                                    if (widget.onNavigateTab != null) {
+                                      widget.onNavigateTab!(6);
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
+                                      );
+                                    }
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: Colors.amber.shade100,
+                                      color: AppColors.primary.withValues(alpha: 0.15),
                                       borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: Colors.amber.shade600),
+                                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                                     ),
-                                    child: const Text(
-                                      'ADMIN HUB 🛡️',
-                                      style: TextStyle(
-                                        fontSize: 9.5,
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.brown,
-                                      ),
+                                    child: const Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.admin_panel_settings_rounded, size: 13, color: AppColors.primary),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          'ADMIN HUB 🛡️',
+                                          style: TextStyle(
+                                            fontSize: 9.5,
+                                            fontWeight: FontWeight.w900,
+                                            color: AppColors.primary,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 )

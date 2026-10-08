@@ -81,7 +81,7 @@ class _MemberLoginScreenState extends State<MemberLoginScreen> {
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 600),
-          pageBuilder: (_, _, _) => isAdmin ? const AdminDashboardScreen() : const MainLayout(),
+          pageBuilder: (_, _, _) => const MainLayout(),
           transitionsBuilder: (_, animation, _, child) {
             return FadeTransition(opacity: animation, child: child);
           },

@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen>
         final isAdmin = await ApiService().isAdmin();
         Widget target = const OnboardingScreen();
         if (savedMember != null) {
-          target = isAdmin ? const AdminDashboardScreen() : const MainLayout();
+          target = const MainLayout();
         }
 
         if (!mounted) return;

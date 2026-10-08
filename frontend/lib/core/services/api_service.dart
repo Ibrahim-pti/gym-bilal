@@ -310,4 +310,49 @@ class ApiService {
       return {'status': false, 'message': '$e'};
     }
   }
+
+  // Banners / Carousel
+  Future<List<dynamic>> getBanners() async {
+    try {
+      final res = await http.get(Uri.parse('$_baseUrl/banners'));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data['banners'] ?? [];
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  Future<List<dynamic>> getAdminBanners() async {
+    try {
+      final res = await http.get(Uri.parse('$_baseUrl/admin/banners'));
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        return data['banners'] ?? [];
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  Future<Map<String, dynamic>> saveBanner(Map<String, dynamic> data) async {
+    try {
+      final res = await http.post(
+        Uri.parse('$_baseUrl/admin/banners/save'),
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: jsonEncode(data),
+      );
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteBanner(int id) async {
+    try {
+      final res = await http.delete(Uri.parse('$_baseUrl/admin/banners/$id'));
+      return jsonDecode(res.body);
+    } catch (e) {
+      return {'status': false, 'message': '$e'};
+    }
+  }
 }
