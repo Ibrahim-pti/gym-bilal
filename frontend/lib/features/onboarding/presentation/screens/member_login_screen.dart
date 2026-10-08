@@ -102,8 +102,6 @@ class _MemberLoginScreenState extends State<MemberLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
       body: Stack(

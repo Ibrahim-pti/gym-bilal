@@ -130,8 +130,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             final res = await ApiService().scanAttendance(code);
                             setModalState(() => scanning = false);
 
-                            if (!mounted) return;
+                            if (!ctx.mounted) return;
                             Navigator.pop(ctx);
+                            if (!mounted) return;
                             _barcodeInputController.clear();
                             _showScanResult(res);
                             _fetchData();
@@ -307,7 +308,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             icon: const Icon(Icons.logout_rounded, color: Colors.redAccent),
             onPressed: () async {
               await ApiService().logout();
-              if (mounted) {
+              if (context.mounted) {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (_) => const MemberLoginScreen()),
@@ -487,7 +488,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: _members.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 8),
+                        separatorBuilder: (_, _) => const SizedBox(height: 8),
                         itemBuilder: (ctx, index) {
                           final m = _members[index];
                           final bool isActive = m['status'] == 'active';

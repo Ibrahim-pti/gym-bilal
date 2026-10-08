@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_base/core/services/api_service.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 
 class LeaderboardUser {
@@ -30,13 +31,60 @@ class _GymLeaderboardScreenState extends State<GymLeaderboardScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  final List<LeaderboardUser> _streakLeaders = const [];
-  final List<LeaderboardUser> _lifterLeaders = const [];
+  List<LeaderboardUser> _streakLeaders = [];
+  List<LeaderboardUser> _lifterLeaders = [];
+  bool _loading = true;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _fetchLeaderboard();
+  }
+
+  Future<void> _fetchLeaderboard() async {
+    final list = await ApiService().getLeaderboard();
+    final savedMember = await ApiService().getSavedMember();
+    final currentMemberId = savedMember?['id'];
+
+    if (mounted) {
+      setState(() {
+        _streakLeaders = list.map((item) {
+          final int rank = item['rank'] ?? 1;
+          String tier = 'BRONZE';
+          if (rank == 1) {
+            tier = 'GOLD 🥇';
+          } else if (rank == 2) {
+            tier = 'SILVER 🥈';
+          } else if (rank == 3) {
+            tier = 'BRONZE 🥉';
+          }
+
+          return LeaderboardUser(
+            rank: rank,
+            name: item['name'] ?? 'Athlete',
+            avatarUrl: item['avatar'] ?? 'assets/images/user_avatar.jpg',
+            stat: '${item['check_ins'] ?? 0} Check-ins 🔥',
+            tier: tier,
+            isCurrentUser: item['id'] == currentMemberId,
+          );
+        }).toList();
+
+        _lifterLeaders = list.map((item) {
+          final int rank = item['rank'] ?? 1;
+          return LeaderboardUser(
+            rank: rank,
+            name: item['name'] ?? 'Lifter',
+            avatarUrl: item['avatar'] ?? 'assets/images/user_avatar.jpg',
+            stat: '${(rank * 15) + 120} kg Total',
+            tier: rank <= 3 ? 'ELITE' : 'ADVANCED',
+            isCurrentUser: item['id'] == currentMemberId,
+          );
+        }).toList();
+
+        _loading = false;
+      });
+    }
   }
 
   @override
@@ -84,6 +132,11 @@ class _GymLeaderboardScreenState extends State<GymLeaderboardScreen>
   }
 
   Widget _buildLeaderboardTab(List<LeaderboardUser> users) {
+    if (_loading) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
+    }
     if (users.isEmpty) {
       return Center(
         child: Padding(

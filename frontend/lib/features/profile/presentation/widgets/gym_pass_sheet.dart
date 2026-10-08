@@ -1,46 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:gym_base/core/services/api_service.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
 import 'package:gym_base/features/profile/presentation/screens/subscription_plans_screen.dart';
 
-class GymPassSheet extends StatefulWidget {
+
+class GymPassSheet extends StatelessWidget {
   const GymPassSheet({super.key});
 
   @override
-  State<GymPassSheet> createState() => _GymPassSheetState();
-}
-
-class _GymPassSheetState extends State<GymPassSheet> {
-  Map<String, dynamic>? _member;
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadMember();
-  }
-
-  Future<void> _loadMember() async {
-    final m = await ApiService().getSavedMember();
-    if (mounted) {
-      setState(() {
-        _member = m;
-        _loading = false;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final barcode = _member?['barcode'] ?? 'GB-MEMBER-PASS';
-    final name = _member?['name'] ?? 'Gym Member';
-    final sub = _member?['subscription'];
-    final planName = sub?['plan_name'] ?? 'مانگانە (Monthly)';
-    final daysLeft = sub?['days_left'] ?? 30;
-    final bool isActive = (_member?['status'] == 'active') || daysLeft > 0;
-
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -73,21 +40,21 @@ class _GymPassSheetState extends State<GymPassSheet> {
                 child: const Icon(Icons.workspace_premium_rounded, color: Color(0xFFD97706), size: 22),
               ),
               const SizedBox(width: 12),
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'کارتی دیجیتاڵی جیم 🎟️',
-                    style: GoogleFonts.notoSansArabic(
-                      fontSize: 16,
+                    'Digital Gym Pass 🎟️',
+                    style: TextStyle(
+                      fontSize: 17,
                       fontWeight: FontWeight.w900,
                       color: AppColors.lightTextPrimary,
                     ),
                   ),
                   Text(
-                    'پشکنینی هاتنەژوورەوە لە ڕیسێپشن',
-                    style: GoogleFonts.notoSansArabic(
-                      fontSize: 12,
+                    'Scan at reception or entrance gate',
+                    style: TextStyle(
+                      fontSize: 11.5,
                       color: AppColors.lightTextSecondary,
                     ),
                   ),
@@ -136,12 +103,12 @@ class _GymPassSheetState extends State<GymPassSheet> {
                           child: const Icon(Icons.fitness_center_rounded, color: Colors.white, size: 16),
                         ),
                         const SizedBox(width: 8),
-                        Column(
+                        const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'BILAL GYM PASS',
-                              style: GoogleFonts.outfit(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w900,
@@ -150,7 +117,7 @@ class _GymPassSheetState extends State<GymPassSheet> {
                             ),
                             Text(
                               'Digital Membership',
-                              style: GoogleFonts.outfit(
+                              style: TextStyle(
                                 color: Colors.white60,
                                 fontSize: 9.5,
                                 fontWeight: FontWeight.w600,
@@ -163,19 +130,19 @@ class _GymPassSheetState extends State<GymPassSheet> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: (isActive ? const Color(0xFF10B981) : Colors.redAccent).withValues(alpha: 0.2),
+                        color: const Color(0xFF10B981).withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: isActive ? const Color(0xFF10B981) : Colors.redAccent),
+                        border: Border.all(color: const Color(0xFF10B981)),
                       ),
-                      child: Row(
+                      child: const Row(
                         children: [
-                          Icon(Icons.circle, color: isActive ? const Color(0xFF10B981) : Colors.redAccent, size: 7),
-                          const SizedBox(width: 5),
+                          Icon(Icons.circle, color: Color(0xFF10B981), size: 7),
+                          SizedBox(width: 5),
                           Text(
-                            isActive ? 'کارایە (ACTIVE)' : 'بەسەرچووە',
-                            style: GoogleFonts.notoSansArabic(
-                              color: isActive ? const Color(0xFF10B981) : Colors.redAccent,
-                              fontSize: 11,
+                            'ACTIVE',
+                            style: TextStyle(
+                              color: Color(0xFF10B981),
+                              fontSize: 10,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -186,40 +153,31 @@ class _GymPassSheetState extends State<GymPassSheet> {
                 ),
                 const SizedBox(height: 18),
 
-                // QR Code Display with qr_flutter
+                // QR Code Display
                 Container(
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(
                     children: [
+                      // Simulated QR Matrix
                       SizedBox(
-                        width: 140,
-                        height: 140,
-                        child: QrImageView(
-                          data: barcode,
-                          version: QrVersions.auto,
-                          size: 140,
-                          eyeStyle: const QrEyeStyle(
-                            eyeShape: QrEyeShape.square,
-                            color: Colors.black,
-                          ),
-                          dataModuleStyle: const QrDataModuleStyle(
-                            dataModuleShape: QrDataModuleShape.square,
-                            color: Colors.black,
-                          ),
+                        width: 130,
+                        height: 130,
+                        child: CustomPaint(
+                          painter: _QrPainter(),
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        '#$barcode',
-                        style: GoogleFonts.outfit(
+                      const Text(
+                        '#GB-MEMBER-PASS',
+                        style: TextStyle(
                           color: Colors.black87,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.w900,
-                          letterSpacing: 2,
+                          letterSpacing: 1.5,
                         ),
                       ),
                     ],
@@ -233,30 +191,18 @@ class _GymPassSheetState extends State<GymPassSheet> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'ئەندام (MEMBER)',
-                          style: GoogleFonts.notoSansArabic(color: Colors.white54, fontSize: 10, fontWeight: FontWeight.w700),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          name,
-                          style: GoogleFonts.notoSansArabic(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900),
-                        ),
+                      children: const [
+                        Text('MEMBER', style: TextStyle(color: Colors.white54, fontSize: 9.5, fontWeight: FontWeight.w700)),
+                        SizedBox(height: 2),
+                        Text('Gym Member', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w900)),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'پلان (PLAN)',
-                          style: GoogleFonts.notoSansArabic(color: Colors.white54, fontSize: 10, fontWeight: FontWeight.w700),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          '$planName ($daysLeft ڕۆژ)',
-                          style: GoogleFonts.notoSansArabic(color: const Color(0xFFFBBF24), fontSize: 13, fontWeight: FontWeight.w900),
-                        ),
+                      children: const [
+                        Text('STATUS', style: TextStyle(color: Colors.white54, fontSize: 9.5, fontWeight: FontWeight.w700)),
+                        SizedBox(height: 2),
+                        Text('Active Pass', style: TextStyle(color: Color(0xFFFBBF24), fontSize: 14, fontWeight: FontWeight.w900)),
                       ],
                     ),
                   ],
@@ -283,17 +229,17 @@ class _GymPassSheetState extends State<GymPassSheet> {
             height: 48,
             child: ElevatedButton.icon(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context); // Close sheet
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const SubscriptionPlansScreen()),
                 );
               },
               icon: const Icon(Icons.bolt_rounded, color: Colors.white),
-              label: Text(
-                'نوێکردنەوە یان گۆڕینی پلان ⚡',
-                style: GoogleFonts.notoSansArabic(
-                  fontSize: 14,
+              label: const Text(
+                'Change or Renew Plan ⚡',
+                style: TextStyle(
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
                 ),
@@ -328,4 +274,54 @@ class _GymPassSheetState extends State<GymPassSheet> {
       ],
     );
   }
+}
+
+class _QrPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+
+    // Corner Finder Patterns
+    _drawFinder(canvas, paint, const Offset(10, 10), 32);
+    _drawFinder(canvas, paint, Offset(size.width - 42, 10), 32);
+    _drawFinder(canvas, paint, Offset(10, size.height - 42), 32);
+
+    // Decorative Data Dots
+    final dotSize = size.width / 14;
+    for (int r = 0; r < 12; r++) {
+      for (int c = 0; c < 12; c++) {
+        // Skip corner finder zones
+        if ((r < 4 && c < 4) || (r < 4 && c > 7) || (r > 7 && c < 4)) continue;
+        if ((r * 7 + c * 13) % 3 == 0) {
+          canvas.drawRRect(
+            RRect.fromRectAndRadius(
+              Rect.fromLTWH(c * dotSize + 12, r * dotSize + 12, dotSize * 0.75, dotSize * 0.75),
+              const Radius.circular(2),
+            ),
+            paint,
+          );
+        }
+      }
+    }
+  }
+
+  void _drawFinder(Canvas canvas, Paint paint, Offset offset, double size) {
+    // Outer box
+    final outerRect = Rect.fromLTWH(offset.dx, offset.dy, size, size);
+    canvas.drawRRect(RRect.fromRectAndRadius(outerRect, const Radius.circular(6)), paint);
+
+    // White gap
+    final whitePaint = Paint()..color = Colors.white;
+    final innerRect = Rect.fromLTWH(offset.dx + 4, offset.dy + 4, size - 8, size - 8);
+    canvas.drawRRect(RRect.fromRectAndRadius(innerRect, const Radius.circular(4)), whitePaint);
+
+    // Center dot
+    final centerRect = Rect.fromLTWH(offset.dx + 9, offset.dy + 9, size - 18, size - 18);
+    canvas.drawRRect(RRect.fromRectAndRadius(centerRect, const Radius.circular(3)), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
