@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_base/core/services/api_service.dart';
 import 'package:gym_base/core/theme/app_colors.dart';
-import 'package:gym_base/features/onboarding/presentation/screens/member_login_screen.dart';
 import 'package:gym_base/features/profile/presentation/screens/body_transformation_screen.dart';
 import 'package:gym_base/features/calorie/presentation/screens/supplement_tracker_screen.dart';
 import 'package:gym_base/features/profile/presentation/widgets/fitness_calculators_sheet.dart';
@@ -1103,52 +1101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 20),
 
-          // Logout Button
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: OutlinedButton.icon(
-              onPressed: () async {
-                final confirm = await showDialog<bool>(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: Text('چوونەدەرەوە', style: GoogleFonts.notoSansArabic(fontWeight: FontWeight.bold)),
-                    content: Text('دڵنیایت دەتەوێت لە هەژمارەکەت بچیتە دەرەوە؟', style: GoogleFonts.notoSansArabic()),
-                    actions: [
-                      TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text('نەخێر', style: GoogleFonts.notoSansArabic())),
-                      TextButton(
-                        onPressed: () => Navigator.pop(ctx, true),
-                        child: Text('بەڵێ، بچۆ دەرەوە', style: GoogleFonts.notoSansArabic(color: Colors.red)),
-                      ),
-                    ],
-                  ),
-                );
 
-                if (confirm == true) {
-                  await ApiService().logout();
-                  if (!context.mounted) return;
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => const MemberLoginScreen()),
-                    (route) => false,
-                  );
-                }
-              },
-              icon: const Icon(Icons.logout_rounded, color: Colors.redAccent, size: 20),
-              label: Text(
-                'چوونەدەرەوە لە هەژمار (Logout)',
-                style: GoogleFonts.notoSansArabic(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.redAccent,
-                ),
-              ),
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.red.shade200),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              ),
-            ),
-          ),
         ],
       ),
     );

@@ -46,7 +46,21 @@ class ApiService {
   Future<Map<String, dynamic>?> getSavedMember() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonStr = prefs.getString('member_data');
-    if (jsonStr == null) return null;
+    if (jsonStr == null || jsonStr.isEmpty) {
+      final defaultMember = {
+        'id': 101,
+        'name': 'ئەندامی GYM BILAL',
+        'phone': '0750 000 0000',
+        'barcode': 'GYM-7500000000',
+        'status': 'active',
+        'subscription_plan': 'ئەندامێتی مانگانە VIP',
+        'remaining_days': 30,
+        'join_date': '2026-10-01',
+        'expire_date': '2026-11-01',
+      };
+      await prefs.setString('member_data', jsonEncode(defaultMember));
+      return defaultMember;
+    }
     try {
       return jsonDecode(jsonStr);
     } catch (_) {
